@@ -885,7 +885,7 @@ const Logic = (() => {
 		const now_ms = State.timer.now_ms = State.timer.start_ms = performance.now()
 		State.camera.mode = camera_mode
 		State.game.mode = game_mode
-		State.game.raf_id = requestAnimationFrame(on_frame)
+		State.game.raf_id = requestAnimationFrame(() => on_frame(now_ms))
 		if (game_mode == "flick") {
 			return
 		} else if (game_mode == "tracking") {
