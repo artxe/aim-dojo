@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ko">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>AIM DOJO</title>
+		<style>
+			* {
+				background: none;
+				border: none;
+				color: inherit;
+				padding: 0;
+				margin: 0;
+			}
+			html, body {
+				background: #0f1115;
+				color: #e6e8ef;
+				font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+				font-size: 16px;
+				height: 100%;
+				user-select: none;
+			}
+			body.locked .menu { display: none; }
+			body.locked .sens .hint { display: none; }
+			body:not(.locked) canvas { filter: blur(4px); }
+			canvas {
+				display: block;
+				height: 100%;
+				transition: filter .12s ease;
+				width: 100%;
+			}
+			label {
+				color: #9cd2ff;
+				font-weight: bold;
+			}
+			.bg {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				filter: brightness(0.5);
+			}
+			.menu {
+				display: grid;
+				font-weight: bold;
+				left: 50%;
+				position: absolute;
+				text-align: center;
+				top: 60%;
+				transform: translate(-50%, -50%);
+			}
+			.menu button {
+				cursor: pointer;
+				font-size: 2em;
+				font-weight: bold;
+			}
+			.menu button:hover {
+				transform: scale(1.25);
+				transition: .1s;
+			}
+			.hud {
+				left: 50%;
+				pointer-events: none;
+				position: absolute;
+				top: .5em;
+				transform: translateX(-50%);
+				white-space: nowrap;
+			}
+			.logo {
+				color: #4488ff;
+				font-size: 4.5em;
+				font-weight: bold;
+				word-spacing:-.2em;
+				-webkit-text-stroke: 1px white;
+			}
+			.sens {
+				left: .5em;
+				pointer-events: none;
+				position: absolute;
+				top: .5em;
+				white-space: nowrap;
+			}
+			.sens div { line-height: 1.5em; }
+			.sens .game { display: none; }
+			.sens .game.active { display: block; }
+			.sens .game b { font-size: 1.5em; }
+			.sens .hint { opacity: .5; }
+			.timer {
+				pointer-events: none;
+				position: absolute;
+				right: .5em;
+				top: .5em;
+				white-space: nowrap;
+			}
+			#wrap {
+				position: relative;
+				height: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<video class="bg" autoplay muted loop playsinline>
+			<source src="./bg.mp4" type="video/mp4">
+		</video>
+		<div id="wrap">
+			<canvas class="blur" id="canvas"></canvas>
+			<div class="hud" id="hud">
+				<label>Score/Best</label> <span id="best_score">—</span> ·
+				<label>Accuracy</label> <span id="accuracy">—</span> % ·
+				<label>Critical</label> <span id="crit_rate">—</span> %
+			</div>
+			<div class="sens" id="sens">
+				<span class="hint">(Tab: Next game sens)</span>
+				<div id="lol" class="game">
+					<b>LOL: <label>50</label></b><br>
+				</div>
+				<div id="val" class="game">
+					<b>VALORANT</b><br>
+					Hipfire: <label id="val_hipfire">—</label><br>
+					Spectre/Stinger/Ares/Odin: <span id="val_spectre">—</span><br>
+					Vandal/Phantom/Bulldog: <label id="val_vandal">—</label><br>
+					Guardian: <span id="val_guardian">—</span><br>
+					Marshal/Outlaw: <span id="val_marshal">—</span><br>
+					Operator: <label id="val_operator25">—</label> / <span id="val_operator5">—</span>
+				</div>
+				<div id="pubg" class="game">
+					<b>PUBG</b><br>
+					FPP(103): <span id="pubg_fpp">—</span><br>
+					TPP: <label id="pubg_tpp">—</label><br>
+					ADS/Scope: <label id="pubg_ads">—</label><br>
+					Vertical: <label id="pubg_v">—</label><br>
+					x2: <label id="pubg_x2">—</label><br>
+					x3: <label id="pubg_x3">—</label><br>
+					x4: <label id="pubg_x4">—</label><br>
+					x6: <label id="pubg_x6">—</label><br>
+					x8: <label id="pubg_x8">—</label><br>
+					x15: <label id="pubg_x15">—</label>
+				</div>
+				<div id="ow" class="game">
+					<b>OVERWATCH</b><br>
+					Hipfire: <label id="ow_hipfire">—</label>%<br>
+					Widow/Ana: <label id="ow_widow">—</label>%<br>
+					Ashe/Cassidy: <label id="ow_ashe">—</label>%<br>
+					Freja: <label id="ow_freja">—</label>%
+				</div>
+				<div id="mc" class="game">
+					<b>MINECRAFT: <label id="mc_hipfire">—</label>%<br>
+				</div>
+			</div>
+			<span id="timer" class="timer">00:00</span>
+			<div class="menu" id="menu">
+				<label class="logo">AIM DOJO</label><br>
+				<button id="writing">Writing</button><br>
+				<button id="tracking">Tracking</button><br>
+				<button id="flick">Flick</button><br>
+			</div>
+		</div>
+		<script src="./main.js" type="module"></script>
+	</body>
+</html>
