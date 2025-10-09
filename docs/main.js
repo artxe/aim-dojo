@@ -488,55 +488,9 @@ const Logic = (() => {
 	 * @returns {number}
 	 */
 	function compute_perspective_correction(fov_deg) {
-		/**
-		 * @param {number} a
-		 * @param {number} b
-		 * @param {number} eps
-		 * @param {number} whole
-		 * @param {number} depth
-		 * @returns {number}
-		 */
-		function adaptive_simpson(a, b, eps, whole, depth) {
-			const c = (a + b) / 2
-			const left = simpson(a, c)
-			const right = simpson(c, b)
-			const delta = left + right - whole
-			if (depth <= 0 || Math.abs(delta) < 15 * eps) {
-				return left + right + delta / 15
-			}
-			return adaptive_simpson(a, c, eps / 2, left, depth - 1)
-				+ adaptive_simpson(c, b, eps / 2, right, depth - 1)
-		}
-		/**
-		 * @param {number} t
-		 * @returns {number}
-		 */
-		function integrand(t) {
-			const s = Math.sin(t)
-			return Math.sqrt(1 - m_neg * s * s)
-		}
-		/**
-		 * @param {number} a
-		 * @param {number} b
-		 * @returns {number}
-		 */
-		function simpson(a, b) {
-			const c = (a + b) / 2
-			const h = b - a
-			return (h / 6) * (integrand(a) + 4 * integrand(c) + integrand(b))
-		}
-		const eps = 1e-10
-		const max_depth = 20
 		const fov_rad = to_rad(fov_deg)
-		const half_fov = fov_rad / 2
-		const tan_half_fov = Math.tan(half_fov)
-		const m_neg = -tan_half_fov * tan_half_fov
-		const a = 0
-		const b = half_fov
-		const whole = simpson(a, b)
-		const e_inc = adaptive_simpson(a, b, eps, whole, max_depth)
-		const ratio = (2 / fov_rad) * e_inc * Math.cos(half_fov)
-		return 2 * tan_half_fov * ratio
+		const half_fov_rad = fov_rad / 2
+		return 2 * Math.tan(half_fov_rad)
 	}
 	/**
 	 * @param {number} r
