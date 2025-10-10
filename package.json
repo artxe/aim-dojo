@@ -16,5 +16,5 @@
 		"lint": "eslint --cache --fix **/*.{d.ts,js,json}"
 	},
 	"type": "module",
-	"version": "1.0.1"
+	"version": "1.0.2"
 }

@@ -3,6 +3,7 @@ import { parser } from "typescript-eslint"
 
 /** @type {import("eslint").Linter.Config[]} */
 export default [
+	{ ignores: [ "docs/lib/**" ] },
 	{
 		...lube.configs,
 		files: [ "**/*.d.ts", "**/*.js" ],
