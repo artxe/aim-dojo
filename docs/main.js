@@ -1,5 +1,6 @@
 const {
 	abs,
+	acos,
 	atan,
 	cbrt,
 	ceil,
@@ -185,7 +186,7 @@ const HUD = (() => {
 	function calc_sens_mc(vfov_deg) {
 		const { width, height } = State.device
 		const hfov_deg = Logic.hfov_to_vfov(vfov_deg, height / width)
-		const rad_per_count = Logic.compute_perspective_correction(hfov_deg) / width
+		const rad_per_count = Logic.compute_perspective_correction(hfov_deg, width)
 		return (
 			cbrt(
 				rad_per_count / Logic.to_rad(1.2)
@@ -197,8 +198,8 @@ const HUD = (() => {
 	 * @returns {number}
 	 */
 	function calc_sens_ow(hfov_deg) {
-		return Logic.compute_perspective_correction(hfov_deg)
-			/ State.device.width
+		const { width } = State.device
+		return Logic.compute_perspective_correction(hfov_deg, width)
 			/ Logic.to_rad(.0066)
 	}
 	/**
@@ -215,8 +216,7 @@ const HUD = (() => {
 		const base_yaw = .0444400004444
 		const step = 15.0515
 		const sens50_yaw = Logic.to_rad(hfov_deg / base_fov * base_yaw)
-		const rad_per_count = Logic.compute_perspective_correction(hfov_deg)
-			/ width
+		const rad_per_count = Logic.compute_perspective_correction(hfov_deg, width)
 		return base_sens + step * (log(rad_per_count / sens50_yaw) / LN2)
 	}
 	/**
@@ -226,10 +226,8 @@ const HUD = (() => {
 	function calc_sens_pubg_v(hfov_deg) {
 		const { height, width } = State.device
 		const vfov_deg = Logic.hfov_to_vfov(hfov_deg, width / height)
-		const v_rad_per_count = Logic.compute_perspective_correction(vfov_deg)
-			/ height
-		const rad_per_count = Logic.compute_perspective_correction(hfov_deg)
-			/ width
+		const v_rad_per_count = Logic.compute_perspective_correction(vfov_deg, height)
+		const rad_per_count = Logic.compute_perspective_correction(hfov_deg, width)
 		return v_rad_per_count / rad_per_count
 	}
 	/**
@@ -237,8 +235,8 @@ const HUD = (() => {
 	 * @returns {number}
 	 */
 	function calc_sens_val(hfov_deg) {
-		return Logic.compute_perspective_correction(hfov_deg)
-			/ State.device.width
+		const { width } = State.device
+		return Logic.compute_perspective_correction(hfov_deg, width)
 			/ Logic.to_rad(.07 * hfov_deg / 103)
 	}
 	/** @returns {void} */
@@ -521,7 +519,7 @@ const HUD = (() => {
 })()
 const Logic = (() => {
 	const _ = {
-		compute_perspective_correction,
+		compute_perspective_correction: compute_sens_rad,
 		dir_from_yaw_pitch,
 		hfov_to_vfov,
 		on_frame,
@@ -566,12 +564,39 @@ const Logic = (() => {
 	}
 	/**
 	 * @param {number} fov_deg
+	 * @param {number} width
 	 * @returns {number}
 	 */
-	function compute_perspective_correction(fov_deg) {
-		const fov_rad = to_rad(fov_deg)
-		const half_fov_rad = fov_rad / 2
-		return 2 * tan(half_fov_rad)
+	function compute_sens_rad(fov_deg, width) {
+		const tol_px = 1
+		const half_width = width / 2
+		const tangent_half_fov = tan(to_rad(fov_deg) / 2)
+		let low = 1
+		let mid
+		let high = floor(half_width)
+		while (low < high) {
+			mid = floor((low + high + 1) / 2)
+			const match_ratio = mid / half_width
+			const theta_proj = atan(match_ratio * tangent_half_fov)
+			const effective = theta_proj / match_ratio
+			const theta_star = acos(
+				sqrt(
+					max(
+						0,
+						min(1, effective / tangent_half_fov)
+					)
+				)
+			)
+			const max_err = half_width * (theta_star / effective - tan(theta_star) / tangent_half_fov)
+			if (tol_px >= max_err) {
+				low = mid
+			} else {
+				high = mid - 1
+			}
+		}
+		const match_ratio = low / half_width
+		const effective = atan(match_ratio * tangent_half_fov) / match_ratio
+		return 2 * effective / width
 	}
 	/**
 	 * @param {number} r
@@ -2816,7 +2841,7 @@ const State = (() => {
 		const { width } = State.device
 		const { mode } = State.game
 		if (!mode) return
-		const sens = Logic.compute_perspective_correction(fov) / width
+		const sens = Logic.compute_perspective_correction(fov, width)
 		if (dimension == "2d") {
 			const y_limit = floor(PI / 2 / sens - 1e-4)
 			State.camera.x += ev.movementX
