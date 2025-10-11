@@ -84,6 +84,82 @@ const HUD = (() => {
 		update_game_sens,
 		update_hud
 	}
+	const accuracy_el = /** @type {HTMLSpanElement} */(document.getElementById("accuracy"))/**/
+	const best_score_el = /** @type {HTMLSpanElement} */(document.getElementById("best_score"))/**/
+	const crit_rate_el = /** @type {HTMLSpanElement} */(document.getElementById("crit_rate"))/**/
+	const flick_score_el = /** @type {HTMLSpanElement} */(document.getElementById("flick_score"))/**/
+	const lol_el = /** @type {HTMLDivElement} */(document.getElementById("lol"))/**/
+	const mc_el = /** @type {HTMLDivElement} */(document.getElementById("mc"))/**/
+	const mc_hipfire_el = /** @type {HTMLSpanElement} */(document.getElementById("mc_hipfire"))/**/
+	const ow_el = /** @type {HTMLDivElement} */(document.getElementById("ow"))/**/
+	const ow_ashe_el = /** @type {HTMLSpanElement} */(document.getElementById("ow_ashe"))/**/
+	const ow_freja_el = /** @type {HTMLSpanElement} */(document.getElementById("ow_freja"))/**/
+	const ow_hipfire_el = /** @type {HTMLSpanElement} */(document.getElementById("ow_hipfire"))/**/
+	const ow_widow_el = /** @type {HTMLSpanElement} */(document.getElementById("ow_widow"))/**/
+	const pubg_el = /** @type {HTMLDivElement} */(document.getElementById("pubg"))/**/
+	const pubg_ads_el = /** @type {HTMLSpanElement} */(document.getElementById("pubg_ads"))/**/
+	const pubg_fpp_el = /** @type {HTMLSpanElement} */(document.getElementById("pubg_fpp"))/**/
+	const pubg_fpp_fov_el = /** @type {HTMLInputElement} */(document.getElementById("pubg_fpp_fov"))/**/
+	const pubg_tpp_el = /** @type {HTMLSpanElement} */(document.getElementById("pubg_tpp"))/**/
+	const pubg_v_el = /** @type {HTMLSpanElement} */(document.getElementById("pubg_v"))/**/
+	const pubg_x15_el = /** @type {HTMLSpanElement} */(document.getElementById("pubg_x15"))/**/
+	const pubg_x2_el = /** @type {HTMLSpanElement} */(document.getElementById("pubg_x2"))/**/
+	const pubg_x3_el = /** @type {HTMLSpanElement} */(document.getElementById("pubg_x3"))/**/
+	const pubg_x4_el = /** @type {HTMLSpanElement} */(document.getElementById("pubg_x4"))/**/
+	const pubg_x6_el = /** @type {HTMLSpanElement} */(document.getElementById("pubg_x6"))/**/
+	const pubg_x8_el = /** @type {HTMLSpanElement} */(document.getElementById("pubg_x8"))/**/
+	const timer_el = /** @type {HTMLSpanElement} */(document.getElementById("timer"))/**/
+	const tracking_score_el = /** @type {HTMLSpanElement} */(document.getElementById("tracking_score"))/**/
+	const val_el = /** @type {HTMLDivElement} */(document.getElementById("val"))/**/
+	const val_guardian_el = /** @type {HTMLSpanElement} */(document.getElementById("val_guardian"))/**/
+	const val_hipfire_el = /** @type {HTMLSpanElement} */(document.getElementById("val_hipfire"))/**/
+	const val_marshal_el = /** @type {HTMLSpanElement} */(document.getElementById("val_marshal"))/**/
+	const val_operator25_el = /** @type {HTMLSpanElement} */(document.getElementById("val_operator25"))/**/
+	const val_operator5_el = /** @type {HTMLSpanElement} */(document.getElementById("val_operator5"))/**/
+	const val_spectre_el = /** @type {HTMLSpanElement} */(document.getElementById("val_spectre"))/**/
+	const val_vandal_el = /** @type {HTMLSpanElement} */(document.getElementById("val_vandal"))/**/
+	const writing_score_el = /** @type {HTMLSpanElement} */(document.getElementById("writing_score"))/**/
+	pubg_fpp_fov_el.addEventListener(
+		"input",
+		function(ev) {
+			const target = /** @type {HTMLInputElement} */(ev.target)/**/
+			target.value = String(
+				max(
+					min(
+						Number(
+							target.value.replace(/[^0-9]/g, "").substring(0, 3)
+						),
+						103
+					),
+					80
+				)
+			)
+			const pubg_fpp = calc_sens_pubg(Number(pubg_fpp_fov_el.value))
+			set_text_if_changed(pubg_fpp_el, round(pubg_fpp))
+		}
+	)
+	pubg_fpp_fov_el.addEventListener(
+		"keydown",
+		function(ev) {
+			const target = /** @type {HTMLInputElement} */(ev.target)/**/
+			if (ev.code == "ArrowDown") {
+				target.value = String(
+					max(Number(target.value) - 1, 80)
+				)
+			} else if (ev.code == "ArrowUp") {
+				target.value = String(
+					min(Number(target.value) + 1, 103)
+				)
+			} else {
+				return
+			}
+			const pubg_fpp = calc_sens_pubg(Number(pubg_fpp_fov_el.value))
+			set_text_if_changed(pubg_fpp_el, round(pubg_fpp))
+		}
+	)
+	flick_score_el.textContent = localStorage.getItem("flick.best_score") || "0"
+	tracking_score_el.textContent = localStorage.getItem("tracking.best_score") || "0"
+	writing_score_el.textContent = localStorage.getItem("writing.best_score") || "0"
 	/** @returns {void} */
 	function active_game_sens() {
 		const { sens } = State.game
@@ -355,6 +431,10 @@ const HUD = (() => {
 				)
 			}
 			set_text_if_changed(
+				flick_score_el,
+				State.flick.best_score
+			)
+			set_text_if_changed(
 				best_score_el,
 				`${score} / ${State.flick.best_score}`
 			)
@@ -375,6 +455,10 @@ const HUD = (() => {
 					String(score)
 				)
 			}
+			set_text_if_changed(
+				tracking_score_el,
+				State.tracking.best_score
+			)
 			set_text_if_changed(
 				best_score_el,
 				`${score} / ${State.tracking.best_score}`
@@ -401,6 +485,10 @@ const HUD = (() => {
 				)
 			}
 			set_text_if_changed(
+				writing_score_el,
+				State.writing.best_score
+			)
+			set_text_if_changed(
 				best_score_el,
 				`${score} / ${State.writing.best_score}`
 			)
@@ -411,6 +499,7 @@ const HUD = (() => {
 			set_text_if_changed(crit_rate_el, "—")
 		} else {
 			throw Error(String(mode))
+
 		}
 		const fps = 1000 / (now_ms - prev_ms)
 		set_text_if_changed(
@@ -428,76 +517,6 @@ const HUD = (() => {
 		const zoom_rad = 2 * atan(tan(half_rad) / zoom)
 		return Logic.to_deg(zoom_rad)
 	}
-	const accuracy_el = /** @type {HTMLSpanElement} */(document.getElementById("accuracy"))/**/
-	const best_score_el = /** @type {HTMLSpanElement} */(document.getElementById("best_score"))/**/
-	const crit_rate_el = /** @type {HTMLSpanElement} */(document.getElementById("crit_rate"))/**/
-	const lol_el = /** @type {HTMLDivElement} */(document.getElementById("lol"))/**/
-	const mc_el = /** @type {HTMLDivElement} */(document.getElementById("mc"))/**/
-	const mc_hipfire_el = /** @type {HTMLSpanElement} */(document.getElementById("mc_hipfire"))/**/
-	const ow_el = /** @type {HTMLDivElement} */(document.getElementById("ow"))/**/
-	const ow_ashe_el = /** @type {HTMLSpanElement} */(document.getElementById("ow_ashe"))/**/
-	const ow_freja_el = /** @type {HTMLSpanElement} */(document.getElementById("ow_freja"))/**/
-	const ow_hipfire_el = /** @type {HTMLSpanElement} */(document.getElementById("ow_hipfire"))/**/
-	const ow_widow_el = /** @type {HTMLSpanElement} */(document.getElementById("ow_widow"))/**/
-	const pubg_el = /** @type {HTMLDivElement} */(document.getElementById("pubg"))/**/
-	const pubg_ads_el = /** @type {HTMLSpanElement} */(document.getElementById("pubg_ads"))/**/
-	const pubg_fpp_el = /** @type {HTMLSpanElement} */(document.getElementById("pubg_fpp"))/**/
-	const pubg_fpp_fov_el = /** @type {HTMLInputElement} */(document.getElementById("pubg_fpp_fov"))/**/
-	const pubg_tpp_el = /** @type {HTMLSpanElement} */(document.getElementById("pubg_tpp"))/**/
-	const pubg_v_el = /** @type {HTMLSpanElement} */(document.getElementById("pubg_v"))/**/
-	const pubg_x15_el = /** @type {HTMLSpanElement} */(document.getElementById("pubg_x15"))/**/
-	const pubg_x2_el = /** @type {HTMLSpanElement} */(document.getElementById("pubg_x2"))/**/
-	const pubg_x3_el = /** @type {HTMLSpanElement} */(document.getElementById("pubg_x3"))/**/
-	const pubg_x4_el = /** @type {HTMLSpanElement} */(document.getElementById("pubg_x4"))/**/
-	const pubg_x6_el = /** @type {HTMLSpanElement} */(document.getElementById("pubg_x6"))/**/
-	const pubg_x8_el = /** @type {HTMLSpanElement} */(document.getElementById("pubg_x8"))/**/
-	const timer_el = /** @type {HTMLSpanElement} */(document.getElementById("timer"))/**/
-	const val_el = /** @type {HTMLDivElement} */(document.getElementById("val"))/**/
-	const val_guardian_el = /** @type {HTMLSpanElement} */(document.getElementById("val_guardian"))/**/
-	const val_hipfire_el = /** @type {HTMLSpanElement} */(document.getElementById("val_hipfire"))/**/
-	const val_marshal_el = /** @type {HTMLSpanElement} */(document.getElementById("val_marshal"))/**/
-	const val_operator25_el = /** @type {HTMLSpanElement} */(document.getElementById("val_operator25"))/**/
-	const val_operator5_el = /** @type {HTMLSpanElement} */(document.getElementById("val_operator5"))/**/
-	const val_spectre_el = /** @type {HTMLSpanElement} */(document.getElementById("val_spectre"))/**/
-	const val_vandal_el = /** @type {HTMLSpanElement} */(document.getElementById("val_vandal"))/**/
-	pubg_fpp_fov_el.addEventListener(
-		"input",
-		function(ev) {
-			const target = /** @type {HTMLInputElement} */(ev.target)/**/
-			target.value = String(
-				max(
-					min(
-						Number(
-							target.value.replace(/[^0-9]/g, "").substring(0, 3)
-						),
-						103
-					),
-					80
-				)
-			)
-			const pubg_fpp = calc_sens_pubg(Number(pubg_fpp_fov_el.value))
-			set_text_if_changed(pubg_fpp_el, round(pubg_fpp))
-		}
-	)
-	pubg_fpp_fov_el.addEventListener(
-		"keydown",
-		function(ev) {
-			const target = /** @type {HTMLInputElement} */(ev.target)/**/
-			if (ev.code == "ArrowDown") {
-				target.value = String(
-					max(Number(target.value) - 1, 80)
-				)
-			} else if (ev.code == "ArrowUp") {
-				target.value = String(
-					min(Number(target.value) + 1, 103)
-				)
-			} else {
-				return
-			}
-			const pubg_fpp = calc_sens_pubg(Number(pubg_fpp_fov_el.value))
-			set_text_if_changed(pubg_fpp_el, round(pubg_fpp))
-		}
-	)
 	return _
 })()
 const Logic = (() => {
@@ -1357,6 +1376,93 @@ const Mat4 = (() => {
 })()
 const Renderer = (() => {
 	const _ = { check_writing_stats, draw, resize }
+	const canvas_el = /** @type {HTMLCanvasElement} */(document.getElementById("canvas"))/**/
+	const context = /** @type {CanvasRenderingContext2D} */(canvas_el.getContext("2d"))/**/
+	const off = new OffscreenCanvas(1, 1)
+	const off_context = /** @type {OffscreenCanvasRenderingContext2D} */(off.getContext("2d"))/**/
+	const crosshair_image = (() => {
+		const { height, width } = Config.crosshair
+		off.height = height
+		off.width = width
+		context.save()
+		off_context.fillStyle = "white"
+		off_context.lineWidth = .75
+		off_context.strokeStyle = "red"
+		off_context.translate(width / 2, height / 2)
+		off_context.arc(0, 0, width / 2 - 1, 0, TAU)
+		off_context.fill()
+		off_context.arc(0, 0, width / 2 - .75, 0, TAU)
+		off_context.stroke()
+		off_context.restore()
+		return off.transferToImageBitmap()
+	})()
+	const grid_pattern = (() => {
+		const { major_every, size } = Config.grid
+		const pattern_size = size * major_every
+		off.height = off.width = pattern_size
+		off_context.save()
+		off_context.lineWidth = 1
+  		off_context.strokeStyle = "rgba(58,74,104,.45)"
+		off_context.beginPath()
+		for (let x = 0; x <= pattern_size; x += size) {
+			const x_px = round(x) + .5
+			off_context.moveTo(x_px, 0)
+			off_context.lineTo(x_px, pattern_size)
+		}
+		for (let y = 0; y <= pattern_size; y += size) {
+			const y_px = round(y) + .5
+			off_context.moveTo(0, y_px)
+			off_context.lineTo(pattern_size, y_px)
+		}
+		off_context.stroke()
+		off_context.lineWidth = 2
+ 		off_context.strokeStyle = "rgba(58,74,104,.9)"
+		const max_px = round(pattern_size) + .5
+		off_context.beginPath()
+		off_context.moveTo(max_px, 0)
+		off_context.lineTo(max_px, pattern_size)
+		off_context.moveTo(0, max_px)
+		off_context.lineTo(pattern_size, max_px)
+		off_context.stroke()
+		off_context.restore()
+		return /** @type {CanvasPattern} */(off_context.createPattern(off, "repeat"))/**/
+	})()
+	const { text_data, text_image } = (() => {
+		const { size } = Config.grid
+		const { offset_x, text } = Config.writing
+		const lines = text.split("\n")
+		const rows = lines.length
+		const font_px = floor(size * 0.78)
+		off_context.font = `${font_px}px bold monospace`
+		let max_w = 0
+		for (const line of lines) {
+			max_w = max(
+				max_w,
+				ceil(
+					off_context.measureText(line).width
+				)
+			)
+		}
+		off.height = rows * size
+		off.width = max_w + offset_x * 2
+		off_context.save()
+		off_context.fillStyle = "white"
+		off_context.font = `${font_px}px bold monospace`
+		off_context.globalAlpha = 0.5
+		off_context.textAlign = "left"
+		off_context.textBaseline = "middle"
+		for (let r = 0; r < rows; r++) {
+			const line = lines[r]
+			if (!line) continue
+			const cy = r * size + size / 2
+			off_context.fillText(line, offset_x, cy)
+		}
+		off_context.restore()
+		return {
+			text_data: off_context.getImageData(0, 0, off.width, off.height).data,
+			text_image: off.transferToImageBitmap()
+		}
+	})()
 	/** @returns {void} */
 	function check_writing_stats() {
 		const { line_width } = Config.writing
@@ -1623,97 +1729,181 @@ const Renderer = (() => {
 		Renderer3D.resize()
 		draw()
 	}
-	const canvas_el = /** @type {HTMLCanvasElement} */(document.getElementById("canvas"))/**/
-	const context = /** @type {CanvasRenderingContext2D} */(canvas_el.getContext("2d"))/**/
-	const off = new OffscreenCanvas(1, 1)
-	const off_context = /** @type {OffscreenCanvasRenderingContext2D} */(off.getContext("2d"))/**/
-	const crosshair_image = (() => {
-		const { height, width } = Config.crosshair
-		off.height = height
-		off.width = width
-		context.save()
-		off_context.fillStyle = "white"
-		off_context.lineWidth = .75
-		off_context.strokeStyle = "red"
-		off_context.translate(width / 2, height / 2)
-		off_context.arc(0, 0, width / 2 - 1, 0, TAU)
-		off_context.fill()
-		off_context.arc(0, 0, width / 2 - .75, 0, TAU)
-		off_context.stroke()
-		off_context.restore()
-		return off.transferToImageBitmap()
-	})()
-	const grid_pattern = (() => {
-		const { major_every, size } = Config.grid
-		const pattern_size = size * major_every
-		off.height = off.width = pattern_size
-		off_context.save()
-		off_context.lineWidth = 1
-  		off_context.strokeStyle = "rgba(58,74,104,.45)"
-		off_context.beginPath()
-		for (let x = 0; x <= pattern_size; x += size) {
-			const x_px = round(x) + .5
-			off_context.moveTo(x_px, 0)
-			off_context.lineTo(x_px, pattern_size)
-		}
-		for (let y = 0; y <= pattern_size; y += size) {
-			const y_px = round(y) + .5
-			off_context.moveTo(0, y_px)
-			off_context.lineTo(pattern_size, y_px)
-		}
-		off_context.stroke()
-		off_context.lineWidth = 2
- 		off_context.strokeStyle = "rgba(58,74,104,.9)"
-		const max_px = round(pattern_size) + .5
-		off_context.beginPath()
-		off_context.moveTo(max_px, 0)
-		off_context.lineTo(max_px, pattern_size)
-		off_context.moveTo(0, max_px)
-		off_context.lineTo(pattern_size, max_px)
-		off_context.stroke()
-		off_context.restore()
-		return /** @type {CanvasPattern} */(off_context.createPattern(off, "repeat"))/**/
-	})()
-	const { text_data, text_image } = (() => {
-		const { size } = Config.grid
-		const { offset_x, text } = Config.writing
-		const lines = text.split("\n")
-		const rows = lines.length
-		const font_px = floor(size * 0.78)
-		off_context.font = `${font_px}px bold monospace`
-		let max_w = 0
-		for (const line of lines) {
-			max_w = max(
-				max_w,
-				ceil(
-					off_context.measureText(line).width
-				)
-			)
-		}
-		off.height = rows * size
-		off.width = max_w + offset_x * 2
-		off_context.save()
-		off_context.fillStyle = "white"
-		off_context.font = `${font_px}px bold monospace`
-		off_context.globalAlpha = 0.5
-		off_context.textAlign = "left"
-		off_context.textBaseline = "middle"
-		for (let r = 0; r < rows; r++) {
-			const line = lines[r]
-			if (!line) continue
-			const cy = r * size + size / 2
-			off_context.fillText(line, offset_x, cy)
-		}
-		off_context.restore()
-		return {
-			text_data: off_context.getImageData(0, 0, off.width, off.height).data,
-			text_image: off.transferToImageBitmap()
-		}
-	})()
 	return _
 })()
 const Renderer3D = await (async () => {
 	const _ = { image, resize }
+	const canvas = new OffscreenCanvas(1, 1)
+	const context = /** @type {WebGL2RenderingContext} */(canvas.getContext(
+		"webgl2",
+		{
+			alpha: true,
+			antialias: true,
+			desynchronized: true,
+			premultipliedAlpha: false
+		}
+	))/**/
+	const stroke_p = make_program(
+		`#version 300 es
+precision highp float;
+layout(location=0) in vec3 a_pos_a;
+layout(location=1) in vec3 a_pos_b;
+uniform mat4 u_proj;
+uniform mat4 u_view;
+uniform vec2 u_viewport;
+uniform float u_thickness_px;
+const float EPS = 1e-2;
+void main() {
+	int vid = gl_VertexID;
+	float side = ( (vid & 1) == 0 ) ? -1.0 : 1.0;
+	float endpoint = (vid < 2) ? 0.0 : 1.0;
+	vec4 a_view = u_view * vec4(a_pos_a, 1.0);
+	vec4 b_view = u_view * vec4(a_pos_b, 1.0);
+	bool a_front = (a_view.z <= -EPS);
+	bool b_front = (b_view.z <= -EPS);
+	if (!a_front && !b_front) {
+		gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
+		return;
+	}
+	if (a_front != b_front) {
+		vec3 pa = a_view.xyz;
+		vec3 pb = b_view.xyz;
+		float t = (-EPS - pa.z) / (pb.z - pa.z);
+		vec3 pI = mix(pa, pb, t);
+		if (!a_front) a_view = vec4(pI, 1.0);
+		else b_view = vec4(pI, 1.0);
+	}
+	vec4 a_clip = u_proj * a_view;
+	vec4 b_clip = u_proj * b_view;
+	vec2 a_ndc = a_clip.xy / a_clip.w;
+	vec2 b_ndc = b_clip.xy / b_clip.w;
+	vec2 dir_ndc = normalize(b_ndc - a_ndc);
+	vec2 nrm_ndc = vec2(-dir_ndc.y, dir_ndc.x);
+	vec2 px_to_ndc = 2.0 / u_viewport;
+	vec2 offset_ndc = nrm_ndc * u_thickness_px * 0.5 * px_to_ndc;
+	vec4 base_clip = mix(a_clip, b_clip, endpoint);
+	vec2 base_ndc = base_clip.xy / base_clip.w;
+	base_ndc += offset_ndc * side;
+	vec2 base_clip_xy = base_ndc * base_clip.w;
+	gl_Position = vec4(base_clip_xy, base_clip.zw);
+}
+`,
+		`#version 300 es
+precision mediump float;
+uniform vec4 u_color;
+out vec4 out_color;
+void main(){ out_color = u_color; }`
+	)
+	const u_view_i = context.getUniformLocation(stroke_p, "u_view")
+	const u_proj_i = context.getUniformLocation(stroke_p, "u_proj")
+	const u_viewport_i = context.getUniformLocation(stroke_p, "u_viewport")
+	const u_thickness_px_i = context.getUniformLocation(stroke_p, "u_thickness_px")
+	const u_color_i = context.getUniformLocation(stroke_p, "u_color")
+	const vao_stroke_instanced = context.createVertexArray()
+	const fill_p = make_program(
+		`#version 300 es
+precision highp float;
+in vec3 a_pos;
+uniform mat4 u_proj;
+uniform mat4 u_view;
+void main() {
+	gl_Position = u_proj * (u_view * vec4(a_pos, 1.0));
+}`,
+		`#version 300 es
+precision mediump float;
+uniform vec4 u_color;
+out vec4 out_color;
+void main() { out_color = u_color; }`
+	)
+	const a_pos_fill = context.getAttribLocation(fill_p, "a_pos")
+	const u_color_fill = context.getUniformLocation(fill_p, "u_color")
+	const u_proj_fill = context.getUniformLocation(fill_p, "u_proj")
+	const u_view_fill = context.getUniformLocation(fill_p, "u_view")
+	const sky_sphere = (() => {
+		const { sky_sphere_radius: r } = Config.view
+		const seg_w = 72
+		const seg_h = 36
+		/** @type {number[]} */
+		const segments = []
+		for (let y = 1; y < seg_h; y++) {
+			const v = y / seg_h
+			const phi = v * PI
+			const c_y = cos(phi)
+			const s_y = sin(phi)
+			for (let x = 0; x < seg_w; x++) {
+				const th1 = (x / seg_w) * TAU
+				const th2 = ((x + 1) / seg_w) * TAU
+				const p1x = sin(th1) * s_y * r
+				const p1y = c_y * r
+				const p1z = -cos(th1) * s_y * r
+				const p2x = sin(th2) * s_y * r
+				const p2y = c_y * r
+				const p2z = -cos(th2) * s_y * r
+				segments.push(p1x, p1y, p1z, p2x, p2y, p2z)
+			}
+		}
+		for (let x = 0; x < seg_w; x++) {
+			const th = (x / seg_w) * TAU
+			const c_x = cos(th)
+			const s_x = sin(th)
+			for (let y = 0; y < seg_h; y++) {
+				const v1 = (y / seg_h) * PI
+				const v2 = ((y + 1) / seg_h) * PI
+				const p1x = s_x * sin(v1) * r
+				const p1y = cos(v1) * r
+				const p1z = -c_x * sin(v1) * r
+				const p2x = s_x * sin(v2) * r
+				const p2y = cos(v2) * r
+				const p2z = -c_x * sin(v2) * r
+				segments.push(p1x, p1y, p1z, p2x, p2y, p2z)
+			}
+		}
+		return build_stroke_vbo(
+			new Float32Array(segments),
+			context.STATIC_DRAW
+		)
+	})()
+	const sky_sphere_major = (() => {
+		const { sky_sphere_radius: r } = Config.view
+		const seg_w = 72
+		const seg_h = 36
+		/** @type {number[]} */
+		const segments = []
+		const phi = PI * .5
+		const cy = cos(phi)
+		const sy = sin(phi)
+		for (let x = 0; x < seg_w; x++) {
+			const th1 = (x / seg_w) * TAU
+			const th2 = ((x + 1) / seg_w) * TAU
+			const p1x = sin(th1) * sy * r
+			const p1y = cy * r
+			const p1z = -cos(th1) * sy * r
+			const p2x = sin(th2) * sy * r
+			const p2y = cy * r
+			const p2z = -cos(th2) * sy * r
+			segments.push(p1x, p1y, p1z, p2x, p2y, p2z)
+		}
+		const th_list = [ 0, PI * .5, PI, PI * 1.5 ]
+		for (const th of th_list) {
+			const cx = cos(th)
+			const sx = sin(th)
+			for (let y = 0; y < seg_h; y++) {
+				const v1 = (y / seg_h) * PI
+				const v2 = ((y + 1) / seg_h) * PI
+				const p1x = sx * sin(v1) * r
+				const p1y = cos(v1) * r
+				const p1z = -cx * sin(v1) * r
+				const p2x = sx * sin(v2) * r
+				const p2y = cos(v2) * r
+				const p2z = -cx * sin(v2) * r
+				segments.push(p1x, p1y, p1z, p2x, p2y, p2z)
+			}
+		}
+		return build_stroke_vbo(
+			new Float32Array(segments),
+			context.STATIC_DRAW
+		)
+	})()
 	/**
 	 * @param {Float32Array} segments
 	 * @param {GLenum} [usage = context.STATIC_DRAW]
@@ -2161,215 +2351,10 @@ const Renderer3D = await (async () => {
 		canvas.height = height
 		context.viewport(0, 0, width, height)
 	}
-	const canvas = new OffscreenCanvas(1, 1)
-	const context = /** @type {WebGL2RenderingContext} */(canvas.getContext(
-		"webgl2",
-		{
-			alpha: true,
-			antialias: true,
-			desynchronized: true,
-			premultipliedAlpha: false
-		}
-	))/**/
-	const stroke_p = make_program(
-		`#version 300 es
-precision highp float;
-layout(location=0) in vec3 a_pos_a;
-layout(location=1) in vec3 a_pos_b;
-uniform mat4 u_proj;
-uniform mat4 u_view;
-uniform vec2 u_viewport;
-uniform float u_thickness_px;
-const float EPS = 1e-2;
-void main() {
-	int vid = gl_VertexID;
-	float side = ( (vid & 1) == 0 ) ? -1.0 : 1.0;
-	float endpoint = (vid < 2) ? 0.0 : 1.0;
-	vec4 a_view = u_view * vec4(a_pos_a, 1.0);
-	vec4 b_view = u_view * vec4(a_pos_b, 1.0);
-	bool a_front = (a_view.z <= -EPS);
-	bool b_front = (b_view.z <= -EPS);
-	if (!a_front && !b_front) {
-		gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
-		return;
-	}
-	if (a_front != b_front) {
-		vec3 pa = a_view.xyz;
-		vec3 pb = b_view.xyz;
-		float t = (-EPS - pa.z) / (pb.z - pa.z);
-		vec3 pI = mix(pa, pb, t);
-		if (!a_front) a_view = vec4(pI, 1.0);
-		else b_view = vec4(pI, 1.0);
-	}
-	vec4 a_clip = u_proj * a_view;
-	vec4 b_clip = u_proj * b_view;
-	vec2 a_ndc = a_clip.xy / a_clip.w;
-	vec2 b_ndc = b_clip.xy / b_clip.w;
-	vec2 dir_ndc = normalize(b_ndc - a_ndc);
-	vec2 nrm_ndc = vec2(-dir_ndc.y, dir_ndc.x);
-	vec2 px_to_ndc = 2.0 / u_viewport;
-	vec2 offset_ndc = nrm_ndc * u_thickness_px * 0.5 * px_to_ndc;
-	vec4 base_clip = mix(a_clip, b_clip, endpoint);
-	vec2 base_ndc = base_clip.xy / base_clip.w;
-	base_ndc += offset_ndc * side;
-	vec2 base_clip_xy = base_ndc * base_clip.w;
-	gl_Position = vec4(base_clip_xy, base_clip.zw);
-}
-`,
-		`#version 300 es
-precision mediump float;
-uniform vec4 u_color;
-out vec4 out_color;
-void main(){ out_color = u_color; }`
-	)
-	const u_view_i = context.getUniformLocation(stroke_p, "u_view")
-	const u_proj_i = context.getUniformLocation(stroke_p, "u_proj")
-	const u_viewport_i = context.getUniformLocation(stroke_p, "u_viewport")
-	const u_thickness_px_i = context.getUniformLocation(stroke_p, "u_thickness_px")
-	const u_color_i = context.getUniformLocation(stroke_p, "u_color")
-	const vao_stroke_instanced = context.createVertexArray()
-	const fill_p = make_program(
-		`#version 300 es
-precision highp float;
-in vec3 a_pos;
-uniform mat4 u_proj;
-uniform mat4 u_view;
-void main() {
-	gl_Position = u_proj * (u_view * vec4(a_pos, 1.0));
-}`,
-		`#version 300 es
-precision mediump float;
-uniform vec4 u_color;
-out vec4 out_color;
-void main() { out_color = u_color; }`
-	)
-	const a_pos_fill = context.getAttribLocation(fill_p, "a_pos")
-	const u_color_fill = context.getUniformLocation(fill_p, "u_color")
-	const u_proj_fill = context.getUniformLocation(fill_p, "u_proj")
-	const u_view_fill = context.getUniformLocation(fill_p, "u_view")
-	const sky_sphere = (() => {
-		const { sky_sphere_radius: r } = Config.view
-		const seg_w = 72
-		const seg_h = 36
-		/** @type {number[]} */
-		const segments = []
-		for (let y = 1; y < seg_h; y++) {
-			const v = y / seg_h
-			const phi = v * PI
-			const c_y = cos(phi)
-			const s_y = sin(phi)
-			for (let x = 0; x < seg_w; x++) {
-				const th1 = (x / seg_w) * TAU
-				const th2 = ((x + 1) / seg_w) * TAU
-				const p1x = sin(th1) * s_y * r
-				const p1y = c_y * r
-				const p1z = -cos(th1) * s_y * r
-				const p2x = sin(th2) * s_y * r
-				const p2y = c_y * r
-				const p2z = -cos(th2) * s_y * r
-				segments.push(p1x, p1y, p1z, p2x, p2y, p2z)
-			}
-		}
-		for (let x = 0; x < seg_w; x++) {
-			const th = (x / seg_w) * TAU
-			const c_x = cos(th)
-			const s_x = sin(th)
-			for (let y = 0; y < seg_h; y++) {
-				const v1 = (y / seg_h) * PI
-				const v2 = ((y + 1) / seg_h) * PI
-				const p1x = s_x * sin(v1) * r
-				const p1y = cos(v1) * r
-				const p1z = -c_x * sin(v1) * r
-				const p2x = s_x * sin(v2) * r
-				const p2y = cos(v2) * r
-				const p2z = -c_x * sin(v2) * r
-				segments.push(p1x, p1y, p1z, p2x, p2y, p2z)
-			}
-		}
-		return build_stroke_vbo(
-			new Float32Array(segments),
-			context.STATIC_DRAW
-		)
-	})()
-	const sky_sphere_major = (() => {
-		const { sky_sphere_radius: r } = Config.view
-		const seg_w = 72
-		const seg_h = 36
-		/** @type {number[]} */
-		const segments = []
-		const phi = PI * .5
-		const cy = cos(phi)
-		const sy = sin(phi)
-		for (let x = 0; x < seg_w; x++) {
-			const th1 = (x / seg_w) * TAU
-			const th2 = ((x + 1) / seg_w) * TAU
-			const p1x = sin(th1) * sy * r
-			const p1y = cy * r
-			const p1z = -cos(th1) * sy * r
-			const p2x = sin(th2) * sy * r
-			const p2y = cy * r
-			const p2z = -cos(th2) * sy * r
-			segments.push(p1x, p1y, p1z, p2x, p2y, p2z)
-		}
-		const th_list = [ 0, PI * .5, PI, PI * 1.5 ]
-		for (const th of th_list) {
-			const cx = cos(th)
-			const sx = sin(th)
-			for (let y = 0; y < seg_h; y++) {
-				const v1 = (y / seg_h) * PI
-				const v2 = ((y + 1) / seg_h) * PI
-				const p1x = sx * sin(v1) * r
-				const p1y = cos(v1) * r
-				const p1z = -cx * sin(v1) * r
-				const p2x = sx * sin(v2) * r
-				const p2y = cos(v2) * r
-				const p2z = -cx * sin(v2) * r
-				segments.push(p1x, p1y, p1z, p2x, p2y, p2z)
-			}
-		}
-		return build_stroke_vbo(
-			new Float32Array(segments),
-			context.STATIC_DRAW
-		)
-	})()
 	return _
 })()
 const SFX = await (async () => {
 	const _ = { now, play_crit, play_hit }
-	/** @returns {number} */
-	function now() {
-		return context.currentTime
-	}
-	/** @returns {void} */
-	function play_crit() {
-		const t = now()
-		wake(t)
-		const src = context.createBufferSource()
-		src.buffer = crit_sound
-		src.connect(master)
-		src.start(t)
-	}
-	/** @returns {void} */
-	function play_hit() {
-		const t = now()
-		wake(t)
-		const src = context.createBufferSource()
-		src.buffer = hit_sound
-		src.connect(master)
-		src.start(t)
-	}
-	/**
-	 * @param {number} t
-	 * @returns {void}
-	 */
-	function wake(t) {
-		const { volume } = Config.audio
-		if (context.state !== "running") context.resume()
-		if (abs(master.gain.value - volume) > 1e-3) {
-			master.gain.cancelScheduledValues(t)
-			master.gain.setTargetAtTime(volume, t, .01)
-		}
-	}
 	const context = new AudioContext()
 	const master = context.createGain()
 	master.gain.value = 0
@@ -2545,6 +2530,40 @@ const SFX = await (async () => {
 			})()
 		]
 	)
+	/** @returns {number} */
+	function now() {
+		return context.currentTime
+	}
+	/** @returns {void} */
+	function play_crit() {
+		const t = now()
+		wake(t)
+		const src = context.createBufferSource()
+		src.buffer = crit_sound
+		src.connect(master)
+		src.start(t)
+	}
+	/** @returns {void} */
+	function play_hit() {
+		const t = now()
+		wake(t)
+		const src = context.createBufferSource()
+		src.buffer = hit_sound
+		src.connect(master)
+		src.start(t)
+	}
+	/**
+	 * @param {number} t
+	 * @returns {void}
+	 */
+	function wake(t) {
+		const { volume } = Config.audio
+		if (context.state !== "running") context.resume()
+		if (abs(master.gain.value - volume) > 1e-3) {
+			master.gain.cancelScheduledValues(t)
+			master.gain.setTargetAtTime(volume, t, .01)
+		}
+	}
 	return _
 })()
 const State = (() => {

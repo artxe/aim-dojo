@@ -59,12 +59,21 @@
 			</div>
 			<span class="absolute pointer-events=none r=.5 t=.5 ws=nowrap" id="timer">00:00</span>
 			<div class="absolute bold grid l=50% ta=center t=60% tf=translate(-50%,-50%)" menu>
-				<span class="bold c=#4488ff fs=4.5 wsp=-.2 -webkit-text-stroke=1px_white">AIM DOJO</span><br>
-				<button class="cs=pointer fs=2 :hover/tf=scale(1.25);tt=.1s" id="writing">Writing</button><br>
-				<button class="cs=pointer fs=2 :hover/tf=scale(1.25);tt=.1s" id="tracking">Tracking</button><br>
-				<button class="cs=pointer fs=2 :hover/tf=scale(1.25);tt=.1s" id="flick">Flick</button><br>
+				<span class="bold c=#4488ff fs=4.5 wsp=-.2 -webkit-text-stroke=1px_white">AIM DOJO</span>
+				<button class="cs=pointer fs=2 relative :hover/tf=scale(1.25);tt=.1s" id="writing">
+					Writing
+					<span class="absolute fs=.5 l=50% t=90% tf=translate(-50%,-50%)" id="writing_score"><br>-</span>
+				</button>
+				<button class="cs=pointer fs=2 relative :hover/tf=scale(1.25);tt=.1s" id="tracking">
+					Tracking
+					<span class="absolute fs=.5 l=50% t=90% tf=translate(-50%,-50%)" id="tracking_score"><br>-</span>
+				</button>
+				<button class="cs=pointer fs=2 relative :hover/tf=scale(1.25);tt=.1s" id="flick">
+					Flick
+					<span class="absolute fs=.5 l=50% t=90% tf=translate(-50%,-50%)" id="flick_score"><br>-</span>
+				</button>
 			</div>
 		</div>
-		<script src="./main.js?v1.0.2" type="module"></script>
+		<script src="./main.js?v1.0.3" type="module"></script>
 	</body>
 </html>
