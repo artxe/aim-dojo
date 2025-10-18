@@ -7,8 +7,8 @@ type DeepReadonly<T> = Readonly<{
 				? ReadonlyArray<DeepReadonly<A>>
 				: DeepReadonly<T[K]>
 }>
-type GameMode = "flick" | "tracking" | "writing"
-type GameName = "lol" | "val" | "pubg" | "ow" | "mc"
+type GameMode = "flick" | "tracking" | "warmup" | "writing"
+type GameName = "cs2" | "lol" | "mc" | "ow" | "pubg" | "sa" | "val"
 type Line = {
 	e: {
 		x: number

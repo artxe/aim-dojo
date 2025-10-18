@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"allowSyntheticDefaultImports": true,
-    	"allowUmdGlobalAccess": true,
+		"allowUmdGlobalAccess": true,
 		"checkJs": true,
 		"exactOptionalPropertyTypes": true,
 		"lib": [ "ES2024", "DOM", "DOM.Iterable" ],
@@ -11,8 +11,8 @@
 		"noPropertyAccessFromIndexSignature": true,
 		"skipLibCheck": true,
 		"strict": true,
-		"target": "esnext",
-		"types": [ "@webgpu/types" ]
+		"target": "esnext"
 	},
-	"ts-node": { "esm": true }
+	"ts-node": { "esm": true },
+	"exclude": [ "docs/lib/" ]
 }

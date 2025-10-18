@@ -3,160 +3,157 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>AIM DOJO</title>
+		<title>AIM DOJO - The fastest way to improve your FPS skills</title>
+		<meta name="description" content="AIM DOJO — Browser-based FPS aim trainer for flick, tracking, warmup, and writing modes. Preset conversions for CS2, VALORANT, Overwatch, PUBG, LoL, and Minecraft. Adjust sensitivity, FOV/scopes, tolerance and canvas size; track peak score, accuracy, and crit rate.">
+		<link rel="canonical" href="https://artxe.github.io/aim-dojo/">
+		<meta name="robots" content="index,follow">
+		<meta property="og:title" content="AIM DOJO — FPS Aim Trainer">
+		<meta property="og:description" content="AIM DOJO — Browser-based FPS aim trainer for flick, tracking, warmup, and writing modes. Preset conversions for CS2, VALORANT, Overwatch, PUBG, LoL, and Minecraft. Adjust sensitivity, FOV/scopes, tolerance and canvas size; track peak score, accuracy, and crit rate.">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="https://artxe.github.io/aim-dojo/">
+		<meta property="og:image" content="https://artxe.github.io/aim-dojo/bg.png">
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="AIM DOJO — FPS Aim Trainer">
+		<meta name="twitter:description" content="AIM DOJO — Browser-based FPS aim trainer for flick, tracking, warmup, and writing modes. Preset conversions for CS2, VALORANT, Overwatch, PUBG, LoL, and Minecraft. Adjust sensitivity, FOV/scopes, tolerance and canvas size; track peak score, accuracy, and crit rate.">
+		<meta name="twitter:image" content="https://artxe.github.io/aim-dojo/bg.png">
+		<meta name="theme-color" content="#3d2423">
+		<link rel="icon" href="https://artxe.github.io/aim-dojo/bg.png">
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "SoftwareApplication",
+				"name": "AIM DOJO",
+				"applicationCategory": "GameApplication",
+				"operatingSystem": "Web",
+				"url": "https://artxe.github.io/aim-dojo/",
+				"image": "https://artxe.github.io/aim-dojo/bg.png",
+				"description": "AIM DOJO — Browser-based FPS aim trainer for flick, tracking, warmup, and writing modes. Preset conversions for CS2, VALORANT, Overwatch, PUBG, LoL, and Minecraft. Adjust sensitivity, FOV/scopes, tolerance and canvas size; track peak score, accuracy, and crit rate.",
+				"offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+			}
+		</script>
+		<script src="./lib/css-lube.js"></script>
 		<style>
-			* {
-				background: none;
-				border: none;
-				color: inherit;
-				padding: 0;
-				margin: 0;
-			}
-			html, body {
-				background: #0f1115;
-				color: #e6e8ef;
-				font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-				font-size: 16px;
-				height: 100%;
-				user-select: none;
-			}
-			body.locked .menu { display: none; }
-			body.locked .sens .hint { display: none; }
-			body:not(.locked) canvas { filter: blur(4px); }
-			canvas {
-				display: block;
-				height: 100%;
-				transition: filter .12s ease;
-				width: 100%;
-			}
-			label {
-				color: #9cd2ff;
-				font-weight: bold;
-			}
-			.bg {
-				position: fixed;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
-				filter: brightness(0.5);
-			}
-			.menu {
-				display: grid;
-				font-weight: bold;
-				left: 50%;
-				position: absolute;
-				text-align: center;
-				top: 60%;
-				transform: translate(-50%, -50%);
-			}
-			.menu button {
-				cursor: pointer;
-				font-size: 2em;
-				font-weight: bold;
-			}
-			.menu button:hover {
-				transform: scale(1.25);
-				transition: .1s;
-			}
-			.hud {
-				left: 50%;
-				pointer-events: none;
-				position: absolute;
-				top: .5em;
-				transform: translateX(-50%);
-				white-space: nowrap;
-			}
-			.logo {
-				color: #4488ff;
-				font-size: 4.5em;
-				font-weight: bold;
-				word-spacing:-.2em;
-				-webkit-text-stroke: 1px white;
-			}
-			.sens {
-				left: .5em;
-				pointer-events: none;
-				position: absolute;
-				top: .5em;
-				white-space: nowrap;
-			}
-			.sens div { line-height: 1.5em; }
-			.sens .game { display: none; }
-			.sens .game.active { display: block; }
-			.sens .game b { font-size: 1.5em; }
-			.sens .hint { opacity: .5; }
-			.timer {
-				pointer-events: none;
-				position: absolute;
-				right: .5em;
-				top: .5em;
-				white-space: nowrap;
-			}
-			#wrap {
-				position: relative;
-				height: 100%;
+			@keyframes blur-blink {
+				50% { filter: blur(1.25px); }
 			}
 		</style>
 	</head>
-	<body>
-		<video class="bg" autoplay muted loop playsinline>
+	<body class="bg=#3d2423 c=#e6e8ef ff=ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace fs=16px h=100% us=none o=clip
+		[locked]_[menu]/none
+		:not([locked])_canvas/ft=blur(4px);tt=filter_1s_ease;a=none">
+		<img class="ft=brightness(.5) fixed h=100% l=0 of=cover t=0 w=100%" src="./bg.png" />
+		<video class="ft=brightness(.5) fixed h=100% l=0 of=cover t=0 w=100%" autoplay muted loop playsinline>
 			<source src="./bg.mp4" type="video/mp4">
 		</video>
-		<div id="wrap">
-			<canvas class="blur" id="canvas"></canvas>
-			<div class="hud" id="hud">
-				<label>Score/Best</label> <span id="best_score">—</span> ·
-				<label>Accuracy</label> <span id="accuracy">—</span> % ·
-				<label>Critical</label> <span id="crit_rate">—</span> %
+		<div class="h=100% relative">
+			<canvas class="a=blur-blink_1.5s_ease-in-out_infinite ft=blur(.5px)" id="canvas"></canvas>
+			<div class="absolute l=50% pe=none t=.5 tf=translateX(-50%) ws=nowrap">
+				<span class="bold c=#9cd2ff">Score/Peak</span> <span id="peak_score">—</span> ·
+				<span class="bold c=#9cd2ff">Accuracy</span> <span id="accuracy">—</span>% ·
+				<span class="bold c=#9cd2ff">Critical</span> <span id="crit_rate">—</span>%
 			</div>
-			<div class="sens" id="sens">
-				<span class="hint">(Tab: Next game sens)</span>
-				<div id="lol" class="game">
-					<b>LOL: <label>50</label></b><br>
-				</div>
-				<div id="val" class="game">
-					<b>VALORANT</b><br>
-					Hipfire: <label id="val_hipfire">—</label><br>
-					Spectre/Stinger/Ares/Odin: <span id="val_spectre">—</span><br>
-					Vandal/Phantom/Bulldog: <label id="val_vandal">—</label><br>
-					Guardian: <span id="val_guardian">—</span><br>
-					Marshal/Outlaw: <span id="val_marshal">—</span><br>
-					Operator: <label id="val_operator25">—</label> / <span id="val_operator5">—</span>
-				</div>
-				<div id="pubg" class="game">
-					<b>PUBG</b><br>
-					FPP(103): <span id="pubg_fpp">—</span><br>
-					TPP: <label id="pubg_tpp">—</label><br>
-					ADS/Scope: <label id="pubg_ads">—</label><br>
-					Vertical: <label id="pubg_v">—</label><br>
-					x2: <label id="pubg_x2">—</label><br>
-					x3: <label id="pubg_x3">—</label><br>
-					x4: <label id="pubg_x4">—</label><br>
-					x6: <label id="pubg_x6">—</label><br>
-					x8: <label id="pubg_x8">—</label><br>
-					x15: <label id="pubg_x15">—</label>
-				</div>
-				<div id="ow" class="game">
-					<b>OVERWATCH</b><br>
-					Hipfire: <label id="ow_hipfire">—</label>%<br>
-					Widow/Ana: <label id="ow_widow">—</label>%<br>
-					Ashe/Cassidy: <label id="ow_ashe">—</label>%<br>
-					Freja: <label id="ow_freja">—</label>%
-				</div>
-				<div id="mc" class="game">
-					<b>MINECRAFT: <label id="mc_hipfire">—</label>%<br>
-				</div>
+			<div class="absolute l=.5 pe=none t=.5 ws=nowrap">
+				<span class="op=.5" menu>(Tab: Next game sens)<br></span>
+				W:<input class="bd=none bg=none pe=auto w=4ch" id="width" value="-" />
+				H:<input class="bd=none bg=none pe=auto w=4ch" id="height" value="-" />
+				T:<input class="bd=none bg=none pe=auto w=1ch" id="tolerance" value="-" />
+				<ul class="pe=auto :active>li/block
+					:active>li:not([active])>div/none">
+					<li class="lh=1.5 none [active]/block :hover>b/c=#9cd2ff" id="lol">
+						<b class="fs=1.5">LOL</b>
+						<div>
+							Window(6): <span class="bold c=#9cd2ff">50</span>
+						</div>
+					</li>
+					<li class="lh=1.5 none [active]/block :hover>b/c=#9cd2ff" id="val">
+						<b class="fs=1.5">VALORANT</b>
+						<div>
+							Hipfire: <span class="bold c=#9cd2ff" id="val_hipfire">—</span><br>
+							Spectre/Stinger/Ares/Odin: <span id="val_spectre">—</span><br>
+							Vandal/Phantom/Bulldog: <span class="bold c=#9cd2ff" id="val_vandal">—</span><br>
+							Guardian: <span id="val_guardian">—</span><br>
+							Marshal/Outlaw: <span id="val_marshal">—</span><br>
+							Operator: <span class="bold c=#9cd2ff" id="val_operator25">—</span> / <span id="val_operator5">—</span>
+						</div>
+					</li>
+					<li class="lh=1.5 none [active]/block :hover>b/c=#9cd2ff" id="cs2">
+						<b class="fs=1.5">CS2</b>
+						<div>
+							Hipfire(16:9): <span class="bold c=#9cd2ff" id="cs2_hipfire">—</span><br>
+							AUG/SG556: <span id="cs2_aug">—</span><br>
+							Automatic/SSG08: <span id="cs2_auto1">—</span> / <span id="cs2_auto2">—</span><br>
+							AWP: <span class="bold c=#9cd2ff" id="cs2_awp1">—</span> / <span id="cs2_awp2">—</span>
+						</div>
+					</li>
+					<li class="lh=1.5 none [active]/block :hover>b/c=#9cd2ff" id="pubg">
+						<b class="fs=1.5">PUBG</b>
+						<div>
+							FPP(<input class="bd=none bg=none pe=auto w=3ch" id="pubg_fpp_fov" value="103" />): <span id="pubg_fpp">—</span><br>
+							TPP(x0.82): <span class="bold c=#9cd2ff" id="pubg_tpp">—</span><br>
+							ADS/Scope: <span class="bold c=#9cd2ff" id="pubg_ads">—</span><br>
+							Vertical: <span class="bold c=#9cd2ff" id="pubg_v">—</span><br>
+							x2: <span class="bold c=#9cd2ff" id="pubg_x2">—</span> | <span id="pubg_x2_r">—</span><br>
+							x3: <span class="bold c=#9cd2ff" id="pubg_x3">—</span> | <span id="pubg_x3_r">—</span><br>
+							x4: <span class="bold c=#9cd2ff" id="pubg_x4">—</span><br>
+							x6: <span class="bold c=#9cd2ff" id="pubg_x6">—</span><br>
+							x8: <span class="bold c=#9cd2ff" id="pubg_x8">—</span><br>
+							x15: <span class="bold c=#9cd2ff" id="pubg_x15">—</span>
+						</div>
+					</li>
+					<li class="lh=1.5 none [active]/block :hover>b/c=#9cd2ff" id="ow">
+						<b class="fs=1.5">OVERWATCH</b>
+						<div>
+							Hipfire(103): <span class="bold c=#9cd2ff" id="ow_hipfire">—</span>%<br>
+							Widow/Ana: <span class="bold c=#9cd2ff" id="ow_widow">—</span>%<br>
+							Ashe/Cassidy: <span class="bold c=#9cd2ff" id="ow_ashe">—</span>%<br>
+							Freja: <span class="bold c=#9cd2ff" id="ow_freja">—</span>%
+						</div>
+					</li>
+					<li class="lh=1.5 none [active]/block :hover>b/c=#9cd2ff" id="mc">
+						<b class="fs=1.5">MINECRAFT</b>
+						<div>
+							Hipfire(110): <span class="bold c=#9cd2ff" id="mc_hipfire">—</span>%
+						</div>
+					</li>
+					<li class="lh=1.5 none [active]/block :hover>b/c=#9cd2ff" id="sa">
+						<b class="fs=1.5">SUDDEN ATTACK</b>
+						<div>
+							Hipfire(1280): <span class="bold c=#9cd2ff" id="sa_hipfire">—</span>
+						</div>
+					</li>
+				</ul>
 			</div>
-			<span id="timer" class="timer">00:00</span>
-			<div class="menu" id="menu">
-				<label class="logo">AIM DOJO</label><br>
-				<button id="writing">Writing</button><br>
-				<button id="tracking">Tracking</button><br>
-				<button id="flick">Flick</button><br>
+			<div class="absolute column flex ai=end r=.5 t=.5 ws=nowrap">
+				<button class="bold cs=pointer :hover/tf=scale(1.1);tt=.1s
+					[on=true]>span:nth-child(2)/none
+					[on=false]>span:nth-child(1)/none" id="mode_cycle" on="true">
+					Mode Cycle:<span class="c=lime op=.75"> ON</span><span class="c=red op=.75">OFF</span>
+				</button>
+				<span class="pe=none" id="timer">00:00</span>
+			</div>
+			<div class="absolute bold grid l=50% ta=center t=60% tf=translate(-50%,-50%)" menu>
+				<span class="bold c=#4488ff fs=4.5 wsp=-.2 -webkit-text-stroke=1px_white">AIM DOJO</span>
+				<button class="cs=pointer fs=2 relative :hover/tf=scale(1.25);tt=.1s" id="warmup">
+					Warm-Up
+					<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="warmup_score"><br>-</span>
+				</button>
+				<button class="cs=pointer fs=2 relative :hover/tf=scale(1.25);tt=.1s" id="writing">
+					Writing
+					<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="writing_score"><br>-</span>
+				</button>
+				<button class="cs=pointer fs=2 relative :hover/tf=scale(1.25);tt=.1s" id="tracking">
+					Tracking
+					<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="tracking_score"><br>-</span>
+				</button>
+				<button class="cs=pointer fs=2 relative :hover/tf=scale(1.25);tt=.1s" id="flick">
+					Flick
+					<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="flick_score"><br>-</span>
+				</button>
+			</div>
+			<div class="absolute ai=center column-reverse flex g=.5 l=50% b=35% tf=translateX(-50%)
+				>span/bg=#555555aa;br=.5;fs=1.5;p=.0_.5" id="message">
 			</div>
 		</div>
-		<script src="./main.js" type="module"></script>
+		<script src="./js/main.js?v1.1.0" type="module"></script>
 	</body>
 </html>
