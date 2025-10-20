@@ -12,27 +12,17 @@ export default {
 		zoom: 51.5
 	},
 	device: { height: 0, width: 0 },
-	flick: {
-		best_score: Number(
-			localStorage.getItem("flick.best_score") || 0
-		),
-		peak_score: 0,
-		/** @type {Target[]} */
-		targets: [],
-		/** @type {Target3D[]} */
-		targets_3d: []
-	},
 	game: {
 		cycle_id: 1,
 		height: Number(
 			localStorage.getItem("game.height") || 1080
 		),
-		/** @type {GameMode?} */
+		/** @type {GameModeName?} */
 		mode: null,
 		raf_id: 0,
-		sens: /** @type {GameName} */(localStorage.getItem("game.sens") || "lol")/**/,
+		sens: /** @type {GameSensName} */(localStorage.getItem("game.sens") || "lol")/**/,
 		tolerance: Number(
-			localStorage.getItem("game.tolerance") || 7
+			localStorage.getItem("game.tolerance") || 2
 		),
 		width: Number(
 			localStorage.getItem("game.width") || 1920
@@ -60,6 +50,68 @@ export default {
 	 */
 	impacts_3d: create_queue(),
 	input: { mb_left: false, mb_right: false },
+	mode: {
+		aiming: {
+			best_score: Number(
+				localStorage.getItem("aiming.best_score") || 0
+			),
+			peak_score: 0,
+			/** @type {Target} */
+			target: { cr: 0, cx: 0, cy: 0, r: 0, x: 0, y: 0 },
+			/** @type {Target3D} */
+			target_3d: { cp: 0, cr: 0, cy: 0, p: 0, r: 0, y: 0 }
+		},
+		flick: {
+			best_score: Number(
+				localStorage.getItem("flick.best_score") || 0
+			),
+			peak_score: 0,
+			/** @type {Target[]} */
+			targets: [],
+			/** @type {Target3D[]} */
+			targets_3d: []
+		},
+		tracking: {
+			best_score: Number(
+				localStorage.getItem("tracking.best_score") || 0
+			),
+			move: {
+				direction: 0,
+				speed: 0,
+				direction_change_rate: 0
+			},
+			next_impact_s: 0,
+			next_change_size_ms: 0,
+			next_change_move_ms: 0,
+			peak_score: 0,
+			size_lerp: {
+				active: false,
+				start_ms: 0,
+				from: 0,
+				to: 0
+			},
+			speed_lerp: {
+				active: false,
+				start_ms: 0,
+				from: 0,
+				to: 0
+			},
+			/** @type {Target} */
+			target: { cr: 0, cx: 0, cy: 0, r: 0, x: 0, y: 0 },
+			/** @type {Target3D} */
+			target_3d: { cp: 0, cr: 0, cy: 0, p: 0, r: 0, y: 0 }
+		},
+		writing: {
+			best_score: Number(
+				localStorage.getItem("writing.best_score") || 0
+			),
+			/** @type {ReturnType<typeof create_queue<Line>>} */
+			lines: create_queue(),
+			peak_score: 0,
+			/** @type {{ x: number, y: number }?} */
+			pointer: null
+		}
+	},
 	stats: {
 		/**
 		 * @type {ReturnType<typeof create_queue<{
@@ -82,54 +134,6 @@ export default {
 		now_s: 0,
 		prev_ms: 0,
 		start_ms: 0
-	},
-	tracking: {
-		best_score: Number(
-			localStorage.getItem("tracking.best_score") || 0
-		),
-		move: {
-			direction: 0,
-			speed: 0,
-			direction_change_rate: 0
-		},
-		next_impact_s: 0,
-		next_change_size_ms: 0,
-		next_change_move_ms: 0,
-		peak_score: 0,
-		size_lerp: {
-			active: false,
-			start_ms: 0,
-			from: 0,
-			to: 0
-		},
-		speed_lerp: {
-			active: false,
-			start_ms: 0,
-			from: 0,
-			to: 0
-		},
-		/** @type {Target} */
-		target: { cr: 0, cx: 0, cy: 0, r: 0, x: 0, y: 0 },
-		/** @type {Target3D} */
-		target_3d: { cp: 0, cr: 0, cy: 0, p: 0, r: 0, y: 0 }
-	},
-	warmup: {
-		best_score: Number(
-			localStorage.getItem("warmup.best_score") || 0
-		),
-		peak_score: 0,
-		/** @type {Target3D} */
-		target: { cp: 0, cr: 0, cy: 0, p: 0, r: 0, y: 0 }
-	},
-	writing: {
-		best_score: Number(
-			localStorage.getItem("writing.best_score") || 0
-		),
-		/** @type {ReturnType<typeof create_queue<Line>>} */
-		lines: create_queue(),
-		peak_score: 0,
-		/** @type {{ x: number, y: number }?} */
-		pointer: null
 	}
 }
 /** @template T */

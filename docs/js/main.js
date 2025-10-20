@@ -1,4 +1,6 @@
 import {
+	aiming_btn,
+	aiming_score_el,
 	cs2_el,
 	flick_btn,
 	flick_score_el,
@@ -15,12 +17,11 @@ import {
 	tracking_btn,
 	tracking_score_el,
 	val_el,
-	warmup_btn,
-	warmup_score_el,
 	width_el,
 	writing_btn,
 	writing_score_el
 } from "./document.js"
+import game_mode from "./game_mode/index.js"
 import {
 	active_game_sens,
 	change_active_game_sens,
@@ -28,12 +29,7 @@ import {
 	set_text_if_changed,
 	update_game_sens
 } from "./hud.js"
-import {
-	shoot,
-	start_game,
-	stop_game,
-	update_fov
-} from "./logic.js"
+import { start_game, stop_game, update_fov } from "./logic.js"
 import { clamp, EPS, floor, max, min, PI, round } from "./math.js"
 import { resize_2d } from "./renderer.js"
 import { calc_sens_pubg, compute_sens_rad } from "./sens.js"
@@ -58,7 +54,10 @@ document.addEventListener(
 	{ passive: true }
 )
 document.addEventListener("mouseup", on_mouseup)
+aiming_btn.addEventListener("click", on_click)
 flick_btn.addEventListener("click", on_click)
+tracking_btn.addEventListener("click", on_click)
+writing_btn.addEventListener("click", on_click)
 mode_cycle_btn.addEventListener(
 	"click",
 	function() {
@@ -72,9 +71,6 @@ mode_cycle_btn.addEventListener(
 		}
 	}
 )
-tracking_btn.addEventListener("click", on_click)
-warmup_btn.addEventListener("click", on_click)
-writing_btn.addEventListener("click", on_click)
 height_el.addEventListener(
 	"input",
 	function(ev) {
@@ -264,10 +260,10 @@ val_el.addEventListener(
 height_el.value = String(state.game.height)
 tolerance_el.value = String(state.game.tolerance)
 width_el.value = String(state.game.width)
+aiming_score_el.textContent = localStorage.getItem("aiming.best_score") || "0"
 flick_score_el.textContent = localStorage.getItem("flick.best_score") || "0"
 tracking_score_el.textContent = localStorage.getItem("tracking.best_score") || "0"
 writing_score_el.textContent = localStorage.getItem("writing.best_score") || "0"
-warmup_score_el.textContent = localStorage.getItem("warmup.best_score") || "0"
 active_game_sens()
 update_game_sens()
 on_resize()
@@ -277,14 +273,18 @@ on_resize()
  */
 function on_click(ev) {
 	ev.preventDefault()
-	if (ev.currentTarget == flick_btn) {
-		start_game("flick")
+	if (ev.currentTarget == aiming_btn) {
+		state.game.mode = "aiming"
+		start_game()
+	} else if (ev.currentTarget == flick_btn) {
+		state.game.mode = "flick"
+		start_game()
 	} else if (ev.currentTarget == tracking_btn) {
-		start_game("tracking")
-	} else if (ev.currentTarget == warmup_btn) {
-		start_game("warmup")
+		state.game.mode = "tracking"
+		start_game()
 	} else if (ev.currentTarget == writing_btn) {
-		start_game("writing")
+		state.game.mode = "writing"
+		start_game()
 	} else {
 		throw Error(
 			/** @type {HTMLElement} */(ev.currentTarget)/**/.outerHTML
@@ -318,7 +318,7 @@ function on_mousedown(ev) {
 	const { mode } = state.game
 	if (ev.button == 0 && mode) {
 		state.input.mb_left = true
-		shoot()
+		game_mode[mode].shoot()
 	}
 	if (ev.button == 2) {
 		ev.preventDefault()

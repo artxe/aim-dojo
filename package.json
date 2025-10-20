@@ -2,11 +2,11 @@
 	"author": "artxe2",
 	"description": "AIM DOJO",
 	"devDependencies": {
-		"eslint": "^9.37.0",
+		"eslint": "^9.38.0",
 		"eslint-plugin-lube": "^0.5.1",
 		"serve": "^14.2.5",
 		"typescript": "^5.9.3",
-		"typescript-eslint": "^8.46.0"
+		"typescript-eslint": "^8.46.1"
 	},
 	"keywords": [],
 	"name": "aim-dojo",
@@ -15,5 +15,5 @@
 		"lint": "eslint --cache --fix **/*.{d.ts,js,json} && tsc"
 	},
 	"type": "module",
-	"version": "1.1.0"
+	"version": "1.2.0"
 }

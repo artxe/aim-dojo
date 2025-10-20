@@ -22,6 +22,14 @@ export const {
 export const EPS = 1e-4
 export const TAU = Math.PI * 2
 /**
+ * @param {number} r
+ * @param {number} base
+ * @returns {number}
+ */
+export function calc_core_radius(r, base) {
+	return max(r / 3, base / 2)
+}
+/**
  * @param {number} low
  * @param {number} value
  * @param {number} high

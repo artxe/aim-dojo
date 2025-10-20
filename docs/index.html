@@ -4,17 +4,17 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>AIM DOJO - The fastest way to improve your FPS skills</title>
-		<meta name="description" content="AIM DOJO — Browser-based FPS aim trainer for flick, tracking, warmup, and writing modes. Preset conversions for CS2, VALORANT, Overwatch, PUBG, LoL, and Minecraft. Adjust sensitivity, FOV/scopes, tolerance and canvas size; track peak score, accuracy, and crit rate.">
+		<meta name="description" content="AIM DOJO — Browser-based FPS aim trainer for flick, tracking, aiming, and writing modes. Preset conversions for CS2, VALORANT, Overwatch, PUBG, LoL, and Minecraft. Adjust sensitivity, FOV/scopes, tolerance and canvas size; track peak score, accuracy, and crit rate.">
 		<link rel="canonical" href="https://artxe.github.io/aim-dojo/">
 		<meta name="robots" content="index,follow">
 		<meta property="og:title" content="AIM DOJO — FPS Aim Trainer">
-		<meta property="og:description" content="AIM DOJO — Browser-based FPS aim trainer for flick, tracking, warmup, and writing modes. Preset conversions for CS2, VALORANT, Overwatch, PUBG, LoL, and Minecraft. Adjust sensitivity, FOV/scopes, tolerance and canvas size; track peak score, accuracy, and crit rate.">
+		<meta property="og:description" content="AIM DOJO — Browser-based FPS aim trainer for flick, tracking, aiming, and writing modes. Preset conversions for CS2, VALORANT, Overwatch, PUBG, LoL, and Minecraft. Adjust sensitivity, FOV/scopes, tolerance and canvas size; track peak score, accuracy, and crit rate.">
 		<meta property="og:type" content="website">
 		<meta property="og:url" content="https://artxe.github.io/aim-dojo/">
 		<meta property="og:image" content="https://artxe.github.io/aim-dojo/bg.png">
 		<meta name="twitter:card" content="summary_large_image">
 		<meta name="twitter:title" content="AIM DOJO — FPS Aim Trainer">
-		<meta name="twitter:description" content="AIM DOJO — Browser-based FPS aim trainer for flick, tracking, warmup, and writing modes. Preset conversions for CS2, VALORANT, Overwatch, PUBG, LoL, and Minecraft. Adjust sensitivity, FOV/scopes, tolerance and canvas size; track peak score, accuracy, and crit rate.">
+		<meta name="twitter:description" content="AIM DOJO — Browser-based FPS aim trainer for flick, tracking, aiming, and writing modes. Preset conversions for CS2, VALORANT, Overwatch, PUBG, LoL, and Minecraft. Adjust sensitivity, FOV/scopes, tolerance and canvas size; track peak score, accuracy, and crit rate.">
 		<meta name="twitter:image" content="https://artxe.github.io/aim-dojo/bg.png">
 		<meta name="theme-color" content="#3d2423">
 		<link rel="icon" href="https://artxe.github.io/aim-dojo/bg.png">
@@ -27,16 +27,11 @@
 				"operatingSystem": "Web",
 				"url": "https://artxe.github.io/aim-dojo/",
 				"image": "https://artxe.github.io/aim-dojo/bg.png",
-				"description": "AIM DOJO — Browser-based FPS aim trainer for flick, tracking, warmup, and writing modes. Preset conversions for CS2, VALORANT, Overwatch, PUBG, LoL, and Minecraft. Adjust sensitivity, FOV/scopes, tolerance and canvas size; track peak score, accuracy, and crit rate.",
+				"description": "AIM DOJO — Browser-based FPS aim trainer for flick, tracking, aiming, and writing modes. Preset conversions for CS2, VALORANT, Overwatch, PUBG, LoL, and Minecraft. Adjust sensitivity, FOV/scopes, tolerance and canvas size; track peak score, accuracy, and crit rate.",
 				"offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
 			}
 		</script>
 		<script src="./lib/css-lube.js"></script>
-		<style>
-			@keyframes blur-blink {
-				50% { filter: blur(1.25px); }
-			}
-		</style>
 	</head>
 	<body class="bg=#3d2423 c=#e6e8ef ff=ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace fs=16px h=100% us=none o=clip
 		[locked]_[menu]/none
@@ -46,7 +41,7 @@
 			<source src="./bg.mp4" type="video/mp4">
 		</video>
 		<div class="h=100% relative">
-			<canvas class="a=blur-blink_1.5s_ease-in-out_infinite ft=blur(.5px)" id="canvas"></canvas>
+			<canvas id="canvas"></canvas>
 			<div class="absolute l=50% pe=none t=.5 tf=translateX(-50%) ws=nowrap">
 				<span class="bold c=#9cd2ff">Score/Peak</span> <span id="peak_score">—</span> ·
 				<span class="bold c=#9cd2ff">Accuracy</span> <span id="accuracy">—</span>% ·
@@ -133,27 +128,27 @@
 			</div>
 			<div class="absolute bold grid l=50% ta=center t=60% tf=translate(-50%,-50%)" menu>
 				<span class="bold c=#4488ff fs=4.5 wsp=-.2 -webkit-text-stroke=1px_white">AIM DOJO</span>
-				<button class="cs=pointer fs=2 relative :hover/tf=scale(1.25);tt=.1s" id="warmup">
-					Warm-Up
-					<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="warmup_score"><br>-</span>
+				<button class="cs=pointer fs=2 relative :hover/tf=scale(1.25);tt=.1s" id="aiming">
+					Aiming
+					<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="aiming_score"><br>-</span>
 				</button>
-				<button class="cs=pointer fs=2 relative :hover/tf=scale(1.25);tt=.1s" id="writing">
-					Writing
-					<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="writing_score"><br>-</span>
+				<button class="cs=pointer fs=2 relative :hover/tf=scale(1.25);tt=.1s" id="flick">
+					Flick
+					<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="flick_score"><br>-</span>
 				</button>
 				<button class="cs=pointer fs=2 relative :hover/tf=scale(1.25);tt=.1s" id="tracking">
 					Tracking
 					<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="tracking_score"><br>-</span>
 				</button>
-				<button class="cs=pointer fs=2 relative :hover/tf=scale(1.25);tt=.1s" id="flick">
-					Flick
-					<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="flick_score"><br>-</span>
+				<button class="cs=pointer fs=2 relative :hover/tf=scale(1.25);tt=.1s" id="writing">
+					Writing
+					<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="writing_score"><br>-</span>
 				</button>
 			</div>
 			<div class="absolute ai=center column-reverse flex g=.5 l=50% b=35% tf=translateX(-50%)
 				>span/bg=#555555aa;br=.5;fs=1.5;p=.0_.5" id="message">
 			</div>
 		</div>
-		<script src="./js/main.js?v1.1.0" type="module"></script>
+		<script src="./js/main.js?v1.2.0" type="module"></script>
 	</body>
 </html>

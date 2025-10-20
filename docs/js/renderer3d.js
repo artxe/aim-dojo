@@ -1,5 +1,5 @@
 import { px_to_rad } from "./camera.js"
-import config from "./config.js"
+import constants from "./constants.js"
 import { dir_from_yaw_pitch } from "./logic.js"
 import mat4 from "./mat4.js"
 import {
@@ -98,7 +98,7 @@ const u_color_fill = context.getUniformLocation(fill_p, "u_color")
 const u_proj_fill = context.getUniformLocation(fill_p, "u_proj")
 const u_view_fill = context.getUniformLocation(fill_p, "u_view")
 const sky_sphere = (() => {
-	const { sky_sphere_radius: r } = config.grid
+	const { sky_sphere_radius: r } = constants.grid
 	const seg_w = 72
 	const seg_h = 36
 	/** @type {number[]} */
@@ -142,7 +142,7 @@ const sky_sphere = (() => {
 	)
 })()
 const sky_sphere_major = (() => {
-	const { sky_sphere_radius: r } = config.grid
+	const { sky_sphere_radius: r } = constants.grid
 	const seg_w = 72
 	const seg_h = 36
 	/** @type {number[]} */
@@ -387,8 +387,8 @@ function draw_impacts() {
 		fade_factor,
 		rings,
 		spacing
-	} = config.impact
-	const { sky_sphere_radius: d } = config.grid
+	} = constants.impact
+	const { sky_sphere_radius: d } = constants.grid
 	const { impacts_3d } = state
 	const { now_s } = state.timer
 	if (!impacts_3d.length) return
@@ -417,11 +417,11 @@ function draw_impacts() {
 }
 /** @returns {void} */
 function draw_paths() {
-	const { sky_sphere_radius: d } = config.grid
-	const { targets_3d } = state.flick
+	const { sky_sphere_radius: d } = constants.grid
+	const { target_3d } = state.mode.aiming
+	const { targets_3d } = state.mode.flick
+	const { target_3d: tracking_target } = state.mode.tracking
 	const { mode } = state.game
-	const { target_3d } = state.tracking
-	const { target: warmup_target } = state.warmup
 	/** @type {number[]} */
 	const segments = []
 	const cam_dir = dir_from_yaw_pitch(
@@ -433,7 +433,18 @@ function draw_paths() {
 		cam_dir[1] * d,
 		cam_dir[2] * d
 	]
-	if (mode == "flick") {
+	if (mode == "aiming") {
+		const dir = dir_from_yaw_pitch(target_3d.cy, target_3d.cp)
+		const pos = [ dir[0] * d, dir[1] * d, dir[2] * d ]
+		segments.push(
+			prev[0],
+			prev[1],
+			prev[2],
+			pos[0],
+			pos[1],
+			pos[2]
+		)
+	} else if (mode == "flick") {
 		if (!targets_3d.length) return
 		for (let i = targets_3d.length - 1; i >= 0; i--) {
 			const t = targets_3d[i]
@@ -450,20 +461,9 @@ function draw_paths() {
 			prev = pos
 		}
 	} else if (mode == "tracking") {
-		const dir = dir_from_yaw_pitch(target_3d.cy, target_3d.cp)
-		const pos = [ dir[0] * d, dir[1] * d, dir[2] * d ]
-		segments.push(
-			prev[0],
-			prev[1],
-			prev[2],
-			pos[0],
-			pos[1],
-			pos[2]
-		)
-	} else if (mode == "warmup") {
 		const dir = dir_from_yaw_pitch(
-			warmup_target.cy,
-			warmup_target.cp
+			tracking_target.cy,
+			tracking_target.cp
 		)
 		const pos = [ dir[0] * d, dir[1] * d, dir[2] * d ]
 		segments.push(
@@ -542,7 +542,7 @@ function draw_stroke(
  * @returns {void}
  */
 function draw_target(target, alpha) {
-	const { sky_sphere_radius: d } = config.grid
+	const { sky_sphere_radius: d } = constants.grid
 	const { cp, cr, cy, p, r, y } = target
 	const line_width = 1
 	const line_width_rad = px_to_rad(1)
@@ -567,11 +567,13 @@ function draw_target(target, alpha) {
 }
 /** @returns {void} */
 function draw_targets() {
-	const { targets_3d } = state.flick
 	const { mode } = state.game
-	const { target_3d } = state.tracking
-	const { target: warmup_target } = state.warmup
-	if (mode == "flick") {
+	const { target_3d } = state.mode.aiming
+	const { targets_3d } = state.mode.flick
+	const { target_3d: tracking_target } = state.mode.tracking
+	if (mode == "aiming") {
+		draw_target(target_3d, 1)
+	} else if (mode == "flick") {
 		if (!targets_3d.length) return
 		for (let i = 0; i + 1 < targets_3d.length; i++) {
 			draw_target(
@@ -584,9 +586,7 @@ function draw_targets() {
 			1
 		)
 	} else if (mode == "tracking") {
-		draw_target(target_3d, 1)
-	} else if (mode == "warmup") {
-		draw_target(warmup_target, 1)
+		draw_target(tracking_target, 1)
 	} else {
 		throw Error(String(mode))
 	}

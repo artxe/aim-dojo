@@ -1,7 +1,4 @@
-import config from "./config.js"
 import {
-	accuracy_el,
-	crit_rate_el,
 	cs2_aug_el,
 	cs2_auto1_el,
 	cs2_auto2_el,
@@ -9,7 +6,6 @@ import {
 	cs2_awp2_el,
 	cs2_el,
 	cs2_hipfire_el,
-	flick_score_el,
 	lol_el,
 	mc_el,
 	mc_hipfire_el,
@@ -19,7 +15,6 @@ import {
 	ow_freja_el,
 	ow_hipfire_el,
 	ow_widow_el,
-	peak_score_el,
 	pubg_ads_el,
 	pubg_el,
 	pubg_fpp_el,
@@ -37,7 +32,6 @@ import {
 	sa_el,
 	sa_hipfire_el,
 	timer_el,
-	tracking_score_el,
 	val_el,
 	val_guardian_el,
 	val_hipfire_el,
@@ -45,10 +39,9 @@ import {
 	val_operator25_el,
 	val_operator5_el,
 	val_spectre_el,
-	val_vandal_el,
-	warmup_score_el,
-	writing_score_el
+	val_vandal_el
 } from "./document.js"
+import game_mode from "./game_mode/index.js"
 import { update_fov } from "./logic.js"
 import {
 	atan,
@@ -94,7 +87,7 @@ export function active_game_sens() {
 	update_fov()
 }
 /**
- * @param {GameName} name
+ * @param {GameSensName} name
  * @returns {void}
  */
 export function change_active_game_sens(name) {
@@ -319,138 +312,10 @@ export function update_game_sens() {
 }
 /** @returns {void} */
 export function update_hud() {
-	const { update_interval_ms } = config.hud
 	const { mode } = state.game
-	const {
-		count_crit,
-		count_hit,
-		count_shoot,
-		sum_crit_ms,
-		sum_hit_ms,
-		sum_shoot_ms
-	} = state.stats
 	const { now_ms, prev_ms, start_ms } = state.timer
-	state.hud.next_update_ms = now_ms + update_interval_ms
-	if (mode == "flick") {
-		const score = (150 * count_crit + 200 * count_hit * (count_hit / count_shoot)) | 0
-		if (score > state.flick.peak_score) {
-			state.flick.peak_score = score
-			if (score > state.flick.best_score) {
-				localStorage.setItem(
-					"flick.best_score",
-					String(score)
-				)
-				set_text_if_changed(
-					flick_score_el,
-					state.flick.best_score = score
-				)
-			}
-		}
-		set_text_if_changed(
-			peak_score_el,
-			`${score} / ${state.flick.peak_score}`
-		)
-		set_text_if_changed(
-			accuracy_el,
-			count_shoot ? round_to(count_hit / count_shoot * 100, 2) : 0
-		)
-		set_text_if_changed(
-			crit_rate_el,
-			count_hit ? round_to(count_crit / count_hit * 100, 2) : 0
-		)
-	} else if (mode == "tracking") {
-		const score = (sum_crit_ms + sum_hit_ms) | 0
-		if (score > state.tracking.peak_score) {
-			state.tracking.peak_score = score
-			if (score > state.tracking.best_score) {
-				state.tracking.best_score = score
-				localStorage.setItem(
-					"tracking.best_score",
-					String(score)
-				)
-				set_text_if_changed(
-					tracking_score_el,
-					state.tracking.best_score
-				)
-			}
-		}
-		set_text_if_changed(
-			peak_score_el,
-			`${score} / ${state.tracking.peak_score}`
-		)
-		set_text_if_changed(
-			accuracy_el,
-			sum_shoot_ms
-				? round_to(
-					sum_hit_ms / sum_shoot_ms * 100,
-					2
-				)
-				: 0
-		)
-		set_text_if_changed(
-			crit_rate_el,
-			sum_hit_ms
-				? round_to(
-					sum_crit_ms / sum_hit_ms * 100,
-					2
-				)
-				: 0
-		)
-	} else if (mode == "warmup") {
-		const score = (800 * count_crit + 700 * count_hit * (count_hit / count_shoot)) | 0
-		if (score > state.warmup.peak_score) {
-			state.warmup.peak_score = score
-			if (score > state.warmup.best_score) {
-				localStorage.setItem(
-					"warmup.best_score",
-					String(score)
-				)
-				set_text_if_changed(
-					warmup_score_el,
-					state.warmup.best_score = score
-				)
-			}
-		}
-		set_text_if_changed(
-			peak_score_el,
-			`${score} / ${state.warmup.peak_score}`
-		)
-		set_text_if_changed(
-			accuracy_el,
-			count_shoot ? round_to(count_hit / count_shoot * 100, 2) : 0
-		)
-		set_text_if_changed(
-			crit_rate_el,
-			count_hit ? round_to(count_crit / count_hit * 100, 2) : 0
-		)
-	} else if (mode == "writing") {
-		const score = (7 * count_hit * (count_hit / count_shoot) ** 4) | 0
-		if (score > state.writing.peak_score) {
-			state.writing.peak_score = score
-			if (score > state.writing.best_score) {
-				localStorage.setItem(
-					"writing.best_score",
-					String(score)
-				)
-				set_text_if_changed(
-					writing_score_el,
-					state.writing.best_score
-				)
-			}
-		}
-		set_text_if_changed(
-			peak_score_el,
-			`${score} / ${state.writing.peak_score}`
-		)
-		set_text_if_changed(
-			accuracy_el,
-			count_shoot ? round_to(count_hit / count_shoot * 100, 2) : 0
-		)
-		set_text_if_changed(crit_rate_el, "—")
-	} else {
-		throw Error(String(mode))
-
-	}
+	if (!mode) throw Error()
+	game_mode[mode].update_hud()
 	const fps = 1000 / (now_ms - prev_ms)
 	set_text_if_changed(
 		timer_el,

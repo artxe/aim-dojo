@@ -1,4 +1,4 @@
-import config from "./config.js"
+import constants from "./constants.js"
 import { canvas_el } from "./document.js"
 import { ceil, floor, max, min, round, TAU } from "./math.js"
 import { image, resize_3d } from "./renderer3d.js"
@@ -7,41 +7,58 @@ const context = /** @type {CanvasRenderingContext2D} */(canvas_el.getContext("2d
 const off = new OffscreenCanvas(1, 1)
 const off_context = /** @type {OffscreenCanvasRenderingContext2D} */(off.getContext("2d"))/**/
 const crosshair_image = (() => {
-	const { color, gap, length, thickness } = config.crosshair
+	const {
+		color,
+		down,
+		gap,
+		left,
+		length,
+		right,
+		thickness,
+		up
+	} = constants.crosshair
 	off.height = gap + length * 2
 	off.width = gap + length * 2
 	context.save()
 	off_context.fillStyle = color
 	off_context.translate(off.width / 2, off.height / 2)
-	off_context.fillRect(
-		-thickness,
-		-gap / 2 - length,
-		thickness * 2,
-		length
-	)
-	off_context.fillRect(
-		gap / 2,
-		-thickness,
-		length,
-		thickness * 2
-	)
-	off_context.fillRect(
-		-thickness,
-		gap / 2,
-		thickness * 2,
-		length
-	)
-	off_context.fillRect(
-		-gap / 2 - length,
-		-thickness,
-		length,
-		thickness * 2
-	)
+	if (up) {
+		off_context.fillRect(
+			-thickness,
+			-gap / 2 - length,
+			thickness * 2,
+			length
+		)
+	}
+	if (down) {
+		off_context.fillRect(
+			-thickness,
+			gap / 2,
+			thickness * 2,
+			length
+		)
+	}
+	if (left) {
+		off_context.fillRect(
+			-gap / 2 - length,
+			-thickness,
+			length,
+			thickness * 2
+		)
+	}
+	if (right) {
+		off_context.fillRect(
+			gap / 2,
+			-thickness,
+			length,
+			thickness * 2
+		)
+	}
 	off_context.restore()
 	return off.transferToImageBitmap()
 })()
 const grid_pattern = (() => {
-	const { major_every, size } = config.grid
+	const { major_every, size } = constants.grid
 	const pattern_size = size * major_every
 	off.height = off.width = pattern_size
 	off_context.save()
@@ -70,8 +87,8 @@ const grid_pattern = (() => {
 	return /** @type {CanvasPattern} */(off_context.createPattern(off, "repeat"))/**/
 })()
 const { text_data, text_image } = (() => {
-	const { size } = config.grid
-	const { offset_x, text } = config.writing
+	const { size } = constants.grid
+	const { offset_x, text } = constants.mode.writing
 	const lines = text.split("\n")
 	const rows = lines.length
 	const font_px = floor(size * 0.78)
@@ -107,8 +124,8 @@ const { text_data, text_image } = (() => {
 })()
 /** @returns {void} */
 export function check_writing_stats() {
-	const { line_width } = config.writing
-	const { lines } = state.writing
+	const { line_width } = constants.mode.writing
+	const { lines } = state.mode.writing
 	off.height = text_image.height
 	off.width = text_image.width
 	off_context.save()
@@ -211,7 +228,7 @@ export function draw() {
 }
 /** @returns {void} */
 function draw_crosshair() {
-	const { gap, length } = config.crosshair
+	const { gap, length } = constants.crosshair
 	off.height = gap + length * 2
 	off.width = gap + length * 2
 	context.save()
@@ -246,7 +263,7 @@ function draw_impacts() {
 		fade_factor,
 		rings,
 		spacing
-	} = config.impact
+	} = constants.impact
 	const { x, y } = state.camera
 	const { now_s } = state.timer
 	const alpha = .9
@@ -290,9 +307,9 @@ function draw_impacts() {
 	context.restore()
 }
 function draw_lines() {
-	const { line_width } = config.writing
+	const { line_width } = constants.mode.writing
 	const { x, y } = state.camera
-	const { lines } = state.writing
+	const { lines } = state.mode.writing
 	context.save()
 	context.translate(-x, -y)
 	context.lineWidth = line_width
@@ -314,9 +331,10 @@ function draw_lines() {
 /** @returns {void} */
 function draw_paths() {
 	const { x, y } = state.camera
-	const { targets } = state.flick
 	const { mode } = state.game
-	const { target } = state.tracking
+	const { target: aiming_target } = state.mode.aiming
+	const { targets } = state.mode.flick
+	const { target } = state.mode.tracking
 	context.save()
 	context.translate(-x, -y)
 	context.globalAlpha = .2
@@ -324,7 +342,10 @@ function draw_paths() {
 	context.strokeStyle = "white"
 	context.beginPath()
 	context.moveTo(x, y)
-	if (mode == "flick") {
+	if (mode == "aiming") {
+		const { cy, x: target_x } = aiming_target
+		context.lineTo(target_x, cy)
+	} else if (mode == "flick") {
 		for (let i = targets.length - 1; i >= 0; i--) {
 			const { cy, x: target_x } = targets[i]
 			context.lineTo(target_x, cy)
@@ -374,10 +395,13 @@ function draw_target(target, alpha) {
 }
 /** @returns {void} */
 function draw_targets() {
-	const { targets } = state.flick
 	const { mode } = state.game
-	const { target } = state.tracking
-	if (mode == "flick") {
+	const { target } = state.mode.aiming
+	const { targets } = state.mode.flick
+	const { target: tracking_target } = state.mode.tracking
+	if (mode == "aiming") {
+		draw_target(target, 1)
+	} else if (mode == "flick") {
 		if (!targets.length) return
 		for (let i = 0; i + 1 < targets.length; i++) {
 			draw_target(
@@ -387,7 +411,7 @@ function draw_targets() {
 		}
 		draw_target(targets[targets.length - 1], 1)
 	} else if (mode == "tracking") {
-		draw_target(target, 1)
+		draw_target(tracking_target, 1)
 	} else {
 		throw Error(String(mode))
 	}

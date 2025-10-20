@@ -1,4 +1,4 @@
-import config from "./config.js"
+import constants from "./constants.js"
 import {
 	abs,
 	ceil,
@@ -211,7 +211,7 @@ export function play_hit() {
  * @returns {void}
  */
 function wake(t) {
-	const { volume } = config.audio
+	const { volume } = constants.audio
 	if (context.state !== "running") context.resume()
 	if (abs(master.gain.value - volume) > EPS) {
 		master.gain.cancelScheduledValues(t)

@@ -7,8 +7,17 @@ type DeepReadonly<T> = Readonly<{
 				? ReadonlyArray<DeepReadonly<A>>
 				: DeepReadonly<T[K]>
 }>
-type GameMode = "flick" | "tracking" | "warmup" | "writing"
-type GameName = "cs2" | "lol" | "mc" | "ow" | "pubg" | "sa" | "val"
+type GameMode = {
+	check_stats: () => void
+	dispose: () => void
+	init: () => void
+	on_frame: () => void
+	shoot: () => void
+	update_fov: () => void
+	update_hud: () => void
+}
+type GameModeName = "aiming" | "flick" | "tracking" | "writing"
+type GameSensName = "cs2" | "lol" | "mc" | "ow" | "pubg" | "sa" | "val"
 type Line = {
 	e: {
 		x: number
