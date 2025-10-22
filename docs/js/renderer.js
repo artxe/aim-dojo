@@ -8,6 +8,7 @@ const off = new OffscreenCanvas(1, 1)
 const off_context = /** @type {OffscreenCanvasRenderingContext2D} */(off.getContext("2d"))/**/
 const crosshair_image = (() => {
 	const {
+		alpha,
 		color,
 		down,
 		gap,
@@ -21,6 +22,7 @@ const crosshair_image = (() => {
 	off.width = gap + length * 2
 	context.save()
 	off_context.fillStyle = color
+	off_context.globalAlpha = alpha
 	off_context.translate(off.width / 2, off.height / 2)
 	if (up) {
 		off_context.fillRect(

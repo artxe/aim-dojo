@@ -10,7 +10,7 @@ import {
 	crit_rate_el,
 	peak_score_el
 } from "../document.js"
-import { set_text_if_changed, toast } from "../hud.js"
+import { set_text_if_changed, send_toast } from "../ui.js"
 import {
 	check_stats,
 	dir_from_yaw_pitch,
@@ -41,7 +41,7 @@ function change_to_next_mode() {
 	const { peak_score } = state.mode[mode]
 	/** @type {GameModeName} */
 	const next_mode = "flick"
-	toast(`SCORE: ${peak_score}!`, 2500)
+	send_toast(`SCORE: ${peak_score}!`, 2500)
 	dispose()
 	state.game.mode = next_mode
 	game_mode[next_mode].init()

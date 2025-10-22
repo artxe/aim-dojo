@@ -1,4 +1,5 @@
 import {
+	aiming_score_el,
 	cs2_aug_el,
 	cs2_auto1_el,
 	cs2_auto2_el,
@@ -6,10 +7,11 @@ import {
 	cs2_awp2_el,
 	cs2_el,
 	cs2_hipfire_el,
+	flick_score_el,
+	height_input,
 	lol_el,
 	mc_el,
 	mc_hipfire_el,
-	message_el,
 	ow_ashe_el,
 	ow_el,
 	ow_freja_el,
@@ -18,10 +20,9 @@ import {
 	pubg_ads_el,
 	pubg_el,
 	pubg_fpp_el,
-	pubg_fpp_fov_el,
+	pubg_fpp_fov_input,
 	pubg_tpp_el,
 	pubg_v_el,
-	pubg_x15_el,
 	pubg_x2_el,
 	pubg_x2_r_el,
 	pubg_x3_el,
@@ -29,17 +30,34 @@ import {
 	pubg_x4_el,
 	pubg_x6_el,
 	pubg_x8_el,
+	pubg_x15_el,
 	sa_el,
 	sa_hipfire_el,
 	timer_el,
+	toast_el,
+	tolerance_input,
+	tracking_score_el,
 	val_el,
 	val_guardian_el,
 	val_hipfire_el,
 	val_marshal_el,
-	val_operator25_el,
 	val_operator5_el,
+	val_operator25_el,
 	val_spectre_el,
-	val_vandal_el
+	val_vandal_el,
+	width_input,
+	writing_score_el,
+	bg_soop_input,
+	bg_youtube_input,
+	bg_chzzk_input,
+	bg_type_input,
+	bg_web_view_input,
+	mode_cycle_btn,
+	bg_type_youtube_input,
+	bg_type_soop_input,
+	bg_type_web_view_input,
+	bg_type_default_input,
+	bg_type_chzzk_input
 } from "./document.js"
 import game_mode from "./game_mode/index.js"
 import { update_fov } from "./logic.js"
@@ -64,6 +82,37 @@ import {
 	calc_sens_val
 } from "./sens.js"
 import state from "./state.js"
+width_input.value = String(state.game.width)
+height_input.value = String(state.game.height)
+tolerance_input.value = String(state.game.tolerance)
+aiming_score_el.textContent = localStorage.getItem("aiming.best_score") || "0"
+flick_score_el.textContent = localStorage.getItem("flick.best_score") || "0"
+tracking_score_el.textContent = localStorage.getItem("tracking.best_score") || "0"
+writing_score_el.textContent = localStorage.getItem("writing.best_score") || "0"
+mode_cycle_btn.setAttribute(
+	"on",
+	state.game.cycle_id ? "true" : "false"
+)
+bg_type_input.value = state.bg.type
+if (state.bg.type == "chzzk") {
+	bg_type_chzzk_input.checked = true
+	bg_chzzk_input.setAttribute("active", "")
+} else if (state.bg.type == "default") {
+	bg_type_default_input.checked = true
+} else if (state.bg.type == "soop") {
+	bg_type_soop_input.checked = true
+	bg_soop_input.setAttribute("active", "")
+} else if (state.bg.type == "web_view") {
+	bg_type_web_view_input.checked = true
+	bg_web_view_input.setAttribute("active", "")
+} else if (state.bg.type == "youtube") {
+	bg_type_youtube_input.checked = true
+	bg_youtube_input.setAttribute("active", "")
+}
+bg_youtube_input.value = state.bg.youtube_link
+bg_soop_input.value = state.bg.soop_link
+bg_chzzk_input.value = state.bg.chzzk_link
+bg_web_view_input.value = state.bg.web_view_link
 /** @returns {void} */
 export function active_game_sens() {
 	const { sens } = state.game
@@ -168,10 +217,10 @@ export function set_text_if_changed(el, text) {
  * @param {string} message
  * @param {number} duration
  */
-export function toast(message, duration) {
+export function send_toast(message, duration) {
 	const span = document.createElement("span")
 	span.textContent = message
-	message_el.prepend(span)
+	toast_el.prepend(span)
 	span.setAttribute(
 		"timer",
 		String(
@@ -254,7 +303,9 @@ export function update_game_sens() {
 		round_to(cs2_10 / cs2_hipfire, 2)
 	)
 	const pubg_fov = 80
-	const pubg_fpp = calc_sens_pubg(Number(pubg_fpp_fov_el.value))
+	const pubg_fpp = calc_sens_pubg(
+		Number(pubg_fpp_fov_input.value)
+	)
 	set_text_if_changed(pubg_fpp_el, round(pubg_fpp))
 	const pubg_tpp = calc_sens_pubg(
 		convert_deg_across_aspect(pubg_fov, width, width * .82),

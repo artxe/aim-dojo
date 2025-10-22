@@ -6,7 +6,7 @@
 		"eslint-plugin-lube": "^0.5.1",
 		"serve": "^14.2.5",
 		"typescript": "^5.9.3",
-		"typescript-eslint": "^8.46.1"
+		"typescript-eslint": "^8.46.2"
 	},
 	"keywords": [],
 	"name": "aim-dojo",
@@ -15,5 +15,5 @@
 		"lint": "eslint --cache --fix **/*.{d.ts,js,json} && tsc"
 	},
 	"type": "module",
-	"version": "1.2.0"
+	"version": "1.3.0"
 }

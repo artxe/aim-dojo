@@ -1,4 +1,4 @@
-import { set_text_if_changed, toast } from "../hud.js"
+import { set_text_if_changed, send_toast } from "../ui.js"
 import state from "../state.js"
 import constants from "../constants.js"
 import game_mode from "./index.js"
@@ -17,7 +17,7 @@ function change_to_next_mode() {
 	const { peak_score } = state.mode[mode]
 	/** @type {GameModeName} */
 	const next_mode = "aiming"
-	toast(`SCORE: ${peak_score}!`, 2500)
+	send_toast(`SCORE: ${peak_score}!`, 2500)
 	dispose()
 	state.game.mode = next_mode
 	game_mode[next_mode].init()

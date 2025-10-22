@@ -1,3 +1,4 @@
+type BackgroundType = "chzzk" | "default" | "soop" | "web_view" | "youtube"
 type CameraMode = "2d" | "3d"
 type DeepReadonly<T> = Readonly<{
 	[K in keyof T]:

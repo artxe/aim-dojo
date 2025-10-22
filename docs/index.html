@@ -33,122 +33,183 @@
 		</script>
 		<script src="./lib/css-lube.js"></script>
 	</head>
-	<body class="bg=#3d2423 c=#e6e8ef ff=ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace fs=16px h=100% us=none o=clip
-		[locked]_[menu]/none
-		:not([locked])_canvas/ft=blur(4px);tt=filter_1s_ease;a=none">
-		<img class="ft=brightness(.5) fixed h=100% l=0 of=cover t=0 w=100%" src="./bg.png" />
-		<video class="ft=brightness(.5) fixed h=100% l=0 of=cover t=0 w=100%" autoplay muted loop playsinline>
-			<source src="./bg.mp4" type="video/mp4">
-		</video>
-		<div class="h=100% relative">
-			<canvas id="canvas"></canvas>
-			<div class="absolute l=50% pe=none t=.5 tf=translateX(-50%) ws=nowrap">
-				<span class="bold c=#9cd2ff">Score/Peak</span> <span id="peak_score">—</span> ·
-				<span class="bold c=#9cd2ff">Accuracy</span> <span id="accuracy">—</span>% ·
-				<span class="bold c=#9cd2ff">Critical</span> <span id="crit_rate">—</span>%
-			</div>
-			<div class="absolute l=.5 pe=none t=.5 ws=nowrap">
-				<span class="op=.5" menu>(Tab: Next game sens)<br></span>
-				W:<input class="bd=none bg=none pe=auto w=4ch" id="width" value="-" />
-				H:<input class="bd=none bg=none pe=auto w=4ch" id="height" value="-" />
-				T:<input class="bd=none bg=none pe=auto w=1ch" id="tolerance" value="-" />
-				<ul class="pe=auto :active>li/block
-					:active>li:not([active])>div/none">
-					<li class="lh=1.5 none [active]/block :hover>b/c=#9cd2ff" id="lol">
-						<b class="fs=1.5">LOL</b>
-						<div>
-							Window(6): <span class="bold c=#9cd2ff">50</span>
-						</div>
-					</li>
-					<li class="lh=1.5 none [active]/block :hover>b/c=#9cd2ff" id="val">
-						<b class="fs=1.5">VALORANT</b>
-						<div>
-							Hipfire: <span class="bold c=#9cd2ff" id="val_hipfire">—</span><br>
-							Spectre/Stinger/Ares/Odin: <span id="val_spectre">—</span><br>
-							Vandal/Phantom/Bulldog: <span class="bold c=#9cd2ff" id="val_vandal">—</span><br>
-							Guardian: <span id="val_guardian">—</span><br>
-							Marshal/Outlaw: <span id="val_marshal">—</span><br>
-							Operator: <span class="bold c=#9cd2ff" id="val_operator25">—</span> / <span id="val_operator5">—</span>
-						</div>
-					</li>
-					<li class="lh=1.5 none [active]/block :hover>b/c=#9cd2ff" id="cs2">
-						<b class="fs=1.5">CS2</b>
-						<div>
-							Hipfire(16:9): <span class="bold c=#9cd2ff" id="cs2_hipfire">—</span><br>
-							AUG/SG556: <span id="cs2_aug">—</span><br>
-							Automatic/SSG08: <span id="cs2_auto1">—</span> / <span id="cs2_auto2">—</span><br>
-							AWP: <span class="bold c=#9cd2ff" id="cs2_awp1">—</span> / <span id="cs2_awp2">—</span>
-						</div>
-					</li>
-					<li class="lh=1.5 none [active]/block :hover>b/c=#9cd2ff" id="pubg">
-						<b class="fs=1.5">PUBG</b>
-						<div>
-							FPP(<input class="bd=none bg=none pe=auto w=3ch" id="pubg_fpp_fov" value="103" />): <span id="pubg_fpp">—</span><br>
-							TPP(x0.82): <span class="bold c=#9cd2ff" id="pubg_tpp">—</span><br>
-							ADS/Scope: <span class="bold c=#9cd2ff" id="pubg_ads">—</span><br>
-							Vertical: <span class="bold c=#9cd2ff" id="pubg_v">—</span><br>
-							x2: <span class="bold c=#9cd2ff" id="pubg_x2">—</span> | <span id="pubg_x2_r">—</span><br>
-							x3: <span class="bold c=#9cd2ff" id="pubg_x3">—</span> | <span id="pubg_x3_r">—</span><br>
-							x4: <span class="bold c=#9cd2ff" id="pubg_x4">—</span><br>
-							x6: <span class="bold c=#9cd2ff" id="pubg_x6">—</span><br>
-							x8: <span class="bold c=#9cd2ff" id="pubg_x8">—</span><br>
-							x15: <span class="bold c=#9cd2ff" id="pubg_x15">—</span>
-						</div>
-					</li>
-					<li class="lh=1.5 none [active]/block :hover>b/c=#9cd2ff" id="ow">
-						<b class="fs=1.5">OVERWATCH</b>
-						<div>
-							Hipfire(103): <span class="bold c=#9cd2ff" id="ow_hipfire">—</span>%<br>
-							Widow/Ana: <span class="bold c=#9cd2ff" id="ow_widow">—</span>%<br>
-							Ashe/Cassidy: <span class="bold c=#9cd2ff" id="ow_ashe">—</span>%<br>
-							Freja: <span class="bold c=#9cd2ff" id="ow_freja">—</span>%
-						</div>
-					</li>
-					<li class="lh=1.5 none [active]/block :hover>b/c=#9cd2ff" id="mc">
-						<b class="fs=1.5">MINECRAFT</b>
-						<div>
-							Hipfire(110): <span class="bold c=#9cd2ff" id="mc_hipfire">—</span>%
-						</div>
-					</li>
-					<li class="lh=1.5 none [active]/block :hover>b/c=#9cd2ff" id="sa">
-						<b class="fs=1.5">SUDDEN ATTACK</b>
-						<div>
-							Hipfire(1280): <span class="bold c=#9cd2ff" id="sa_hipfire">—</span>
-						</div>
-					</li>
-				</ul>
-			</div>
-			<div class="absolute column flex ai=end r=.5 t=.5 ws=nowrap">
-				<button class="bold cs=pointer :hover/tf=scale(1.1);tt=.1s
+	<body class="bg=#3d2423 c=#e6e8ef ff=ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace fs=16px h=100%	pe=none us=none o=clip
+		:not([locked])_canvas/ft=blur(4px);tt=filter_1s_ease;a=none
+		:not([locked])_[hud]/none
+		[locked]_[hud]/block
+		[locked]_[menu]/none">
+		<div class="fixed pe=auto o=hidden
+			[preview]/z=1
+			[preview]>button/op=.8
+			[preview]>iframe/br=1;h=80%;l=50%;tf=translateX(-50%);w=80%;z=1
+			[preview]>img/none
+			[preview]>video/none" id="bg">
+			<img alt="pre image for video" class="fixed h=100% of=cover w=100%" src="./bg.png" />
+			<video autoplay class="fixed h=100% of=cover w=100%" loop muted playsinline>
+				<source src="./bg.mp4" type="video/mp4">
+			</video>
+			<iframe class="fixed h=100% none w=100% [src]/block" id="bg_iframe"></iframe>
+			<button class="bg=#000 fixed h=100% op=.33 w=100%" id="bg_space"></button>
+		</div>
+		<canvas class="fixed h=100% pe=auto w=100%" id="canvas"></canvas>
+		<div class="fixed l=.5 t=.5 ws=nowrap">
+			<span class="op=.5" menu>(Tab: Next game sens)<br></span>
+			W:<input class="bd=none bg=none pe=auto w=4ch" id="width" value="-" />
+			H:<input class="bd=none bg=none pe=auto w=4ch" id="height" value="-" />
+			T:<input class="bd=none bg=none pe=auto w=1ch" id="tolerance" value="-" />
+			<ul class="pe=auto
+				:active>li/block
+				:active>li:not([active])>div/none">
+				<li class="lh=1.5 none :hover>b/c=#9cd2ff [active]/block" id="lol">
+					<b class="fs=1.5">LOL</b>
+					<div>
+						Window(6): <span class="bold c=#9cd2ff">50</span>
+					</div>
+				</li>
+				<li class="lh=1.5 none :hover>b/c=#9cd2ff [active]/block" id="val">
+					<b class="fs=1.5">VALORANT</b>
+					<div>
+						Hipfire: <span class="bold c=#9cd2ff" id="val_hipfire">—</span><br>
+						Spectre/Stinger/Ares/Odin: <span id="val_spectre">—</span><br>
+						Vandal/Phantom/Bulldog: <span class="bold c=#9cd2ff" id="val_vandal">—</span><br>
+						Guardian: <span id="val_guardian">—</span><br>
+						Marshal/Outlaw: <span id="val_marshal">—</span><br>
+						Operator: <span class="bold c=#9cd2ff" id="val_operator25">—</span> / <span id="val_operator5">—</span>
+					</div>
+				</li>
+				<li class="lh=1.5 none :hover>b/c=#9cd2ff [active]/block" id="cs2">
+					<b class="fs=1.5">CS2</b>
+					<div>
+						Hipfire(16:9): <span class="bold c=#9cd2ff" id="cs2_hipfire">—</span><br>
+						AUG/SG556: <span id="cs2_aug">—</span><br>
+						Automatic/SSG08: <span id="cs2_auto1">—</span> / <span id="cs2_auto2">—</span><br>
+						AWP: <span class="bold c=#9cd2ff" id="cs2_awp1">—</span> / <span id="cs2_awp2">—</span>
+					</div>
+				</li>
+				<li class="lh=1.5 none :hover>b/c=#9cd2ff [active]/block" id="pubg">
+					<b class="fs=1.5">PUBG</b>
+					<div>
+						FPP(<input class="bd=none bg=none pe=auto w=3ch" id="pubg_fpp_fov" value="103" />): <span id="pubg_fpp">—</span><br>
+						TPP(x0.82): <span class="bold c=#9cd2ff" id="pubg_tpp">—</span><br>
+						ADS/Scope: <span class="bold c=#9cd2ff" id="pubg_ads">—</span><br>
+						Vertical: <span class="bold c=#9cd2ff" id="pubg_v">—</span><br>
+						x2: <span class="bold c=#9cd2ff" id="pubg_x2">—</span> | <span id="pubg_x2_r">—</span><br>
+						x3: <span class="bold c=#9cd2ff" id="pubg_x3">—</span> | <span id="pubg_x3_r">—</span><br>
+						x4: <span class="bold c=#9cd2ff" id="pubg_x4">—</span><br>
+						x6: <span class="bold c=#9cd2ff" id="pubg_x6">—</span><br>
+						x8: <span class="bold c=#9cd2ff" id="pubg_x8">—</span><br>
+						x15: <span class="bold c=#9cd2ff" id="pubg_x15">—</span>
+					</div>
+				</li>
+				<li class="lh=1.5 none :hover>b/c=#9cd2ff [active]/block" id="ow">
+					<b class="fs=1.5">OVERWATCH</b>
+					<div>
+						Hipfire(103): <span class="bold c=#9cd2ff" id="ow_hipfire">—</span>%<br>
+						Widow/Ana: <span class="bold c=#9cd2ff" id="ow_widow">—</span>%<br>
+						Ashe/Cassidy: <span class="bold c=#9cd2ff" id="ow_ashe">—</span>%<br>
+						Freja: <span class="bold c=#9cd2ff" id="ow_freja">—</span>%
+					</div>
+				</li>
+				<li class="lh=1.5 none :hover>b/c=#9cd2ff [active]/block" id="mc">
+					<b class="fs=1.5">MINECRAFT</b>
+					<div>
+						Hipfire(110): <span class="bold c=#9cd2ff" id="mc_hipfire">—</span>%
+					</div>
+				</li>
+				<li class="lh=1.5 none :hover>b/c=#9cd2ff [active]/block" id="sa">
+					<b class="fs=1.5">SUDDEN ATTACK</b>
+					<div>
+						Hipfire(1280): <span class="bold c=#9cd2ff" id="sa_hipfire">—</span>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="fixed l=50% t=.5 tf=translateX(-50%) ws=nowrap" hud>
+			<span class="bold c=#9cd2ff">Score/Peak</span> <span id="peak_score">—</span> ·
+			<span class="bold c=#9cd2ff">Accuracy</span> <span id="accuracy">—</span>% ·
+			<span class="bold c=#9cd2ff">Critical</span> <span id="crit_rate">—</span>%
+		</div>
+		<div class="fixed r=.5 t=.5" hud>
+			<span class="pe=none" id="timer">00:00</span>
+		</div>
+		<div class="ai=center bold column fixed flex l=50% ta=center t=60% tf=translate(-50%,-50%)" menu>
+			<span class="bold c=#4488ff fs=4.5 wsp=-.2 -webkit-text-stroke=1px_white">AIM DOJO</span>
+			<button class="fs=2 pe=auto relative :hover/tf=scale(1.25);tt=.1s" id="aiming">
+				Aiming
+				<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="aiming_score"><br>-</span>
+			</button>
+			<button class="fs=2 pe=auto relative :hover/tf=scale(1.25);tt=.1s" id="flick">
+				Flick
+				<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="flick_score"><br>-</span>
+			</button>
+			<button class="fs=2 pe=auto relative :hover/tf=scale(1.25);tt=.1s" id="tracking">
+				Tracking
+				<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="tracking_score"><br>-</span>
+			</button>
+			<button class="fs=2 pe=auto relative :hover/tf=scale(1.25);tt=.1s" id="writing">
+				Writing
+				<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="writing_score"><br>-</span>
+			</button><br>
+			<button class="fs=1.5 pe=auto relative :hover/tf=scale(1.25);tt=.1s" id="setting" onfocus="this.blur()">
+				Setting
+			</button>
+		</div>
+		<div class="bf=blur(2px) bg=rgba(0,0,0,.8) br=1 fixed fs=2 h=90% l=50% none pe=auto t=50% tf=translate(-50%,-50%) w=90%
+			[active]/block" id="setting_view">
+			<div class="ai=center column flex pe=none">
+				<br>
+				<button class="bold pe=auto
+					:hover/c=#9cd2ff
 					[on=true]>span:nth-child(2)/none
 					[on=false]>span:nth-child(1)/none" id="mode_cycle" on="true">
 					Mode Cycle:<span class="c=lime op=.75"> ON</span><span class="c=red op=.75">OFF</span>
 				</button>
-				<span class="pe=none" id="timer">00:00</span>
-			</div>
-			<div class="absolute bold grid l=50% ta=center t=60% tf=translate(-50%,-50%)" menu>
-				<span class="bold c=#4488ff fs=4.5 wsp=-.2 -webkit-text-stroke=1px_white">AIM DOJO</span>
-				<button class="cs=pointer fs=2 relative :hover/tf=scale(1.25);tt=.1s" id="aiming">
-					Aiming
-					<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="aiming_score"><br>-</span>
-				</button>
-				<button class="cs=pointer fs=2 relative :hover/tf=scale(1.25);tt=.1s" id="flick">
-					Flick
-					<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="flick_score"><br>-</span>
-				</button>
-				<button class="cs=pointer fs=2 relative :hover/tf=scale(1.25);tt=.1s" id="tracking">
-					Tracking
-					<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="tracking_score"><br>-</span>
-				</button>
-				<button class="cs=pointer fs=2 relative :hover/tf=scale(1.25);tt=.1s" id="writing">
-					Writing
-					<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="writing_score"><br>-</span>
-				</button>
-			</div>
-			<div class="absolute ai=center column-reverse flex g=.5 l=50% b=35% tf=translateX(-50%)
-				>span/bg=#555555aa;br=.5;fs=1.5;p=.0_.5" id="message">
+				<br>
+				Background Video
+				<div>
+					<input id="bg_type" type="hidden" />
+					<input checked class="pe=auto pointer" id="bg_type_default" name="bg_type"
+						onchange="bg_type.value=this.value;bg_type.dispatchEvent(new Event('change'))"
+						type="radio" value="default" />
+					<label class="pe=auto pointer" for="bg_type_default">Default</label>
+					<input class="pe=auto pointer" id="bg_type_youtube" name="bg_type"
+						onchange="bg_type.value=this.value;bg_type.dispatchEvent(new Event('change'))"
+						type="radio" value="youtube" />
+					<label class="pe=auto pointer" for="bg_type_youtube">Youtube</label>
+					<input class="pe=auto pointer" id="bg_type_soop" name="bg_type"
+						onchange="bg_type.value=this.value;bg_type.dispatchEvent(new Event('change'))"
+						type="radio" value="soop" />
+					<label class="pe=auto pointer" for="bg_type_soop">Soop</label>
+					<!-- <input class="pe=auto pointer" id="bg_type_chzzk" name="bg_type"
+						onchange="bg_type.value=this.value;bg_type.dispatchEvent(new Event('change'))"
+						type="radio" value="chzzk" />
+					<label class="pe=auto pointer" for="bg_type_chzzk">Chzzk</label> -->
+					<input class="pe=auto pointer" id="bg_type_web_view" name="bg_type"
+						onchange="bg_type.value=this.value;bg_type.dispatchEvent(new Event('change'))"
+						type="radio" value="web_view" />
+					<label class="pe=auto pointer" for="bg_type_web_view">Web View</label>
+				</div>
+				<div class="h=1.5">
+					<input accept="video/mp4,video/webm,video/ogg" class="bg=none p=0_.25 pe=auto w=25ch :not([active])/none" id="bg_video" type="file" />
+					<input class="bg=none p=0_.25 pe=auto w=25ch :not([active])/none" id="bg_youtube" />
+					<input class="bg=none p=0_.25 pe=auto w=25ch :not([active])/none" id="bg_soop" />
+					<input class="bg=none p=0_.25 pe=auto w=25ch :not([active])/none" id="bg_chzzk" />
+					<input class="bg=none p=0_.25 pe=auto w=25ch :not([active])/none" id="bg_web_view" />
+				</div>
+				<div>
+					<button class="pe=auto :hover/bold;c=#9cd2ff" id="preview_bg" onfocus="this.blur()">
+						Preview
+					</button>
+					<button class="pe=auto :hover/bold;c=#9cd2ff" id="save_bg" onfocus="this.blur()">
+						Save
+					</button>
+				</div>
 			</div>
 		</div>
-		<script src="./js/main.js?v1.2.0" type="module"></script>
+		<div class="fixed ai=center column-reverse flex g=.5 l=50% b=35% tf=translateX(-50%) z=2
+			>span/bg=#555555aa;br=.5;fs=1.5;p=.0_.5" id="toast">
+			<!-- span -->
+		</div>
+		<script src="./js/main.js?v1.3.0" type="module"></script>
 	</body>
 </html>

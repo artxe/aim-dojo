@@ -1,4 +1,11 @@
 export default {
+	bg: {
+		chzzk_link: localStorage.getItem("bg.chzzk_link") || "",
+		soop_link: localStorage.getItem("bg.soop_link") || "",
+		type: /** @type {BackgroundType} */(localStorage.getItem("bg.type") || "default")/**/,
+		web_view_link: localStorage.getItem("bg.web_view_link") || "",
+		youtube_link: localStorage.getItem("bg.youtube_link") || ""
+	},
 	camera: {
 		fov: 103,
 		/** @type {"2d" | "3d"} */
@@ -13,7 +20,9 @@ export default {
 	},
 	device: { height: 0, width: 0 },
 	game: {
-		cycle_id: 1,
+		cycle_id: Number(
+			localStorage.getItem("game.cycle_id") || 1
+		),
 		height: Number(
 			localStorage.getItem("game.height") || 1080
 		),

@@ -1,6 +1,6 @@
 import { px_to_rad, rad_to_px } from "./camera.js"
 import constants from "./constants.js"
-import { update_hud } from "./hud.js"
+import game_mode from "./game_mode/index.js"
 import {
 	atan,
 	convert_deg_across_aspect,
@@ -13,8 +13,7 @@ import {
 import state from "./state.js"
 import { now } from "./sfx.js"
 import { draw } from "./renderer.js"
-import { message_el } from "./document.js"
-import game_mode from "./game_mode/index.js"
+import { update_hud } from "./ui.js"
 /** @returns {void} */
 export function check_stats() {
 	const { shoots } = state.stats
@@ -105,12 +104,6 @@ export function stop_game() {
 	cancelAnimationFrame(raf_id)
 	if (cycle_id) {
 		clearTimeout(cycle_id)
-		for (const span of message_el.children) {
-			clearTimeout(
-				Number(span.getAttribute("timer"))
-			)
-		}
-		message_el.textContent = ""
 	}
 	game_mode[mode].dispose()
 	draw()
