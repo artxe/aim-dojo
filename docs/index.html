@@ -33,10 +33,9 @@
 		</script>
 		<script src="./lib/css-lube.js"></script>
 	</head>
-	<body class="bg=#3d2423 c=#e6e8ef ff=ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace fs=16px h=100%	pe=none us=none o=clip
+	<body class="bg=#3d2423 c=#eee ff=ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace fs=16px h=100%	pe=none us=none o=clip
 		:not([locked])_canvas/ft=blur(4px);tt=filter_1s_ease;a=none
 		:not([locked])_[hud]/none
-		[locked]_[hud]/block
 		[locked]_[menu]/none">
 		<div class="fixed pe=auto o=hidden
 			[preview]/z=1
@@ -48,78 +47,107 @@
 			<video autoplay class="fixed h=100% of=cover w=100%" loop muted playsinline>
 				<source src="./bg.mp4" type="video/mp4">
 			</video>
-			<iframe class="fixed h=100% none w=100% [src]/block" id="bg_iframe"></iframe>
+			<iframe class="bd=none fixed h=100% w=100% :not([src])/none" id="bg_iframe"></iframe>
 			<button class="bg=#000 fixed h=100% op=.33 w=100%" id="bg_space"></button>
 		</div>
 		<canvas class="fixed h=100% pe=auto w=100%" id="canvas"></canvas>
-		<div class="fixed l=.5 t=.5 ws=nowrap">
+		<div class="c=#ccc fixed l=.5 t=.5 ws=nowrap">
 			<span class="op=.5" menu>(Tab: Next game sens)<br></span>
-			W:<input class="bd=none bg=none pe=auto w=4ch" id="width" value="-" />
-			H:<input class="bd=none bg=none pe=auto w=4ch" id="height" value="-" />
-			T:<input class="bd=none bg=none pe=auto w=1ch" id="tolerance" value="-" />
+			<div class="c=#9cd2ff inline pe=auto relative">
+				<button class="p=.25" id="monitor_res"
+					onclick="this.nextElementSibling.setAttribute('open','');this.nextElementSibling.focus()" value="fhd">
+					-
+				</button>
+				<ul class="absolute bg=rgba(0,0,0,.5) bf=blur(2px) br=.5 relative :not([open])/none" onblur="this.removeAttribute('open')" tabindex="-1">
+					<li class="p=.25" id="monitor_res_hd"
+						onclick="monitor_res.value=this.getAttribute('value');monitor_res.textContent=this.textContent;this.parentNode.blur();monitor_res.dispatchEvent(new Event('change'))"
+						value="hd">
+						1280x720(HD)
+					</li>
+					<li class="p=.25" id="monitor_res_fhd"
+						onclick="monitor_res.value=this.getAttribute('value');monitor_res.textContent=this.textContent;this.parentNode.blur();monitor_res.dispatchEvent(new Event('change'))"
+						value="fhd">
+						1920x1080(FHD)
+					</li>
+					<li class="p=.25" id="monitor_res_qhd"
+						onclick="monitor_res.value=this.getAttribute('value');monitor_res.textContent=this.textContent;this.parentNode.blur();monitor_res.dispatchEvent(new Event('change'))"
+						value="qhd">
+						2560x1440(QHD)
+					</li>
+				</ul>
+			</div>
+			<span class="c=#fff">T:</span><input class="c=#9cd2ff bd=none bg=none pe=auto w=1ch" id="tolerance" value="-" />
 			<ul class="pe=auto
 				:active>li/block
 				:active>li:not([active])>div/none">
-				<li class="lh=1.5 none :hover>b/c=#9cd2ff [active]/block" id="lol">
-					<b class="fs=1.5">LOL</b>
+				<li class="lh=1.5 :hover>b/c=#9cd2ff :not([active])/none" id="lol">
+					<b class="c=#fff fs=1.5">LOL</b>
 					<div>
-						Window(6): <span class="bold c=#9cd2ff">50</span>
+						<span class="c=#fff">Window(6): </span><span class="bold c=#fff">50</span>
 					</div>
 				</li>
-				<li class="lh=1.5 none :hover>b/c=#9cd2ff [active]/block" id="val">
-					<b class="fs=1.5">VALORANT</b>
+				<li class="lh=1.5 :hover>b/c=#9cd2ff :not([active])/none" id="val">
+					<b class="c=#fff fs=1.5">VALORANT</b>
 					<div>
-						Hipfire: <span class="bold c=#9cd2ff" id="val_hipfire">—</span><br>
+						<span class="c=#fff">Hipfire: </span><span class="bold c=#fff" id="val_hipfire">—</span><br>
 						Spectre/Stinger/Ares/Odin: <span id="val_spectre">—</span><br>
-						Vandal/Phantom/Bulldog: <span class="bold c=#9cd2ff" id="val_vandal">—</span><br>
+						<span class="c=#fff">Vandal/Phantom/Bulldog: </span><span class="bold c=#fff" id="val_vandal">—</span><br>
 						Guardian: <span id="val_guardian">—</span><br>
 						Marshal/Outlaw: <span id="val_marshal">—</span><br>
-						Operator: <span class="bold c=#9cd2ff" id="val_operator25">—</span> / <span id="val_operator5">—</span>
+						<span class="c=#fff">Operator: </span><span class="bold c=#fff" id="val_operator25">—</span> / <span id="val_operator5">—</span>
 					</div>
 				</li>
-				<li class="lh=1.5 none :hover>b/c=#9cd2ff [active]/block" id="cs2">
-					<b class="fs=1.5">CS2</b>
+				<li class="lh=1.5 :hover>b/c=#9cd2ff :not([active])/none" id="mc">
+					<b class="c=#fff fs=1.5">MINECRAFT</b>
 					<div>
-						Hipfire(16:9): <span class="bold c=#9cd2ff" id="cs2_hipfire">—</span><br>
+						<span class="c=#fff">Hipfire(110): <span class="bold c=#fff" id="mc_hipfire">—</span>%</span>
+					</div>
+				</li>
+				<li class="lh=1.5 :hover>b/c=#9cd2ff :not([active])/none" id="fn">
+					<b class="c=#fff fs=1.5">FORTNITE</b>
+					<div>
+						<span class="c=#fff">Hipfire(x0.87): <span class="bold c=#fff" id="fn_hipfire">—</span>%</span><br>
+						<span class="c=#fff">ASD/Scope: <span class="bold c=#fff" id="fn_ads">-</span>%</span><br>
+						<span class="c=#fff">Zoom Scaling: </span><span class="bold c=#fff">Standard</span>
+					</div>
+				</li>
+				<li class="lh=1.5 :hover>b/c=#9cd2ff :not([active])/none" id="cs2">
+					<b class="c=#fff fs=1.5">CS2</b>
+					<div>
+						<span class="c=#fff">Hipfire(16:9): </span><span class="bold c=#fff" id="cs2_hipfire">—</span><br>
 						AUG/SG556: <span id="cs2_aug">—</span><br>
 						Automatic/SSG08: <span id="cs2_auto1">—</span> / <span id="cs2_auto2">—</span><br>
-						AWP: <span class="bold c=#9cd2ff" id="cs2_awp1">—</span> / <span id="cs2_awp2">—</span>
+						<span class="c=#fff">AWP: </span><span class="bold c=#fff" id="cs2_awp1">—</span> / <span id="cs2_awp2">—</span>
 					</div>
 				</li>
-				<li class="lh=1.5 none :hover>b/c=#9cd2ff [active]/block" id="pubg">
-					<b class="fs=1.5">PUBG</b>
+				<li class="lh=1.5 :hover>b/c=#9cd2ff :not([active])/none" id="pubg">
+					<b class="c=#fff fs=1.5">PUBG</b>
 					<div>
-						FPP(<input class="bd=none bg=none pe=auto w=3ch" id="pubg_fpp_fov" value="103" />): <span id="pubg_fpp">—</span><br>
-						TPP(x0.82): <span class="bold c=#9cd2ff" id="pubg_tpp">—</span><br>
-						ADS/Scope: <span class="bold c=#9cd2ff" id="pubg_ads">—</span><br>
-						Vertical: <span class="bold c=#9cd2ff" id="pubg_v">—</span><br>
-						x2: <span class="bold c=#9cd2ff" id="pubg_x2">—</span> | <span id="pubg_x2_r">—</span><br>
-						x3: <span class="bold c=#9cd2ff" id="pubg_x3">—</span> | <span id="pubg_x3_r">—</span><br>
-						x4: <span class="bold c=#9cd2ff" id="pubg_x4">—</span><br>
-						x6: <span class="bold c=#9cd2ff" id="pubg_x6">—</span><br>
-						x8: <span class="bold c=#9cd2ff" id="pubg_x8">—</span><br>
-						x15: <span class="bold c=#9cd2ff" id="pubg_x15">—</span>
+						FPP(103): <span id="pubg_fpp">—</span><br>
+						<span class="c=#fff">Hipfire(x0.87): </span><span class="bold c=#fff" id="pubg_hipfire">—</span><br>
+						<span class="c=#fff">ASD/Scope: </span><span class="bold c=#fff" id="pubg_ads">—</span><br>
+						<span class="c=#fff">Vertical: </span><span class="bold c=#fff">1</span><br>
+						<span class="c=#fff">x2: </span><span class="bold c=#fff" id="pubg_x2">—</span><br>
+						<span class="c=#fff">x3: </span><span class="bold c=#fff" id="pubg_x3">—</span><br>
+						<span class="c=#fff">x4: </span><span class="bold c=#fff" id="pubg_x4">—</span><br>
+						<span class="c=#fff">x6: </span><span class="bold c=#fff" id="pubg_x6">—</span><br>
+						<span class="c=#fff">x8: </span><span class="bold c=#fff" id="pubg_x8">—</span><br>
+						<span class="c=#fff">x15: </span><span class="bold c=#fff" id="pubg_x15">—</span>
 					</div>
 				</li>
-				<li class="lh=1.5 none :hover>b/c=#9cd2ff [active]/block" id="ow">
-					<b class="fs=1.5">OVERWATCH</b>
+				<li class="lh=1.5 :hover>b/c=#9cd2ff :not([active])/none" id="ow">
+					<b class="c=#fff fs=1.5">OVERWATCH</b>
 					<div>
-						Hipfire(103): <span class="bold c=#9cd2ff" id="ow_hipfire">—</span>%<br>
-						Widow/Ana: <span class="bold c=#9cd2ff" id="ow_widow">—</span>%<br>
-						Ashe/Cassidy: <span class="bold c=#9cd2ff" id="ow_ashe">—</span>%<br>
-						Freja: <span class="bold c=#9cd2ff" id="ow_freja">—</span>%
+						<span class="c=#fff">Hipfire(103): <span class="bold c=#fff" id="ow_hipfire">—</span>%</span><br>
+						<span class="c=#fff">Widow/Ana: <span class="bold c=#fff" id="ow_widow">—</span>%</span><br>
+						<span class="c=#fff">Ashe/Cassidy: <span class="bold c=#fff" id="ow_ashe">—</span>%</span><br>
+						<span class="c=#fff">Freja: <span class="bold c=#fff" id="ow_freja">—</span>%</span>
 					</div>
 				</li>
-				<li class="lh=1.5 none :hover>b/c=#9cd2ff [active]/block" id="mc">
-					<b class="fs=1.5">MINECRAFT</b>
+				<li class="lh=1.5 :hover>b/c=#9cd2ff :not([active])/none" id="sa">
+					<b class="c=#fff fs=1.5">SUDDEN ATTACK</b>
 					<div>
-						Hipfire(110): <span class="bold c=#9cd2ff" id="mc_hipfire">—</span>%
-					</div>
-				</li>
-				<li class="lh=1.5 none :hover>b/c=#9cd2ff [active]/block" id="sa">
-					<b class="fs=1.5">SUDDEN ATTACK</b>
-					<div>
-						Hipfire(1280): <span class="bold c=#9cd2ff" id="sa_hipfire">—</span>
+						<span class="c=#fff">Hipfire(1152x864): </span><span class="bold c=#fff" id="sa_hipfire">—</span>
 					</div>
 				</li>
 			</ul>
@@ -210,6 +238,6 @@
 			>span/bg=#555555aa;br=.5;fs=1.5;p=.0_.5" id="toast">
 			<!-- span -->
 		</div>
-		<script src="./js/main.js?v1.3.0" type="module"></script>
+		<script src="./js/main.js" type="module"></script>
 	</body>
 </html>

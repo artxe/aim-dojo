@@ -1,3 +1,18 @@
+const device_resolution = /** @type {MonitorResolution} */(localStorage.getItem("device.resolution") || "fhd")/**/
+let game_height
+let game_width
+if (device_resolution == "fhd") {
+	game_height = 1080
+	game_width = 1920
+} else if (device_resolution == "hd") {
+	game_height = 720
+	game_width = 1280
+} else if (device_resolution == "qhd") {
+	game_height = 1440
+	game_width = 2560
+} else {
+	throw Error(device_resolution)
+}
 export default {
 	bg: {
 		chzzk_link: localStorage.getItem("bg.chzzk_link") || "",
@@ -18,14 +33,16 @@ export default {
 		yaw: 0,
 		zoom: 51.5
 	},
-	device: { height: 0, width: 0 },
+	device: {
+		height: 0,
+		resolution: device_resolution,
+		width: 0
+	},
 	game: {
 		cycle_id: Number(
 			localStorage.getItem("game.cycle_id") || 1
 		),
-		height: Number(
-			localStorage.getItem("game.height") || 1080
-		),
+		height: game_height,
 		/** @type {GameModeName?} */
 		mode: null,
 		raf_id: 0,
@@ -33,9 +50,7 @@ export default {
 		tolerance: Number(
 			localStorage.getItem("game.tolerance") || 2
 		),
-		width: Number(
-			localStorage.getItem("game.width") || 1920
-		)
+		width: game_width
 	},
 	hud: { next_update_ms: 0 },
 	/**

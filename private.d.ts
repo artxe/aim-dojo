@@ -18,7 +18,7 @@ type GameMode = {
 	update_hud: () => void
 }
 type GameModeName = "aiming" | "flick" | "tracking" | "writing"
-type GameSensName = "cs2" | "lol" | "mc" | "ow" | "pubg" | "sa" | "val"
+type GameSensName = "cs2" | "fn" | "lol" | "mc" | "ow" | "pubg" | "sa" | "val"
 type Line = {
 	e: {
 		x: number
@@ -30,6 +30,7 @@ type Line = {
 	}
 	t: number
 }
+type MonitorResolution = "fhd" | "hd" | "qhd"
 type Target = {
 	cr: number
 	cx: number

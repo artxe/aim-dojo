@@ -1,16 +1,6 @@
 const _ = {
 	audio: { volume: .5 },
-	crosshair: {
-		alpha: .67,
-		color: "white",
-		down: true,
-		gap: 6,
-		left: false,
-		length: 30,
-		right: false,
-		thickness: 2,
-		up: true
-	},
+	crosshair: { height: 66, width: 6 },
 	grid: {
 		major_every: 9,
 		size: 80,

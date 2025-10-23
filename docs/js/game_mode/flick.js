@@ -106,7 +106,7 @@ function on_frame() {
 					const t = clamp((range_px - y) / dist, -1, 1)
 					const cap = 2 * Math.acos(t)
 					theta = Math.random() * (TAU - cap)
-					if (theta > Math.PI * 0.5 - cap / 2) {
+					if (theta > Math.PI * .5 - cap / 2) {
 						theta += cap
 					}
 				} else if (y - dist <= -range_px) {
@@ -140,7 +140,7 @@ function on_frame() {
 				const t = clamp((range_rad - p) / dist, -1, 1)
 				const cap = 2 * Math.acos(t)
 				theta = Math.random() * (TAU - cap)
-				if (theta > Math.PI * 0.5 - cap / 2) {
+				if (theta > Math.PI * .5 - cap / 2) {
 					theta += cap
 				}
 			} else if (p - dist <= -range_rad) {

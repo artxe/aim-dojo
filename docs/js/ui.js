@@ -1,5 +1,15 @@
 import {
 	aiming_score_el,
+	bg_chzzk_input,
+	bg_soop_input,
+	bg_type_chzzk_input,
+	bg_type_default_input,
+	bg_type_input,
+	bg_type_soop_input,
+	bg_type_web_view_input,
+	bg_type_youtube_input,
+	bg_web_view_input,
+	bg_youtube_input,
 	cs2_aug_el,
 	cs2_auto1_el,
 	cs2_auto2_el,
@@ -8,25 +18,26 @@ import {
 	cs2_el,
 	cs2_hipfire_el,
 	flick_score_el,
-	height_input,
+	fn_el,
+	fn_hipfire_el,
 	lol_el,
 	mc_el,
 	mc_hipfire_el,
+	mode_cycle_btn,
+	monitor_res_btn,
+	monitor_res_fhd_el,
+	monitor_res_hd_el,
+	monitor_res_qhd_el,
 	ow_ashe_el,
 	ow_el,
 	ow_freja_el,
 	ow_hipfire_el,
 	ow_widow_el,
-	pubg_ads_el,
 	pubg_el,
 	pubg_fpp_el,
-	pubg_fpp_fov_input,
-	pubg_tpp_el,
-	pubg_v_el,
+	pubg_hipfire_el,
 	pubg_x2_el,
-	pubg_x2_r_el,
 	pubg_x3_el,
-	pubg_x3_r_el,
 	pubg_x4_el,
 	pubg_x6_el,
 	pubg_x8_el,
@@ -45,19 +56,9 @@ import {
 	val_operator25_el,
 	val_spectre_el,
 	val_vandal_el,
-	width_input,
 	writing_score_el,
-	bg_soop_input,
-	bg_youtube_input,
-	bg_chzzk_input,
-	bg_type_input,
-	bg_web_view_input,
-	mode_cycle_btn,
-	bg_type_youtube_input,
-	bg_type_soop_input,
-	bg_type_web_view_input,
-	bg_type_default_input,
-	bg_type_chzzk_input
+	pubg_ads_el,
+	fn_ads_el
 } from "./document.js"
 import game_mode from "./game_mode/index.js"
 import { update_fov } from "./logic.js"
@@ -73,17 +74,24 @@ import {
 } from "./math.js"
 import {
 	calc_sens_cs2,
+	calc_sens_fn,
 	calc_sens_mc,
 	calc_sens_ow,
 	calc_sens_pubg,
-	calc_sens_pubg_recoil,
-	calc_sens_pubg_v,
 	calc_sens_sa,
 	calc_sens_val
 } from "./sens.js"
 import state from "./state.js"
-width_input.value = String(state.game.width)
-height_input.value = String(state.game.height)
+monitor_res_btn.value = state.device.resolution
+if (state.device.resolution == "fhd") {
+	monitor_res_btn.textContent = monitor_res_fhd_el.textContent
+} else if (state.device.resolution == "hd") {
+	monitor_res_btn.textContent = monitor_res_hd_el.textContent
+} else if (state.device.resolution == "qhd") {
+	monitor_res_btn.textContent = monitor_res_qhd_el.textContent
+} else {
+	throw Error(state.device.resolution)
+}
 tolerance_input.value = String(state.game.tolerance)
 aiming_score_el.textContent = localStorage.getItem("aiming.best_score") || "0"
 flick_score_el.textContent = localStorage.getItem("flick.best_score") || "0"
@@ -116,20 +124,22 @@ bg_web_view_input.value = state.bg.web_view_link
 /** @returns {void} */
 export function active_game_sens() {
 	const { sens } = state.game
-	if (sens == "lol") {
-		lol_el.setAttribute("active", "")
-	} else if (sens == "val") {
-		val_el.setAttribute("active", "")
-	} else if (sens == "cs2") {
+	if (sens == "cs2") {
 		cs2_el.setAttribute("active", "")
-	} else if (sens == "pubg") {
-		pubg_el.setAttribute("active", "")
-	} else if (sens == "ow") {
-		ow_el.setAttribute("active", "")
+	} else if (sens == "fn") {
+		fn_el.setAttribute("active", "")
+	} else if (sens == "lol") {
+		lol_el.setAttribute("active", "")
 	} else if (sens == "mc") {
 		mc_el.setAttribute("active", "")
+	} else if (sens == "ow") {
+		ow_el.setAttribute("active", "")
+	} else if (sens == "pubg") {
+		pubg_el.setAttribute("active", "")
 	} else if (sens == "sa") {
 		sa_el.setAttribute("active", "")
+	} else if (sens == "val") {
+		val_el.setAttribute("active", "")
 	} else {
 		throw Error(sens)
 	}
@@ -146,20 +156,22 @@ export function change_active_game_sens(name) {
 		"game.sens",
 		state.game.sens = name
 	)
-	if (sens == "lol") {
-		lol_el.removeAttribute("active")
-	} else if (sens == "val") {
-		val_el.removeAttribute("active")
-	} else if (sens == "cs2") {
+	if (sens == "cs2") {
 		cs2_el.removeAttribute("active")
-	} else if (sens == "pubg") {
-		pubg_el.removeAttribute("active")
-	} else if (sens == "ow") {
-		ow_el.removeAttribute("active")
+	} else if (sens == "fn") {
+		fn_el.removeAttribute("active")
+	} else if (sens == "lol") {
+		lol_el.removeAttribute("active")
 	} else if (sens == "mc") {
 		mc_el.removeAttribute("active")
+	} else if (sens == "ow") {
+		ow_el.removeAttribute("active")
+	} else if (sens == "pubg") {
+		pubg_el.removeAttribute("active")
 	} else if (sens == "sa") {
 		sa_el.removeAttribute("active")
+	} else if (sens == "val") {
+		val_el.removeAttribute("active")
 	} else {
 		throw Error(sens)
 	}
@@ -168,20 +180,22 @@ export function change_active_game_sens(name) {
 /** @returns {void} */
 export function cycle_active_game_sens() {
 	const { sens } = state.game
-	if (sens == "lol") {
-		change_active_game_sens("val")
-	} else if (sens == "val") {
-		change_active_game_sens("cs2")
-	} else if (sens == "cs2") {
+	if (sens == "cs2") {
 		change_active_game_sens("pubg")
+	} else if (sens == "fn") {
+		change_active_game_sens("cs2")
+	} else if (sens == "lol") {
+		change_active_game_sens("val")
+	} else if (sens == "mc") {
+		change_active_game_sens("fn")
+	} else if (sens == "ow") {
+		change_active_game_sens("sa")
 	} else if (sens == "pubg") {
 		change_active_game_sens("ow")
-	} else if (sens == "ow") {
-		change_active_game_sens("mc")
-	} else if (sens == "mc") {
-		change_active_game_sens("sa")
 	} else if (sens == "sa") {
 		change_active_game_sens("lol")
+	} else if (sens == "val") {
+		change_active_game_sens("mc")
 	} else {
 		throw Error(sens)
 	}
@@ -232,11 +246,8 @@ export function send_toast(message, duration) {
 export function update_game_sens() {
 	const { height, width } = state.game
 	const base_hfov = 103
-	const val_hipfire = calc_sens_val(base_hfov)
-	set_text_if_changed(
-		val_hipfire_el,
-		round_to(val_hipfire, 3)
-	)
+	const val_hipfire = round_to(calc_sens_val(base_hfov), 3)
+	set_text_if_changed(val_hipfire_el, val_hipfire)
 	let zoom_fov = val_zoom_hfov(base_hfov, 1.15)
 	const spectre = calc_sens_val(zoom_fov)
 	set_text_if_changed(
@@ -273,15 +284,24 @@ export function update_game_sens() {
 		val_operator5_el,
 		round_to(operator5 / val_hipfire, 3)
 	)
-	const cs2_hipfire = calc_sens_cs2(90)
+	const mc_hipfire = calc_sens_mc(110)
+	set_text_if_changed(mc_hipfire_el, round(mc_hipfire))
+	const fn_hipfire = calc_sens_fn(80, width * .87)
+	set_text_if_changed(
+		fn_hipfire_el,
+		round_to(fn_hipfire, 1)
+	)
+	const fn_ads = calc_sens_fn(80)
+	set_text_if_changed(
+		fn_ads_el,
+		round_to(fn_ads / fn_hipfire * 100, 1)
+	)
+	const cs2_hipfire = round_to(calc_sens_cs2(90), 2)
 	const cs2_45 = calc_sens_cs2(45)
 	const cs2_40 = calc_sens_cs2(40)
 	const cs2_15 = calc_sens_cs2(15)
 	const cs2_10 = calc_sens_cs2(10)
-	set_text_if_changed(
-		cs2_hipfire_el,
-		round_to(cs2_hipfire, 2)
-	)
+	set_text_if_changed(cs2_hipfire_el, cs2_hipfire)
 	set_text_if_changed(
 		cs2_aug_el,
 		round_to(cs2_45 / cs2_hipfire, 2)
@@ -303,27 +323,18 @@ export function update_game_sens() {
 		round_to(cs2_10 / cs2_hipfire, 2)
 	)
 	const pubg_fov = 80
-	const pubg_fpp = calc_sens_pubg(
-		Number(pubg_fpp_fov_input.value)
-	)
+	const pubg_fpp = calc_sens_pubg(103)
 	set_text_if_changed(pubg_fpp_el, round(pubg_fpp))
-	const pubg_tpp = calc_sens_pubg(
-		convert_deg_across_aspect(pubg_fov, width, width * .82),
-		width * .82
+	const pubg_hipfire = round(
+		calc_sens_pubg(pubg_fov, width * .87)
 	)
-	set_text_if_changed(pubg_tpp_el, round(pubg_tpp))
+	set_text_if_changed(pubg_hipfire_el, pubg_hipfire)
 	const pubg_ads = calc_sens_pubg(pubg_fov)
 	set_text_if_changed(pubg_ads_el, round(pubg_ads))
-	const pubg_v = calc_sens_pubg_v(pubg_fov)
-	set_text_if_changed(pubg_v_el, round_to(pubg_v, 2))
 	const pubg_x2 = calc_sens_pubg(pubg_fov / 2)
 	set_text_if_changed(pubg_x2_el, round(pubg_x2))
-	const pubg_x2_r = calc_sens_pubg_recoil(pubg_fov / 2)
-	set_text_if_changed(pubg_x2_r_el, round(pubg_x2_r))
 	const pubg_x3 = calc_sens_pubg(pubg_fov / 3)
 	set_text_if_changed(pubg_x3_el, round(pubg_x3))
-	const pubg_x3_r = calc_sens_pubg_recoil(pubg_fov / 3)
-	set_text_if_changed(pubg_x3_r_el, round(pubg_x3_r))
 	const pubg_x4 = calc_sens_pubg(pubg_fov / 4)
 	set_text_if_changed(pubg_x4_el, round(pubg_x4))
 	const pubg_x6 = calc_sens_pubg(pubg_fov / 6)
@@ -332,11 +343,8 @@ export function update_game_sens() {
 	set_text_if_changed(pubg_x8_el, round(pubg_x8))
 	const pubg_x15 = calc_sens_pubg(pubg_fov / 15)
 	set_text_if_changed(pubg_x15_el, round(pubg_x15))
-	const ow_hipfire = calc_sens_ow(base_hfov)
-	set_text_if_changed(
-		ow_hipfire_el,
-		round_to(ow_hipfire, 2)
-	)
+	const ow_hipfire = round_to(calc_sens_ow(base_hfov), 2)
+	set_text_if_changed(ow_hipfire_el, ow_hipfire)
 	const widow = calc_sens_ow(
 		convert_deg_across_aspect(30, height, width)
 	)
@@ -356,8 +364,6 @@ export function update_game_sens() {
 		ow_freja_el,
 		round_to(freja / ow_hipfire * 100, 2)
 	)
-	const mc_hipfire = calc_sens_mc(110)
-	set_text_if_changed(mc_hipfire_el, round(mc_hipfire))
 	const sa_hipfire = calc_sens_sa()
 	set_text_if_changed(sa_hipfire_el, round(sa_hipfire))
 }

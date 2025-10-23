@@ -7,55 +7,44 @@ const context = /** @type {CanvasRenderingContext2D} */(canvas_el.getContext("2d
 const off = new OffscreenCanvas(1, 1)
 const off_context = /** @type {OffscreenCanvasRenderingContext2D} */(off.getContext("2d"))/**/
 const crosshair_image = (() => {
-	const {
-		alpha,
-		color,
-		down,
-		gap,
-		left,
-		length,
-		right,
-		thickness,
-		up
-	} = constants.crosshair
-	off.height = gap + length * 2
-	off.width = gap + length * 2
+	const { height, width } = constants.crosshair
+	const inner_gap = 12
+	const inner_length = 20
+	const inner_thickness = 6
+	const outer_gap = 2
+	const outer_length = 10
+	const outer_thickness = 2
+	off.height = height
+	off.width = width
 	context.save()
-	off_context.fillStyle = color
-	off_context.globalAlpha = alpha
-	off_context.translate(off.width / 2, off.height / 2)
-	if (up) {
-		off_context.fillRect(
-			-thickness,
-			-gap / 2 - length,
-			thickness * 2,
-			length
-		)
-	}
-	if (down) {
-		off_context.fillRect(
-			-thickness,
-			gap / 2,
-			thickness * 2,
-			length
-		)
-	}
-	if (left) {
-		off_context.fillRect(
-			-gap / 2 - length,
-			-thickness,
-			length,
-			thickness * 2
-		)
-	}
-	if (right) {
-		off_context.fillRect(
-			gap / 2,
-			-thickness,
-			length,
-			thickness * 2
-		)
-	}
+	off_context.fillStyle = "#fff"
+	off_context.globalAlpha = .67
+	off_context.translate(width / 2, height / 2)
+	off_context.fillRect(
+		-inner_thickness / 2,
+		-inner_gap - inner_length,
+		inner_thickness,
+		inner_length
+	)
+	off_context.fillRect(
+		-inner_thickness / 2,
+		inner_gap,
+		inner_thickness,
+		inner_length
+	)
+	off_context.globalAlpha = .83
+	off_context.fillRect(
+		-outer_thickness / 2,
+		-outer_gap - outer_length,
+		outer_thickness,
+		outer_length
+	)
+	off_context.fillRect(
+		-outer_thickness / 2,
+		outer_gap,
+		outer_thickness,
+		outer_length
+	)
 	off_context.restore()
 	return off.transferToImageBitmap()
 })()
@@ -93,7 +82,7 @@ const { text_data, text_image } = (() => {
 	const { offset_x, text } = constants.mode.writing
 	const lines = text.split("\n")
 	const rows = lines.length
-	const font_px = floor(size * 0.78)
+	const font_px = floor(size * .78)
 	off_context.font = `${font_px}px bold monospace`
 	let max_w = 0
 	for (const line of lines) {
@@ -109,7 +98,7 @@ const { text_data, text_image } = (() => {
 	off_context.save()
 	off_context.fillStyle = "white"
 	off_context.font = `${font_px}px bold monospace`
-	off_context.globalAlpha = 0.5
+	off_context.globalAlpha = .5
 	off_context.textAlign = "left"
 	off_context.textBaseline = "middle"
 	for (let r = 0; r < rows; r++) {
@@ -196,32 +185,18 @@ export function draw() {
 	}
 	draw_crosshair()
 	if (sens == "sa") {
-		context.fillStyle = "gray"
-		if (height > 1024) {
+		context.fillStyle = "#000"
+		if (width > height * 4 / 3) {
 			context.fillRect(
 				-width / 2,
 				-height / 2,
-				width,
-				(height - 1024) / 2
-			)
-			context.fillRect(
-				-width / 2,
-				512,
-				width,
-				(height - 1024) / 2
-			)
-		}
-		if (width > 1280) {
-			context.fillRect(
-				-width / 2,
-				-height / 2,
-				(width - 1280) / 2,
+				(width - height * 4 / 3) / 2,
 				height
 			)
 			context.fillRect(
-				640,
+				height * 2 / 3,
 				-height / 2,
-				(width - 1280) / 2,
+				(width - height * 4 / 3) / 2,
 				height
 			)
 		}
@@ -230,14 +205,14 @@ export function draw() {
 }
 /** @returns {void} */
 function draw_crosshair() {
-	const { gap, length } = constants.crosshair
-	off.height = gap + length * 2
-	off.width = gap + length * 2
+	const { height, width } = constants.crosshair
+	off.height = height
+	off.width = width
 	context.save()
 	context.drawImage(
 		crosshair_image,
-		-round(off.width / 2),
-		-round(off.height / 2)
+		-round(width / 2),
+		-round(height / 2)
 	)
 	context.restore()
 }

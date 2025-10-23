@@ -142,8 +142,34 @@ export function update_fov() {
 	const { height, width } = state.device
 	const { mode, sens } = state.game
 	const { mb_right } = state.input
-	if (sens == "lol") {
+	if (sens == "cs2") {
+		if (mb_right) {
+			const vfov_deg = convert_deg_across_aspect(40, height * 4 / 3, height)
+			state.camera.fov = convert_deg_across_aspect(vfov_deg, height, width)
+		} else {
+			const vfov_deg = convert_deg_across_aspect(90, height * 4 / 3, height)
+			state.camera.fov = convert_deg_across_aspect(vfov_deg, height, width)
+		}
+	} else if (sens == "fn") {
+		state.camera.fov = 80
+	} else if (sens == "lol") {
 		state.camera.fov = 103
+	} else if (sens == "mc") {
+		state.camera.fov = convert_deg_across_aspect(110, height, width)
+	} else if (sens == "ow") {
+		if (mb_right) {
+			state.camera.fov = convert_deg_across_aspect(30, height, width)
+		} else {
+			state.camera.fov = 103
+		}
+	} else if (sens == "pubg") {
+		if (mb_right) {
+			state.camera.fov = 40
+		} else {
+			state.camera.fov = 80
+		}
+	} else if (sens == "sa") {
+		state.camera.fov = convert_deg_across_aspect(85, height * 4 / 3, width)
 	} else if (sens == "val") {
 		if (mb_right) {
 			const half_rad = to_rad(51.5)
@@ -152,30 +178,6 @@ export function update_fov() {
 		} else {
 			state.camera.fov = 103
 		}
-	} else if (sens == "cs2") {
-		if (mb_right) {
-			const vfov_deg = convert_deg_across_aspect(40, height * 4 / 3, height)
-			state.camera.fov = convert_deg_across_aspect(vfov_deg, height, width)
-		} else {
-			const vfov_deg = convert_deg_across_aspect(90, height * 4 / 3, height)
-			state.camera.fov = convert_deg_across_aspect(vfov_deg, height, width)
-		}
-	} else if (sens == "pubg") {
-		if (mb_right) {
-			state.camera.fov = 40
-		} else {
-			state.camera.fov = 80
-		}
-	} else if (sens == "ow") {
-		if (mb_right) {
-			state.camera.fov = convert_deg_across_aspect(30, height, width)
-		} else {
-			state.camera.fov = 103
-		}
-	} else if (sens == "mc") {
-		state.camera.fov = convert_deg_across_aspect(110, height, width)
-	} else if (sens == "sa") {
-		state.camera.fov = convert_deg_across_aspect(85, 1280, width)
 	} else {
 		throw Error(sens)
 	}

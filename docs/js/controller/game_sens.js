@@ -1,105 +1,43 @@
 import {
 	cs2_el,
-	height_input,
+	fn_el,
 	lol_el,
 	mc_el,
+	monitor_res_btn,
 	ow_el,
 	pubg_el,
-	pubg_fpp_el,
-	pubg_fpp_fov_input,
 	sa_el,
 	tolerance_input,
-	val_el,
-	width_input
+	val_el
 } from "../document.js"
-import { max, min, round } from "../math.js"
-import { calc_sens_pubg } from "../sens.js"
+import { max, min } from "../math.js"
 import state from "../state.js"
 import {
 	change_active_game_sens,
-	set_text_if_changed,
 	update_game_sens
 } from "../ui.js"
-height_input.addEventListener(
-	"input",
+monitor_res_btn.addEventListener(
+	"change",
 	function(ev) {
-		const target = /** @type {HTMLInputElement} */(ev.target)/**/
-		target.value = String(
-			max(
-				min(
-					Number(
-						target.value.replace(/[^0-9]/g, "").substring(0, 4)
-					),
-					9999
-				),
-				1
-			)
-		)
-		localStorage.setItem("game.height", target.value)
-		state.game.height = Number(target.value)
-		update_game_sens()
-	}
-)
-height_input.addEventListener(
-	"keydown",
-	function(ev) {
-		const target = /** @type {HTMLInputElement} */(ev.target)/**/
-		if (ev.code == "ArrowDown") {
-			target.value = String(
-				max(Number(target.value) - 1, 1)
-			)
-		} else if (ev.code == "ArrowUp") {
-			target.value = String(
-				min(Number(target.value) + 1, 9999)
-			)
+		const target = /** @type {HTMLButtonElement} */(ev.target)/**/
+		const type = /** @type {MonitorResolution} */(target.value)/**/
+		if (type == "fhd") {
+			state.game.height = 1080
+			state.game.width = 1920
+		} else if (type == "hd") {
+			state.game.height = 720
+			state.game.width = 1280
+		} else if (type == "qhd") {
+			state.game.height = 1440
+			state.game.width = 2560
 		} else {
-			return
+			throw Error(type)
 		}
-		localStorage.setItem("game.height", target.value)
-		state.game.height = Number(target.value)
+		localStorage.setItem(
+			"device.resolution",
+			state.device.resolution = type
+		)
 		update_game_sens()
-	}
-)
-pubg_fpp_fov_input.addEventListener(
-	"input",
-	function(ev) {
-		const target = /** @type {HTMLInputElement} */(ev.target)/**/
-		target.value = String(
-			max(
-				min(
-					Number(
-						target.value.replace(/[^0-9]/g, "").substring(0, 3)
-					),
-					103
-				),
-				80
-			)
-		)
-		const pubg_fpp = calc_sens_pubg(
-			Number(pubg_fpp_fov_input.value)
-		)
-		set_text_if_changed(pubg_fpp_el, round(pubg_fpp))
-	}
-)
-pubg_fpp_fov_input.addEventListener(
-	"keydown",
-	function(ev) {
-		const target = /** @type {HTMLInputElement} */(ev.target)/**/
-		if (ev.code == "ArrowDown") {
-			target.value = String(
-				max(Number(target.value) - 1, 80)
-			)
-		} else if (ev.code == "ArrowUp") {
-			target.value = String(
-				min(Number(target.value) + 1, 103)
-			)
-		} else {
-			return
-		}
-		const pubg_fpp = calc_sens_pubg(
-			Number(pubg_fpp_fov_input.value)
-		)
-		set_text_if_changed(pubg_fpp_el, round(pubg_fpp))
 	}
 )
 tolerance_input.addEventListener(
@@ -142,49 +80,13 @@ tolerance_input.addEventListener(
 		update_game_sens()
 	}
 )
-width_input.addEventListener(
-	"input",
-	function(ev) {
-		const target = /** @type {HTMLInputElement} */(ev.target)/**/
-		target.value = String(
-			max(
-				min(
-					Number(
-						target.value.replace(/[^0-9]/g, "").substring(0, 4)
-					),
-					9999
-				),
-				1
-			)
-		)
-		localStorage.setItem("game.width", target.value)
-		state.game.width = Number(target.value)
-		update_game_sens()
-	}
-)
-width_input.addEventListener(
-	"keydown",
-	function(ev) {
-		const target = /** @type {HTMLInputElement} */(ev.target)/**/
-		if (ev.code == "ArrowDown") {
-			target.value = String(
-				max(Number(target.value) - 1, 1)
-			)
-		} else if (ev.code == "ArrowUp") {
-			target.value = String(
-				min(Number(target.value) + 1, 9999)
-			)
-		} else {
-			return
-		}
-		localStorage.setItem("game.width", target.value)
-		state.game.width = Number(target.value)
-		update_game_sens()
-	}
-)
 cs2_el.addEventListener(
 	"mouseup",
 	() => change_active_game_sens("cs2")
+)
+fn_el.addEventListener(
+	"mouseup",
+	() => change_active_game_sens("fn")
 )
 lol_el.addEventListener(
 	"mouseup",

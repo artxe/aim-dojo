@@ -25,6 +25,18 @@ export function calc_sens_cs2(hfov_deg) {
 		/ to_rad(.022 * hfov_deg / 90)
 }
 /**
+ * @param {number} hfov_deg
+ * @param {number} [width]
+ * @returns {number}
+ */
+export function calc_sens_fn(
+	hfov_deg,
+	width = state.game.width
+) {
+	return compute_sens_rad(hfov_deg, width)
+		/ to_rad(.005555)
+}
+/**
  * @param {number} vfov_deg
  * @returns {number}
  */
@@ -33,8 +45,8 @@ export function calc_sens_mc(vfov_deg) {
 	const hfov_deg = convert_deg_across_aspect(vfov_deg, height, width)
 	const rad_per_count = compute_sens_rad(hfov_deg, width)
 	return (
-		cbrt(rad_per_count / to_rad(1.2)) - 0.2
-	) / 0.006
+		cbrt(rad_per_count / to_rad(1.2)) - .2
+	) / .006
 }
 /**
  * @param {number} hfov_deg
@@ -62,37 +74,10 @@ export function calc_sens_pubg(
 	const rad_per_count = compute_sens_rad(hfov_deg, width)
 	return base_sens + step * (log(rad_per_count / sens50_yaw) / LN2)
 }
-/**
- * @param {number} hfov_deg
- * @returns {number}
- */
-export function calc_sens_pubg_recoil(hfov_deg) {
-	const { width } = state.game
-	const base_fov = 80
-	const base_sens = 50
-	const base_yaw = .0444400004444
-	const step = 15.0515
-	const sens50_yaw = to_rad(hfov_deg / base_fov * base_yaw)
-	const rad_per_count = (
-		compute_sens_rad(base_fov, width)
-		+ compute_sens_rad(hfov_deg, width)
-	) / 2
-	return base_sens + step * (log(rad_per_count / sens50_yaw) / LN2)
-}
-/**
- * @param {number} hfov_deg
- * @returns {number}
- */
-export function calc_sens_pubg_v(hfov_deg) {
-	const { height, width } = state.game
-	const vfov_deg = convert_deg_across_aspect(hfov_deg, width, height)
-	const v_rad_per_count = compute_sens_rad(vfov_deg, height)
-	const rad_per_count = compute_sens_rad(hfov_deg, width)
-	return v_rad_per_count / rad_per_count
-}
 /** @returns {number} */
 export function calc_sens_sa() {
-	return (compute_sens_rad(85, 1280) - .00015)
+	const { height } = state.game
+	return (compute_sens_rad(85, height * 4 / 3) - .00015)
 		/ .00003
 }
 /**
