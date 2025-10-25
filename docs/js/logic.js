@@ -13,7 +13,7 @@ import {
 import state from "./state.js"
 import { now } from "./sfx.js"
 import { draw } from "./renderer.js"
-import { update_hud } from "./ui.js"
+import { update_hud } from "./controller/screen.js"
 /** @returns {void} */
 export function check_stats() {
 	const { shoots } = state.stats

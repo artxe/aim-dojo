@@ -1,4 +1,3 @@
-import { set_text_if_changed, send_toast } from "../ui.js"
 import state from "../state.js"
 import constants from "../constants.js"
 import game_mode from "./index.js"
@@ -10,6 +9,7 @@ import {
 } from "../document.js"
 import { round_to } from "../math.js"
 import { check_writing_stats } from "../renderer.js"
+import { send_toast, set_text_if_changed } from "../controller/index.js"
 /** @returns {void} */
 function change_to_next_mode() {
 	const { mode } = state.game

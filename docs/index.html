@@ -32,56 +32,188 @@
 			}
 		</script>
 		<script src="./lib/css-lube.js"></script>
+		<script src="./js/main.js" type="module"></script>
+		<script>
+			function radio_item_onchange() {
+				const input = document.getElementById(this.getAttribute("name"))
+				input.value = this.value
+			}
+			function selector_button_onclick() {
+				this.nextElementSibling.setAttribute('open','')
+				this.nextElementSibling.focus()
+			}
+			function selector_option_onclick() {
+				this.parentNode.blur()
+				this.parentNode.previousElementSibling.value = this.getAttribute('value')
+			}
+			document.addEventListener(
+				"DOMContentLoaded",
+				function() {
+					const { get: get_input_value, set: set_input_value } = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")
+					const { max, min } = Math
+					const radio_set = new Set()
+					for (const radio of document.querySelectorAll("input[type='radio']")) {
+						radio_set.add(radio.getAttribute("name"))
+					}
+					for (const radio_name of radio_set) {
+						const radio_input = document.getElementById(radio_name)
+						Object.defineProperty(radio_input, "value", {
+							get() {
+								return get_input_value.call(this)
+							},
+							set(value) {
+								const radio_item = this.parentNode.querySelector(`input[name='${radio_name}'][value='${value}']`)
+								if (radio_item && this.value != value) {
+									radio_item.checked = true
+									set_input_value.call(this, value)
+									this.dispatchEvent(new Event("change"))
+								}
+							}
+						})
+					}
+					for (const selector_btn of document.querySelectorAll("[onclick='selector_button_onclick.call(this)']")) {
+						Object.defineProperty(selector_btn, "value", {
+							get() {
+								return this.getAttribute("value")
+							},
+							set(value) {
+								const option = this.nextElementSibling.querySelector(`li[value="${value}"]`)
+								if (option && this.value != value) {
+									this.setAttribute("value", value)
+									this.textContent = option.textContent
+									this.dispatchEvent(new Event("change"))
+								}
+							}
+						})
+					}
+					for (const number_input of document.querySelectorAll("input[min][max]")) {
+						const max_str = number_input.getAttribute("max")
+						const length = max_str.includes(".") ? max_str.indexOf(".") : max_str.length
+						const decimals = Number(number_input.getAttribute("decimals"))
+						const min_value = Number(number_input.getAttribute("min"))
+						const max_value = Number(number_input.getAttribute("max"))
+						if (!number_input.value) {
+							number_input.value = min_value
+						}
+						number_input.addEventListener(
+							"input",
+							function({ target }) {
+								if (decimals && target.value.includes(".")) {
+									if (target.value.indexOf(".") == target.value.length - 1) {
+										target.value = String(
+											max(
+												min(
+													Number(
+														target.value.replace(/[^\d]/g, "").substring(0, length)
+													),
+													max_value
+												),
+												min_value
+											)
+										) + "."
+									} else {
+										const [ integer, decimal ] = target.value.split(".")
+										target.value = max(
+											min(
+												Number(
+													integer.replace(/[^\d]/g, "").substring(0, length)
+														+ "."
+														+ decimal.replace(/[^\d]/g, "")
+												),
+												max_value
+											),
+											min_value
+										).toFixed(decimals).replace(/0+$/, "")
+									}
+								} else {
+									target.value = String(
+										max(
+											min(
+												Number(
+													target.value.replace(/[^\d]/g, "").substring(0, length)
+												),
+												max_value
+											),
+											min_value
+										)
+									)
+								}
+							}
+						)
+						number_input.addEventListener(
+							"keydown",
+							function({ code, target }) {
+								if (code == "ArrowDown") {
+									target.value = max(
+										Number(target.value) - 10 ** -decimals,
+										min_value
+									).toFixed(decimals)
+								} else if (code == "ArrowUp") {
+									target.value = min(
+										Number(target.value) + 10 ** -decimals,
+										max_value
+									).toFixed(decimals).replace(/0+$/, "")
+								}
+								this.dispatchEvent(new Event("input"))
+							}
+						)
+					}
+				}
+			)
+		</script>
 	</head>
-	<body class="bg=#3d2423 c=#eee ff=ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace fs=16px h=100%	pe=none us=none o=clip
+	<body class="bg=#3d2423 c=#eee ff=ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace fs=16px h=100% o=clip pe=none us=none wsp=-.4
 		:not([locked])_canvas/ft=blur(4px);tt=filter_1s_ease;a=none
 		:not([locked])_[hud]/none
 		[locked]_[menu]/none">
 		<div class="fixed pe=auto o=hidden
-			[preview]/z=1
-			[preview]>button/op=.8
-			[preview]>iframe/br=1;h=80%;l=50%;tf=translateX(-50%);w=80%;z=1
-			[preview]>img/none
-			[preview]>video/none" id="bg">
+			[activate]/z=1
+			[activate]>button/op=.8
+			[activate]>iframe/br=1;tf=scale(.8)_translateY(-12.5%);z=1
+			[activate]>img/none
+			[activate]>video/br=1;tf=scale(.8)_translateY(-12.5%);z=1" id="bg">
 			<img alt="pre image for video" class="fixed h=100% of=cover w=100%" src="./bg.png" />
 			<video autoplay class="fixed h=100% of=cover w=100%" loop muted playsinline>
 				<source src="./bg.mp4" type="video/mp4">
 			</video>
-			<iframe class="bd=none fixed h=100% w=100% :not([src])/none" id="bg_iframe"></iframe>
-			<button class="bg=#000 fixed h=100% op=.33 w=100%" id="bg_space"></button>
+			<iframe class="bd=none fixed h=100% w=100% :not([src])/none" id="bg-iframe"></iframe>
+			<button class="bg=#000 fixed h=100% op=.4 w=100%" id="bg-space"></button>
 		</div>
 		<canvas class="fixed h=100% pe=auto w=100%" id="canvas"></canvas>
 		<div class="c=#ccc fixed l=.5 t=.5 ws=nowrap">
 			<span class="op=.5" menu>(Tab: Next game sens)<br></span>
-			<div class="c=#9cd2ff inline pe=auto relative">
-				<button class="p=.25" id="monitor_res"
-					onclick="this.nextElementSibling.setAttribute('open','');this.nextElementSibling.focus()" value="fhd">
-					-
-				</button>
-				<ul class="absolute bg=rgba(0,0,0,.5) bf=blur(2px) br=.5 relative :not([open])/none" onblur="this.removeAttribute('open')" tabindex="-1">
-					<li class="p=.25" id="monitor_res_hd"
-						onclick="monitor_res.value=this.getAttribute('value');monitor_res.textContent=this.textContent;this.parentNode.blur();monitor_res.dispatchEvent(new Event('change'))"
-						value="hd">
-						1280x720(HD)
-					</li>
-					<li class="p=.25" id="monitor_res_fhd"
-						onclick="monitor_res.value=this.getAttribute('value');monitor_res.textContent=this.textContent;this.parentNode.blur();monitor_res.dispatchEvent(new Event('change'))"
-						value="fhd">
-						1920x1080(FHD)
-					</li>
-					<li class="p=.25" id="monitor_res_qhd"
-						onclick="monitor_res.value=this.getAttribute('value');monitor_res.textContent=this.textContent;this.parentNode.blur();monitor_res.dispatchEvent(new Event('change'))"
-						value="qhd">
-						2560x1440(QHD)
-					</li>
-				</ul>
+			<div class="flex p=.25">
+				<div class="c=#9cd2ff pe=auto relative">
+					<button id="monitor-res"
+						onclick="selector_button_onclick.call(this)">
+						-
+					</button>
+					<ul class="absolute bf=blur(2px) bg=rgba(0,0,0,.5) block br=.5 l=0 w=max-content :not([open])/none" onblur="this.removeAttribute('open')" tabindex="-1">
+						<li class="p=.25"
+							onclick="selector_option_onclick.call(this)"
+							value="hd">
+							1280x720(HD)
+						</li>
+						<li class="p=.25"
+							onclick="selector_option_onclick.call(this)"
+							value="fhd">
+							1920x1080(FHD)
+						</li>
+						<li class="p=.25"
+							onclick="selector_option_onclick.call(this)"
+							value="qhd">
+							2560x1440(QHD)
+						</li>
+					</ul>
+				</div>
+				<div class="w=.5"></div>
+				<span class="c=#fff">T:</span><input class="bd=none bg=none c=#9cd2ff pe=auto w=1.5ch" id="tolerance" max="9" min="0" />
 			</div>
-			<span class="c=#fff">T:</span><input class="c=#9cd2ff bd=none bg=none pe=auto w=1ch" id="tolerance" value="-" />
 			<ul class="pe=auto
 				:active>li/block
 				:active>li:not([active])>div/none">
 				<li class="lh=1.5 :hover>b/c=#9cd2ff :not([active])/none" id="lol">
-					<b class="c=#fff fs=1.5">LOL</b>
+					<b class="c=#fff fs=1.5">League of Legends</b>
 					<div>
 						<span class="c=#fff">Window(6): </span><span class="bold c=#fff">50</span>
 					</div>
@@ -89,155 +221,489 @@
 				<li class="lh=1.5 :hover>b/c=#9cd2ff :not([active])/none" id="val">
 					<b class="c=#fff fs=1.5">VALORANT</b>
 					<div>
-						<span class="c=#fff">Hipfire: </span><span class="bold c=#fff" id="val_hipfire">—</span><br>
-						Spectre/Stinger/Ares/Odin: <span id="val_spectre">—</span><br>
-						<span class="c=#fff">Vandal/Phantom/Bulldog: </span><span class="bold c=#fff" id="val_vandal">—</span><br>
-						Guardian: <span id="val_guardian">—</span><br>
-						Marshal/Outlaw: <span id="val_marshal">—</span><br>
-						<span class="c=#fff">Operator: </span><span class="bold c=#fff" id="val_operator25">—</span> / <span id="val_operator5">—</span>
+						<span class="c=#fff">Hipfire: </span><span class="bold c=#fff" id="val-hipfire">—</span><br>
+						Spectre/Stinger/Ares/Odin: <span id="val-spectre">—</span><br>
+						<span class="c=#fff">Vandal/Phantom/Bulldog: </span><span class="bold c=#fff" id="val-vandal">—</span><br>
+						Guardian: <span id="val-guardian">—</span><br>
+						Marshal/Outlaw: <span id="val-marshal">—</span><br>
+						<span class="c=#fff">Operator: </span><span class="bold c=#fff" id="val-operator25">—</span> / <span id="val-operator5">—</span>
 					</div>
 				</li>
 				<li class="lh=1.5 :hover>b/c=#9cd2ff :not([active])/none" id="mc">
-					<b class="c=#fff fs=1.5">MINECRAFT</b>
+					<b class="c=#fff fs=1.5">Minecraft</b>
 					<div>
-						<span class="c=#fff">Hipfire(110): <span class="bold c=#fff" id="mc_hipfire">—</span>%</span>
+						<span class="c=#fff">Hipfire(110): <span class="bold c=#fff" id="mc-hipfire">—</span>%</span>
 					</div>
 				</li>
 				<li class="lh=1.5 :hover>b/c=#9cd2ff :not([active])/none" id="fn">
-					<b class="c=#fff fs=1.5">FORTNITE</b>
+					<b class="c=#fff fs=1.5">Fortnite</b>
 					<div>
-						<span class="c=#fff">Hipfire(x0.87): <span class="bold c=#fff" id="fn_hipfire">—</span>%</span><br>
-						<span class="c=#fff">ASD/Scope: <span class="bold c=#fff" id="fn_ads">-</span>%</span><br>
+						<span class="c=#fff">Hipfire(x0.87): <span class="bold c=#fff" id="fn-hipfire">—</span>%</span><br>
+						<span class="c=#fff">ASD/Scope: <span class="bold c=#fff" id="fn-ads">-</span>%</span><br>
 						<span class="c=#fff">Zoom Scaling: </span><span class="bold c=#fff">Standard</span>
 					</div>
 				</li>
 				<li class="lh=1.5 :hover>b/c=#9cd2ff :not([active])/none" id="cs2">
-					<b class="c=#fff fs=1.5">CS2</b>
+					<b class="c=#fff fs=1.5">Counter-Strike 2</b>
 					<div>
-						<span class="c=#fff">Hipfire(16:9): </span><span class="bold c=#fff" id="cs2_hipfire">—</span><br>
-						AUG/SG556: <span id="cs2_aug">—</span><br>
-						Automatic/SSG08: <span id="cs2_auto1">—</span> / <span id="cs2_auto2">—</span><br>
-						<span class="c=#fff">AWP: </span><span class="bold c=#fff" id="cs2_awp1">—</span> / <span id="cs2_awp2">—</span>
+						<span class="c=#fff">Hipfire(16:9): </span><span class="bold c=#fff" id="cs2-hipfire">—</span><br>
+						AUG/SG556: <span id="cs2-aug">—</span><br>
+						Automatic/SSG08: <span id="cs2-auto1">—</span> / <span id="cs2-auto2">—</span><br>
+						<span class="c=#fff">AWP: </span><span class="bold c=#fff" id="cs2-awp1">—</span> / <span id="cs2-awp2">—</span>
 					</div>
 				</li>
 				<li class="lh=1.5 :hover>b/c=#9cd2ff :not([active])/none" id="pubg">
-					<b class="c=#fff fs=1.5">PUBG</b>
+					<b class="c=#fff fs=1.5">PUBG: BATTLEGROUNDS</b>
 					<div>
-						FPP(103): <span id="pubg_fpp">—</span><br>
-						<span class="c=#fff">Hipfire(x0.87): </span><span class="bold c=#fff" id="pubg_hipfire">—</span><br>
-						<span class="c=#fff">ASD/Scope: </span><span class="bold c=#fff" id="pubg_ads">—</span><br>
+						<span class="c=#fff">FPP FoV: </span><span class="bold c=#fff" id="pubg-fpp">—</span><br>
+						<span class="c=#fff">Hipfire(x0.87): </span><span class="bold c=#fff" id="pubg-hipfire">—</span><br>
+						<span class="c=#fff">ASD/Scope: </span><span class="bold c=#fff" id="pubg-ads">—</span><br>
 						<span class="c=#fff">Vertical: </span><span class="bold c=#fff">1</span><br>
-						<span class="c=#fff">x2: </span><span class="bold c=#fff" id="pubg_x2">—</span><br>
-						<span class="c=#fff">x3: </span><span class="bold c=#fff" id="pubg_x3">—</span><br>
-						<span class="c=#fff">x4: </span><span class="bold c=#fff" id="pubg_x4">—</span><br>
-						<span class="c=#fff">x6: </span><span class="bold c=#fff" id="pubg_x6">—</span><br>
-						<span class="c=#fff">x8: </span><span class="bold c=#fff" id="pubg_x8">—</span><br>
-						<span class="c=#fff">x15: </span><span class="bold c=#fff" id="pubg_x15">—</span>
+						<span class="c=#fff">x2: </span><span class="bold c=#fff" id="pubg-x2">—</span><br>
+						<span class="c=#fff">x3: </span><span class="bold c=#fff" id="pubg-x3">—</span><br>
+						<span class="c=#fff">x4: </span><span class="bold c=#fff" id="pubg-x4">—</span><br>
+						<span class="c=#fff">x6: </span><span class="bold c=#fff" id="pubg-x6">—</span><br>
+						<span class="c=#fff">x8: </span><span class="bold c=#fff" id="pubg-x8">—</span><br>
+						<span class="c=#fff">x15: </span><span class="bold c=#fff" id="pubg-x15">—</span>
 					</div>
 				</li>
 				<li class="lh=1.5 :hover>b/c=#9cd2ff :not([active])/none" id="ow">
-					<b class="c=#fff fs=1.5">OVERWATCH</b>
+					<b class="c=#fff fs=1.5">Overwatch 2</b>
 					<div>
-						<span class="c=#fff">Hipfire(103): <span class="bold c=#fff" id="ow_hipfire">—</span>%</span><br>
-						<span class="c=#fff">Widow/Ana: <span class="bold c=#fff" id="ow_widow">—</span>%</span><br>
-						<span class="c=#fff">Ashe/Cassidy: <span class="bold c=#fff" id="ow_ashe">—</span>%</span><br>
-						<span class="c=#fff">Freja: <span class="bold c=#fff" id="ow_freja">—</span>%</span>
+						<span class="c=#fff">Hipfire(103): <span class="bold c=#fff" id="ow-hipfire">—</span>%</span><br>
+						<span class="c=#fff">Widow/Ana: <span class="bold c=#fff" id="ow-widow">—</span>%</span><br>
+						<span class="c=#fff">Ashe/Cassidy: <span class="bold c=#fff" id="ow-ashe">—</span>%</span><br>
+						<span class="c=#fff">Freja: <span class="bold c=#fff" id="ow-freja">—</span>%</span>
 					</div>
 				</li>
 				<li class="lh=1.5 :hover>b/c=#9cd2ff :not([active])/none" id="sa">
-					<b class="c=#fff fs=1.5">SUDDEN ATTACK</b>
+					<b class="c=#fff fs=1.5">Sudden Attack</b>
 					<div>
-						<span class="c=#fff">Hipfire(1152x864): </span><span class="bold c=#fff" id="sa_hipfire">—</span>
+						<span class="c=#fff">Hipfire(1152x864): </span><span class="bold c=#fff" id="sa-hipfire">—</span>
 					</div>
 				</li>
 			</ul>
 		</div>
 		<div class="fixed l=50% t=.5 tf=translateX(-50%) ws=nowrap" hud>
-			<span class="bold c=#9cd2ff">Score/Peak</span> <span id="peak_score">—</span> ·
+			<span class="bold c=#9cd2ff">Score/Peak</span> <span id="peak-score">—</span> ·
 			<span class="bold c=#9cd2ff">Accuracy</span> <span id="accuracy">—</span>% ·
-			<span class="bold c=#9cd2ff">Critical</span> <span id="crit_rate">—</span>%
+			<span class="bold c=#9cd2ff">Critical</span> <span id="crit-rate">—</span>%
 		</div>
 		<div class="fixed r=.5 t=.5" hud>
 			<span class="pe=none" id="timer">00:00</span>
 		</div>
-		<div class="ai=center bold column fixed flex l=50% ta=center t=60% tf=translate(-50%,-50%)" menu>
-			<span class="bold c=#4488ff fs=4.5 wsp=-.2 -webkit-text-stroke=1px_white">AIM DOJO</span>
+		<div class="ai=center bold column fixed flex l=50% t=60% tf=translate(-50%,-50%)" menu>
+			<h1 class="bold c=#4488ff fs=4.5 -webkit-text-stroke=1px_white">AIM DOJO</h1>
 			<button class="fs=2 pe=auto relative :hover/tf=scale(1.25);tt=.1s" id="aiming">
 				Aiming
-				<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="aiming_score"><br>-</span>
+				<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="aiming-score"><br>-</span>
 			</button>
 			<button class="fs=2 pe=auto relative :hover/tf=scale(1.25);tt=.1s" id="flick">
 				Flick
-				<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="flick_score"><br>-</span>
+				<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="flick-score"><br>-</span>
 			</button>
 			<button class="fs=2 pe=auto relative :hover/tf=scale(1.25);tt=.1s" id="tracking">
 				Tracking
-				<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="tracking_score"><br>-</span>
+				<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="tracking-score"><br>-</span>
 			</button>
 			<button class="fs=2 pe=auto relative :hover/tf=scale(1.25);tt=.1s" id="writing">
 				Writing
-				<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="writing_score"><br>-</span>
+				<span class="absolute fs=.5 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="writing-score"><br>-</span>
 			</button><br>
 			<button class="fs=1.5 pe=auto relative :hover/tf=scale(1.25);tt=.1s" id="setting" onfocus="this.blur()">
 				Setting
 			</button>
 		</div>
-		<div class="bf=blur(2px) bg=rgba(0,0,0,.8) br=1 fixed fs=2 h=90% l=50% none pe=auto t=50% tf=translate(-50%,-50%) w=90%
-			[active]/block" id="setting_view">
-			<div class="ai=center column flex pe=none">
-				<br>
-				<button class="bold pe=auto
-					:hover/c=#9cd2ff
-					[on=true]>span:nth-child(2)/none
-					[on=false]>span:nth-child(1)/none" id="mode_cycle" on="true">
-					Mode Cycle:<span class="c=lime op=.75"> ON</span><span class="c=red op=.75">OFF</span>
-				</button>
-				<br>
-				Background Video
-				<div>
-					<input id="bg_type" type="hidden" />
-					<input checked class="pe=auto pointer" id="bg_type_default" name="bg_type"
-						onchange="bg_type.value=this.value;bg_type.dispatchEvent(new Event('change'))"
-						type="radio" value="default" />
-					<label class="pe=auto pointer" for="bg_type_default">Default</label>
-					<input class="pe=auto pointer" id="bg_type_youtube" name="bg_type"
-						onchange="bg_type.value=this.value;bg_type.dispatchEvent(new Event('change'))"
-						type="radio" value="youtube" />
-					<label class="pe=auto pointer" for="bg_type_youtube">Youtube</label>
-					<input class="pe=auto pointer" id="bg_type_soop" name="bg_type"
-						onchange="bg_type.value=this.value;bg_type.dispatchEvent(new Event('change'))"
-						type="radio" value="soop" />
-					<label class="pe=auto pointer" for="bg_type_soop">Soop</label>
-					<!-- <input class="pe=auto pointer" id="bg_type_chzzk" name="bg_type"
-						onchange="bg_type.value=this.value;bg_type.dispatchEvent(new Event('change'))"
-						type="radio" value="chzzk" />
-					<label class="pe=auto pointer" for="bg_type_chzzk">Chzzk</label> -->
-					<input class="pe=auto pointer" id="bg_type_web_view" name="bg_type"
-						onchange="bg_type.value=this.value;bg_type.dispatchEvent(new Event('change'))"
-						type="radio" value="web_view" />
-					<label class="pe=auto pointer" for="bg_type_web_view">Web View</label>
-				</div>
-				<div class="h=1.5">
-					<input accept="video/mp4,video/webm,video/ogg" class="bg=none p=0_.25 pe=auto w=25ch :not([active])/none" id="bg_video" type="file" />
-					<input class="bg=none p=0_.25 pe=auto w=25ch :not([active])/none" id="bg_youtube" />
-					<input class="bg=none p=0_.25 pe=auto w=25ch :not([active])/none" id="bg_soop" />
-					<input class="bg=none p=0_.25 pe=auto w=25ch :not([active])/none" id="bg_chzzk" />
-					<input class="bg=none p=0_.25 pe=auto w=25ch :not([active])/none" id="bg_web_view" />
-				</div>
-				<div>
-					<button class="pe=auto :hover/bold;c=#9cd2ff" id="preview_bg" onfocus="this.blur()">
-						Preview
+		<div class="bf=blur(2px) bg=rgba(0,0,0,.8) br=.5 fixed fs=2 h=90% l=50% none pe=auto t=50% tf=translate(-50%,-50%) w=90%
+			[active]/block" id="setting-view">
+			<div class="grid m=1_auto ox=hidden oy=scroll p=0_1 scrollbar-gutter=stable_both-edges w=max-content xh=calc(100%-2em)
+				::-webkit-scrollbar/w=.25
+				::-webkit-scrollbar-thumb/bg=rgba(170,170,170,.8);br=.5
+				::-webkit-scrollbar-track/bg=rgba(85,85,85,.8);br=.5">
+				<fieldset class="ai=center bd=1px_solid_#fff br=.25 column flex p=.5">
+					<legend class="m=0_auto_-.75 p=.25">In-Game</legend>
+					<button class="bold pe=auto
+						:hover/c=#9cd2ff
+						[on=true]>span:nth-child(2)/none
+						[on=false]>span:nth-child(1)/none" id="mode-cycle" on="true">
+						Mode Cycle:<span class="c=lime op=.75"> ON</span><span class="c=red op=.75">OFF</span>
 					</button>
-					<button class="pe=auto :hover/bold;c=#9cd2ff" id="save_bg" onfocus="this.blur()">
-						Save
-					</button>
-				</div>
+				</fieldset>
+				<br>
+				<fieldset class="ai=center bd=1px_solid_#fff br=.25 column flex p=.5
+					:has(#bg-type[value='default'])_#bg-link/none">
+					<legend class="m=0_auto_-.75 p=.25">Background Video</legend>
+					<div>
+						<input id="bg-type" type="hidden" />
+						<label class="pointer">
+							<input class="pe=auto pointer" name="bg-type"
+								onchange="radio_item_onchange.call(this)"
+								type="radio" value="default" />
+							Default
+						</label>
+						<label class="pointer">
+							<input class="pointer" name="bg-type"
+								onchange="radio_item_onchange.call(this)"
+								type="radio" value="youtube" />
+							Youtube
+						</label>
+						<label class="pointer">
+							<input class="pointer" name="bg-type"
+								onchange="radio_item_onchange.call(this)"
+								type="radio" value="soop" />
+							Soop
+						</label>
+						<label class="pointer">
+							<input class="pointer" name="bg-type"
+								onchange="radio_item_onchange.call(this)"
+								type="radio" value="webview" />
+							Web View
+						</label>
+					</div>
+					<div class="h=1.5">
+						<input accept="video/mp4,video/webm,video/ogg" class="bg=none p=0_.25 pe=auto w=25ch :not([active])/none" id="bg_video" type="file" />
+						<input class="bd=none bg=none c=#9cd2ff p=0_.25 pe=auto w=25ch" id="bg-link" />
+					</div>
+					<div class="flex g=1 jc=center">
+						<button class="pe=auto :hover/bold;c=#9cd2ff" id="activate-bg" onfocus="this.blur()">
+							Activate
+						</button>
+						<button class="pe=auto :hover/bold;c=#9cd2ff" id="save-bg" onfocus="this.blur()">
+							Save
+						</button>
+					</div>
+				</fieldset>
+				<br>
+				<fieldset class="bd=1px_solid_#fff br=.25 column flex p=.5">
+					<legend class="m=0_auto_-.75 p=.25">DPI Normalizer</legend>
+					<fieldset class="bd=1px_solid_#fff column flex g=.5 p=.5">
+						<legend class="m=-.75_0 p=.25">From</legend>
+						<div class="ai=center flex fs=.6 g=1
+							:not(:has(#dpi-norm-game[value='lol']))>#dpi-norm-lol-detail/none
+							:not(:has(#dpi-norm-game[value='val']))>#dpi-norm-val-detail/none
+							:not(:has(#dpi-norm-game[value='mc']))>#dpi-norm-mc-detail/none
+							:not(:has(#dpi-norm-game[value='fn']))>#dpi-norm-fn-detail/none
+							:not(:has(#dpi-norm-game[value='cs2']))>#dpi-norm-cs2-detail/none
+							:not(:has(#dpi-norm-game[value='pubg']))>#dpi-norm-pubg-detail/none
+							:not(:has(#dpi-norm-game[value='ow']))>#dpi-norm-ow-detail/none
+							:not(:has(#dpi-norm-game[value='sa']))>#dpi-norm-sa-detail/none">
+							<label>
+								DPI:
+								<input class="bd=none bg=none c=#9cd2ff w=5.5ch" id="dpi-norm-dpi" max="99999" min="1" />
+							</label>
+							<div class="c=#9cd2ff pe=auto relative">
+								<button class="p=.25" id="dpi-norm-game"
+									onclick="selector_button_onclick.call(this)">
+									-
+								</button>
+								<ul class="absolute bf=blur(2px) bg=rgba(0,0,0,.5) block br=.5 l=0 w=max-content :not([open])/none" onblur="this.removeAttribute('open')" tabindex="-1">
+									<li class="p=.25"
+										onclick="selector_option_onclick.call(this)"
+										value="lol">
+										League of Legends
+									</li>
+									<li class="p=.25"
+										onclick="selector_option_onclick.call(this)"
+										value="val">
+										VALORANT
+									</li>
+									<li class="p=.25"
+										onclick="selector_option_onclick.call(this)"
+										value="mc">
+										Minecraft
+									</li>
+									<li class="p=.25"
+										onclick="selector_option_onclick.call(this)"
+										value="fn">
+										Fortnite
+									</li>
+									<li class="p=.25"
+										onclick="selector_option_onclick.call(this)"
+										value="cs2">
+										Counter-Strike 2
+									</li>
+									<li class="p=.25"
+										onclick="selector_option_onclick.call(this)"
+										value="pubg">
+										PUBG: BATTLEGROUNDS
+									</li>
+									<li class="p=.25"
+										onclick="selector_option_onclick.call(this)"
+										value="ow">
+										Overwatch 2
+									</li>
+									<li class="p=.25"
+										onclick="selector_option_onclick.call(this)"
+										value="sa">
+										Sudden Attack
+									</li>
+								</ul>
+							</div>
+							<div class="ai=center flex g=1" id="dpi-norm-lol-detail">
+								<label>
+									Sens:
+									<input class="bd=none bg=none c=#9cd2ff w=3.5ch" id="dpi-norm-lol-sens" max="100" min="0" />
+								</label>
+							</div>
+							<div class="ai=center flex g=1
+								:has(#dpi-norm-val-fov[value=hipfire])_label:has(#dpi-norm-val-zoom)/none" id="dpi-norm-val-detail">
+								<label>
+									Sens:
+									<input class="bd=none bg=none c=#9cd2ff w=5.5ch" decimals="3" id="dpi-norm-val-sens" max="10" min=".01" />
+								</label>
+								<div class="c=#9cd2ff pe=auto relative">
+									<button class="p=.25" id="dpi-norm-val-fov"
+										onclick="selector_button_onclick.call(this)">
+										-
+									</button>
+									<ul class="absolute bf=blur(2px) bg=rgba(0,0,0,.5) block br=.5 l=0 w=max-content :not([open])/none" onblur="this.removeAttribute('open')" tabindex="-1">
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="hipfire">
+											Hipfire
+										</li>
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="spectre">
+											Spectre/Stinger/Ares/Odin
+										</li>
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="vandal">
+											Vandal/Phantom/Bulldog
+										</li>
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="guardian">
+											Guardian
+										</li>
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="marshal">
+											Marshal/Outlaw
+										</li>
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="operator">
+											Operator
+										</li>
+									</ul>
+								</div>
+								<label>
+									Zoom:
+									<input class="bd=none bg=none c=#9cd2ff w=5.5ch" decimals="3" id="dpi-norm-val-zoom" max="10" min=".01" />
+								</label>
+							</div>
+							<div class="ai=center flex g=1" id="dpi-norm-mc-detail">
+								<label>
+									Sens:
+									<input class="bd=none bg=none c=#9cd2ff w=3.5ch" id="dpi-norm-mc-sens" max="100" min="0" />
+								</label>
+							</div>
+							<div class="ai=center flex g=1
+								:has(#dpi-norm-fn-fov[value=hipfire])_label:has(#dpi-norm-fn-zoom)/none" id="dpi-norm-fn-detail">
+								<label>
+									Sens:
+									<input class="bd=none bg=none c=#9cd2ff w=5.5ch" decimals="1" id="dpi-norm-fn-sens" max="100" min="1" />
+								</label>
+								<div class="c=#9cd2ff pe=auto relative">
+									<button class="p=.25" id="dpi-norm-fn-fov"
+										onclick="selector_button_onclick.call(this)">
+										-
+									</button>
+									<ul class="absolute bf=blur(2px) bg=rgba(0,0,0,.5) block br=.5 l=0 w=max-content :not([open])/none" onblur="this.removeAttribute('open')" tabindex="-1">
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="hipfire">
+											Hipfire
+										</li>
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="ads">
+											ASD/Scope
+										</li>
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="ar_legacy">
+											AR (with "Legacy")
+										</li>
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="sniper_legacy">
+											Sniper (with "Legacy")
+										</li>
+									</ul>
+								</div>
+								<label>
+									Zoom:
+									<input class="bd=none bg=none c=#9cd2ff w=5.5ch" decimals="1" id="dpi-norm-fn-zoom" max="100" min="1" />
+								</label>
+							</div>
+							<div class="ai=center flex g=1
+								:has(#dpi-norm-cs2-fov[value=hipfire])_label:has(#dpi-norm-cs2-zoom)/none" id="dpi-norm-cs2-detail">
+								<label>
+									Sens:
+									<input class="bd=none bg=none c=#9cd2ff w=4.5ch" decimals="2" id="dpi-norm-cs2-sens" max="8" min=".1" />
+								</label>
+								<div class="c=#9cd2ff pe=auto relative">
+									<button class="p=.25" id="dpi-norm-cs2-fov"
+										onclick="selector_button_onclick.call(this)">
+										-
+									</button>
+									<ul class="absolute bf=blur(2px) bg=rgba(0,0,0,.5) block br=.5 l=0 w=max-content :not([open])/none" onblur="this.removeAttribute('open')" tabindex="-1">
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="hipfire">
+											Hipfire
+										</li>
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="aug">
+											AUG/SG556
+										</li>
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="awp">
+											AWP/Automatic/SSG08
+										</li>
+									</ul>
+								</div>
+								<label>
+									Zoom:
+									<input class="bd=none bg=none c=#9cd2ff w=4.5ch" decimals="2" id="dpi-norm-cs2-zoom" max="3" min=".01" />
+								</label>
+							</div>
+							<div class="ai=center flex g=1" id="dpi-norm-pubg-detail">
+								<div class="c=#9cd2ff pe=auto relative">
+									<button class="p=.25" id="dpi-norm-pubg-fov"
+										onclick="selector_button_onclick.call(this)">
+										-
+									</button>
+									<ul class="absolute bf=blur(2px) bg=rgba(0,0,0,.5) block br=.5 l=0 w=max-content :not([open])/none" onblur="this.removeAttribute('open')" tabindex="-1">
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="tpp">
+											TPP
+										</li>
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="x1">
+											x1
+										</li>
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="x2">
+											x2
+										</li>
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="x3">
+											x3
+										</li>
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="x4">
+											x4
+										</li>
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="x6">
+											x6
+										</li>
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="x8">
+											x8
+										</li>
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="x15">
+											x15
+										</li>
+									</ul>
+								</div>
+								<label>
+									Sens:
+									<input class="bd=none bg=none c=#9cd2ff w=3.5ch" id="dpi-norm-pubg-sens" max="100" min="0" />
+								</label>
+							</div>
+							<div class="ai=center flex g=1
+								:has(#dpi-norm-ow-fov[value=hipfire])_label:has(#dpi-norm-ow-zoom)/none" id="dpi-norm-ow-detail">
+								<label>
+									Sens:
+									<input class="bd=none bg=none c=#9cd2ff w=6.5ch" decimals="2" id="dpi-norm-ow-sens" max="100" min=".01" />
+								</label>
+								<div class="c=#9cd2ff pe=auto relative">
+									<button class="p=.25" id="dpi-norm-ow-fov"
+										onclick="selector_button_onclick.call(this)">
+										-
+									</button>
+									<ul class="absolute bf=blur(2px) bg=rgba(0,0,0,.5) block br=.5 l=0 w=max-content :not([open])/none" onblur="this.removeAttribute('open')" tabindex="-1">
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="hipfire">
+											Hipfire
+										</li>
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="widow">
+											Widow/Ana
+										</li>
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="ashe">
+											Ashe/Cassidy
+										</li>
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="freja">
+											Freja
+										</li>
+									</ul>
+								</div>
+								<label>
+									Zoom:
+									<input class="bd=none bg=none c=#9cd2ff w=6.5ch" decimals="2" id="dpi-norm-ow-zoom" max="100" min=".01" />
+								</label>
+							</div>
+							<div class="ai=center flex g=1" id="dpi-norm-sa-detail">
+								<label>
+									Sens:
+									<input class="bd=none bg=none c=#9cd2ff w=3.5ch" id="dpi-norm-sa-sens" max="100" min="0" />
+								</label>
+								<div class="c=#9cd2ff pe=auto relative">
+									<button class="p=.25" id="dpi-norm-sa-fov"
+										onclick="selector_button_onclick.call(this)">
+										-
+									</button>
+									<ul class="absolute bf=blur(2px) bg=rgba(0,0,0,.5) block br=.5 l=0 w=max-content :not([open])/none" onblur="this.removeAttribute('open')" tabindex="-1">
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="normal">
+											Normal
+										</li>
+										<li class="p=.25"
+											onclick="selector_option_onclick.call(this)"
+											value="wide">
+											Wide
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+					<fieldset class="bd=1px_solid_#fff column flex p=.5">
+						<legend class="m=-.75_0 p=.25">Result</legend>
+						<div class="fs=.6">
+							DPI: <span id="dpi-norm-result">-</span>
+						</div>
+					</fieldset>
+				</fieldset>
 			</div>
 		</div>
 		<div class="fixed ai=center column-reverse flex g=.5 l=50% b=35% tf=translateX(-50%) z=2
 			>span/bg=#555555aa;br=.5;fs=1.5;p=.0_.5" id="toast">
 			<!-- span -->
 		</div>
-		<script src="./js/main.js" type="module"></script>
 	</body>
 </html>

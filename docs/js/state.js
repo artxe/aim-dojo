@@ -13,17 +13,81 @@ if (device_resolution == "fhd") {
 } else {
 	throw Error(device_resolution)
 }
+const dpi_norm_game = /** @type {GameSensName} */(localStorage.getItem("dpi_norm.game") || "lol")/**/
+let dpi_norm_fov
+let dpi_norm_sens
+let dpi_norm_zoom
+if (dpi_norm_game == "cs2") {
+	dpi_norm_fov = /** @type {"hipfire"|"aug"|"awp"} */(localStorage.getItem("dpi_norm.fov") || "hipfire")/**/
+	dpi_norm_sens = Number(
+		localStorage.getItem("dpi_norm.sens") || 2.5
+	)
+	if (dpi_norm_fov != "hipfire") {
+		dpi_norm_zoom = Number(
+			localStorage.getItem("dpi_norm.zoom") || 1
+		)
+	}
+} else if (dpi_norm_game == "fn") {
+	dpi_norm_fov = /** @type {"hipfire"|"ads"|"ar_legacy"|"sniper_legacy"} */(localStorage.getItem("dpi_norm.fov") || "hipfire")/**/
+	dpi_norm_sens = Number(
+		localStorage.getItem("dpi_norm.sens") || 50
+	)
+	if (dpi_norm_fov != "hipfire") {
+		dpi_norm_zoom = Number(
+			localStorage.getItem("dpi_norm.zoom") || 100
+		)
+	}
+} else if (dpi_norm_game == "lol") {
+	dpi_norm_sens = Number(
+		localStorage.getItem("dpi_norm.sens") || 50
+	)
+} else if (dpi_norm_game == "mc") {
+	dpi_norm_sens = Number(
+		localStorage.getItem("dpi_norm.sens") || 50
+	)
+} else if (dpi_norm_game == "ow") {
+	dpi_norm_fov = /** @type {"hipfire"|"ashe"|"freja"|"widow"} */(localStorage.getItem("dpi_norm.fov") || "hipfire")/**/
+	dpi_norm_sens = Number(
+		localStorage.getItem("dpi_norm.sens") || 15
+	)
+	if (dpi_norm_fov != "hipfire") {
+		dpi_norm_zoom = Number(
+			localStorage.getItem("dpi_norm.zoom") || 100
+		)
+	}
+} else if (dpi_norm_game == "pubg") {
+	dpi_norm_fov = /** @type {"x1"|"x2"|"x3"|"x4"|"x6"|"x8"|"x15"} */(localStorage.getItem("dpi_norm.fov") || "hipfire")/**/
+	dpi_norm_sens = Number(
+		localStorage.getItem("dpi_norm.sens") || 50
+	)
+} else if (dpi_norm_game == "sa") {
+	dpi_norm_fov = /** @type {"normal"|"wide"} */(localStorage.getItem("dpi_norm.fov") || "hipfire")/**/
+	dpi_norm_sens = Number(
+		localStorage.getItem("dpi_norm.sens") || 50
+	)
+} else if (dpi_norm_game == "val") {
+	dpi_norm_fov = /** @type {"hipfire"|"guardian"|"marshal"|"operator"|"spectre"|"vandal"} */(localStorage.getItem("dpi_norm.fov") || "hipfire")/**/
+	dpi_norm_sens = Number(
+		localStorage.getItem("dpi_norm.sens") || 1
+	)
+	if (dpi_norm_fov != "hipfire") {
+		dpi_norm_zoom = Number(
+			localStorage.getItem("dpi_norm.zoom") || 1
+		)
+	}
+} else {
+	throw Error(dpi_norm_game)
+}
 export default {
 	bg: {
-		chzzk_link: localStorage.getItem("bg.chzzk_link") || "",
 		soop_link: localStorage.getItem("bg.soop_link") || "",
 		type: /** @type {BackgroundType} */(localStorage.getItem("bg.type") || "default")/**/,
-		web_view_link: localStorage.getItem("bg.web_view_link") || "",
+		webview_link: localStorage.getItem("bg.web_view_link") || "",
 		youtube_link: localStorage.getItem("bg.youtube_link") || ""
 	},
 	camera: {
 		fov: 103,
-		/** @type {"2d" | "3d"} */
+		/** @type {"2d"|"3d"} */
 		dimension: "2d",
 		pitch: 0,
 		proj: new Float32Array(16),
@@ -38,6 +102,15 @@ export default {
 		resolution: device_resolution,
 		width: 0
 	},
+	dpi_norm: /** @type {DpiNormalizerState} */({
+		dpi: Number(
+			localStorage.getItem("dpi_norm.dpi") || 500
+		),
+		fov: dpi_norm_fov,
+		game: dpi_norm_game,
+		sens: dpi_norm_sens,
+		zoom: dpi_norm_zoom
+	})/**/,
 	game: {
 		cycle_id: Number(
 			localStorage.getItem("game.cycle_id") || 1

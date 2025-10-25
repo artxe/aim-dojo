@@ -8,43 +8,16 @@ const off = new OffscreenCanvas(1, 1)
 const off_context = /** @type {OffscreenCanvasRenderingContext2D} */(off.getContext("2d"))/**/
 const crosshair_image = (() => {
 	const { height, width } = constants.crosshair
-	const inner_gap = 12
-	const inner_length = 20
-	const inner_thickness = 6
-	const outer_gap = 2
-	const outer_length = 10
-	const outer_thickness = 2
 	off.height = height
 	off.width = width
 	context.save()
 	off_context.fillStyle = "#fff"
-	off_context.globalAlpha = .67
-	off_context.translate(width / 2, height / 2)
-	off_context.fillRect(
-		-inner_thickness / 2,
-		-inner_gap - inner_length,
-		inner_thickness,
-		inner_length
-	)
-	off_context.fillRect(
-		-inner_thickness / 2,
-		inner_gap,
-		inner_thickness,
-		inner_length
-	)
-	off_context.globalAlpha = .83
-	off_context.fillRect(
-		-outer_thickness / 2,
-		-outer_gap - outer_length,
-		outer_thickness,
-		outer_length
-	)
-	off_context.fillRect(
-		-outer_thickness / 2,
-		outer_gap,
-		outer_thickness,
-		outer_length
-	)
+	off_context.lineWidth = 1.25
+	off_context.strokeStyle = "rgba(0,0,0,.9)"
+	off_context.beginPath()
+	off_context.arc(4, 4, 2.75, 0, TAU)
+	off_context.fill()
+	off_context.stroke()
 	off_context.restore()
 	return off.transferToImageBitmap()
 })()

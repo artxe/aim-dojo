@@ -1,11 +1,12 @@
-import { bg_el, setting_view_el, toast_el } from "../document.js"
+import { bg_el, setting_view_el, timer_el } from "../document.js"
 import game_mode from "../game_mode/index.js"
 import { stop_game, update_fov } from "../logic.js"
-import { clamp, EPS, floor, PI } from "../math.js"
-import { resize_2d } from "../renderer.js"
+import { clamp, EPS, floor, PI, round } from "../math.js"
 import { compute_sens_rad } from "../sens.js"
 import state from "../state.js"
-import { cycle_active_game_sens } from "../ui.js"
+import { cycle_active_game_sens } from "./game_sens.js"
+import { on_resize, set_text_if_changed } from "./index.js"
+import { close_bg_activate } from "./setting.js"
 addEventListener(
 	"contextmenu",
 	e => e.preventDefault()
@@ -30,24 +31,34 @@ document.addEventListener(
 )
 document.addEventListener("mouseup", on_mouseup)
 /**
+ * @param {number} ms
+ * @returns {string}
+ */
+function format_duration_ms(ms) {
+	const total_sec = floor(ms / 1_000)
+	const s = total_sec % 60
+	const m = floor(total_sec / 60) % 60
+	const h = floor(total_sec / 3_600)
+	return h > 0 ? `${h}:${two(m)}:${two(s)}` : `${two(m)}:${two(s)}`
+	/**
+	 * @param {number} n
+	 * @returns {string}
+	 */
+	function two(n) {
+		return n < 10 ? "0" + n : "" + n
+	}
+}
+/**
  * @param {KeyboardEvent} ev
  * @returns {void}
  */
 function on_keydown(ev) {
 	if (ev.code === "Escape") {
 		ev.preventDefault()
-		if (bg_el.hasAttribute("preview")) {
-			bg_el.removeAttribute("preview")
+		if (bg_el.hasAttribute("activate")) {
+			close_bg_activate()
 		} else if (setting_view_el.hasAttribute("active")) {
 			setting_view_el.removeAttribute("active")
-		}
-		if (toast_el.textContent) {
-			for (const span of toast_el.children) {
-				clearTimeout(
-					Number(span.getAttribute("timer"))
-				)
-			}
-			toast_el.textContent = ""
 		}
 	} else if (ev.code == "Tab") {
 		ev.preventDefault()
@@ -132,7 +143,14 @@ function on_pointerlockchange() {
 	}
 }
 /** @returns {void} */
-export function on_resize() {
-	update_fov()
-	resize_2d()
+export function update_hud() {
+	const { mode } = state.game
+	const { now_ms, prev_ms, start_ms } = state.timer
+	if (!mode) throw Error()
+	game_mode[mode].update_hud()
+	const fps = 1000 / (now_ms - prev_ms)
+	set_text_if_changed(
+		timer_el,
+		`${round(fps == Infinity ? 0 : fps)} / ${format_duration_ms(now_ms - start_ms)}`
+	)
 }

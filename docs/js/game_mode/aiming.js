@@ -4,13 +4,13 @@ import {
 	px_to_rad
 } from "../camera.js"
 import constants from "../constants.js"
+import { send_toast, set_text_if_changed } from "../controller/index.js"
 import {
 	accuracy_el,
 	aiming_score_el,
 	crit_rate_el,
 	peak_score_el
 } from "../document.js"
-import { set_text_if_changed, send_toast } from "../ui.js"
 import {
 	check_stats,
 	dir_from_yaw_pitch,
