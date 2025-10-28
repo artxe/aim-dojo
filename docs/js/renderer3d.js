@@ -421,6 +421,7 @@ function draw_paths() {
 	const { target_3d } = state.mode.aiming
 	const { targets_3d } = state.mode.flick
 	const { target_3d: tracking_target } = state.mode.tracking
+	const { target_3d: twitch_target } = state.mode.twitch
 	const { mode } = state.game
 	/** @type {number[]} */
 	const segments = []
@@ -474,6 +475,22 @@ function draw_paths() {
 			pos[1],
 			pos[2]
 		)
+	} else if (mode == "twitch") {
+		if (twitch_target) {
+			const dir = dir_from_yaw_pitch(
+				twitch_target.cy,
+				twitch_target.cp
+			)
+			const pos = [ dir[0] * d, dir[1] * d, dir[2] * d ]
+			segments.push(
+				prev[0],
+				prev[1],
+				prev[2],
+				pos[0],
+				pos[1],
+				pos[2]
+			)
+		}
 	} else {
 		throw Error(String(mode))
 	}
@@ -571,6 +588,7 @@ function draw_targets() {
 	const { target_3d } = state.mode.aiming
 	const { targets_3d } = state.mode.flick
 	const { target_3d: tracking_target } = state.mode.tracking
+	const { target_3d: twitch_target } = state.mode.twitch
 	if (mode == "aiming") {
 		draw_target(target_3d, 1)
 	} else if (mode == "flick") {
@@ -587,6 +605,10 @@ function draw_targets() {
 		)
 	} else if (mode == "tracking") {
 		draw_target(tracking_target, 1)
+	} else if (mode == "twitch") {
+		if (twitch_target) {
+			draw_target(twitch_target, 1)
+		}
 	} else {
 		throw Error(String(mode))
 	}

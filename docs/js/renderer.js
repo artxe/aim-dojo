@@ -13,7 +13,7 @@ const crosshair_image = (() => {
 	context.save()
 	off_context.fillStyle = "#fff"
 	off_context.lineWidth = 1.25
-	off_context.strokeStyle = "rgba(0,0,0,.9)"
+	off_context.strokeStyle = "rgba(255,0,0,.9)"
 	off_context.beginPath()
 	off_context.arc(4, 4, 2.75, 0, TAU)
 	off_context.fill()
@@ -94,7 +94,6 @@ export function check_writing_stats() {
 	off.width = text_image.width
 	off_context.save()
 	off_context.lineWidth = line_width
-	off_context.strokeStyle = "black"
 	off_context.beginPath()
 	let l = lines.length
 	let b = null
@@ -282,9 +281,10 @@ function draw_lines() {
 function draw_paths() {
 	const { x, y } = state.camera
 	const { mode } = state.game
-	const { target: aiming_target } = state.mode.aiming
+	const { target } = state.mode.aiming
 	const { targets } = state.mode.flick
-	const { target } = state.mode.tracking
+	const { target: tracking_target } = state.mode.tracking
+	const { target: twitch_target } = state.mode.twitch
 	context.save()
 	context.translate(-x, -y)
 	context.globalAlpha = .2
@@ -293,7 +293,7 @@ function draw_paths() {
 	context.beginPath()
 	context.moveTo(x, y)
 	if (mode == "aiming") {
-		const { cy, x: target_x } = aiming_target
+		const { cy, x: target_x } = target
 		context.lineTo(target_x, cy)
 	} else if (mode == "flick") {
 		for (let i = targets.length - 1; i >= 0; i--) {
@@ -301,8 +301,15 @@ function draw_paths() {
 			context.lineTo(target_x, cy)
 		}
 	} else if (mode == "tracking") {
-		const { cy, x: target_x } = target
+		const { cy, x: target_x } = tracking_target
 		context.lineTo(target_x, cy)
+	} else if (mode == "twitch") {
+		if (twitch_target) {
+			const { cy, x: target_x } = twitch_target
+			context.lineTo(target_x, cy)
+		}
+	} else {
+		throw Error(String(mode))
 	}
 	context.stroke()
 	context.restore()
@@ -349,6 +356,7 @@ function draw_targets() {
 	const { target } = state.mode.aiming
 	const { targets } = state.mode.flick
 	const { target: tracking_target } = state.mode.tracking
+	const { target: twitch_target } = state.mode.twitch
 	if (mode == "aiming") {
 		draw_target(target, 1)
 	} else if (mode == "flick") {
@@ -362,6 +370,10 @@ function draw_targets() {
 		draw_target(targets[targets.length - 1], 1)
 	} else if (mode == "tracking") {
 		draw_target(tracking_target, 1)
+	} else if (mode == "twitch") {
+		if (twitch_target) {
+			draw_target(twitch_target, 1)
+		}
 	} else {
 		throw Error(String(mode))
 	}

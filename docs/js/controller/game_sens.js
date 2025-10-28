@@ -64,14 +64,14 @@ monitor_res_btn.addEventListener(
 		const target = /** @type {HTMLButtonElement} */(ev.target)/**/
 		const type = /** @type {MonitorResolution} */(target.value)/**/
 		if (type == "fhd") {
-			state.game.height = 1080
-			state.game.width = 1920
+			state.game.height = 1_080
+			state.game.width = 1_920
 		} else if (type == "hd") {
 			state.game.height = 720
-			state.game.width = 1280
+			state.game.width = 1_280
 		} else if (type == "qhd") {
-			state.game.height = 1440
-			state.game.width = 2560
+			state.game.height = 1_440
+			state.game.width = 2_560
 		} else {
 			throw Error(type)
 		}

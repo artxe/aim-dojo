@@ -40,7 +40,7 @@ function change_to_next_mode() {
 	const { peak_score } = state.mode[mode]
 	/** @type {GameModeName} */
 	const next_mode = "tracking"
-	send_toast(`SCORE: ${peak_score}!`, 2500)
+	send_toast(`SCORE: ${peak_score}!`, 2_500)
 	dispose()
 	state.game.mode = next_mode
 	game_mode[next_mode].init()
@@ -55,23 +55,17 @@ function dispose() {
 	state.stats.count_shoot = 0
 	state.game.mode = null
 	state.input.mb_left = false
-	state.stats.sum_crit_ms = 0
-	state.stats.sum_hit_ms = 0
-	state.stats.sum_shoot_ms = 0
 	shoots.clear()
 	if (dimension == "2d") {
 		state.camera.x = 0
 		state.camera.y = 0
+		state.mode.flick.targets = []
 		impacts.clear()
 	} else {
 		state.camera.pitch = 0
 		state.camera.yaw = 0
-		impacts_3d.clear()
-	}
-	if (dimension == "2d") {
-		state.mode.flick.targets = []
-	} else {
 		state.mode.flick.targets_3d = []
+		impacts_3d.clear()
 	}
 }
 /** @returns {void} */
@@ -219,13 +213,10 @@ function shoot() {
 		}
 	)
 	state.stats.count_shoot++
-	state.stats.sum_shoot_ms += now_ms - prev_ms
 	if (is_hit) {
 		state.stats.count_hit++
-		state.stats.sum_hit_ms += now_ms - prev_ms
 		if (is_crit) {
 			state.stats.count_crit++
-			state.stats.sum_crit_ms += now_ms - prev_ms
 		}
 	}
 }
@@ -251,10 +242,11 @@ function update_fov() {
 /** @returns {void} */
 function update_hud() {
 	const { update_interval_ms } = constants.hud
+	const { score_mul } = constants.mode.flick
 	const { count_crit, count_hit, count_shoot } = state.stats
 	const { now_ms } = state.timer
 	state.hud.next_update_ms = now_ms + update_interval_ms
-	const score = (150 * count_crit + 200 * count_hit * (count_hit / count_shoot)) | 0
+	const score = (score_mul * count_crit + score_mul * count_hit * (count_hit / count_shoot)) | 0
 	if (score > state.mode.flick.peak_score) {
 		state.mode.flick.peak_score = score
 		if (score > state.mode.flick.best_score) {

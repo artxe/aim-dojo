@@ -35,6 +35,8 @@ import {
 	monitor_res_btn,
 	tolerance_input,
 	tracking_score_el,
+	twitch_score_el,
+	version_el,
 	writing_score_el
 } from "./document.js"
 import state from "./state.js"
@@ -43,7 +45,16 @@ tolerance_input.value = String(state.game.tolerance)
 aiming_score_el.textContent = localStorage.getItem("aiming.best_score") || "0"
 flick_score_el.textContent = localStorage.getItem("flick.best_score") || "0"
 tracking_score_el.textContent = localStorage.getItem("tracking.best_score") || "0"
+twitch_score_el.textContent = localStorage.getItem("twitch.best_score") || "0"
 writing_score_el.textContent = localStorage.getItem("writing.best_score") || "0"
+const version = "v1.6.0"
+if (localStorage.getItem("v") == version) {
+	// no-op
+} else {
+	localStorage.clear()
+	localStorage.setItem("v", version)
+}
+version_el.textContent = version
 mode_cycle_btn.setAttribute(
 	"on",
 	state.game.cycle_id ? "true" : "false"

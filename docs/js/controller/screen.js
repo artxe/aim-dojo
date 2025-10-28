@@ -148,7 +148,7 @@ export function update_hud() {
 	const { now_ms, prev_ms, start_ms } = state.timer
 	if (!mode) throw Error()
 	game_mode[mode].update_hud()
-	const fps = 1000 / (now_ms - prev_ms)
+	const fps = 1_000 / (now_ms - prev_ms)
 	set_text_if_changed(
 		timer_el,
 		`${round(fps == Infinity ? 0 : fps)} / ${format_duration_ms(now_ms - start_ms)}`

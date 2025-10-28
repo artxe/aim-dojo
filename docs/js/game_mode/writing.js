@@ -17,7 +17,7 @@ function change_to_next_mode() {
 	const { peak_score } = state.mode[mode]
 	/** @type {GameModeName} */
 	const next_mode = "aiming"
-	send_toast(`SCORE: ${peak_score}!`, 2500)
+	send_toast(`SCORE: ${peak_score}!`, 2_500)
 	dispose()
 	state.game.mode = next_mode
 	game_mode[next_mode].init()
@@ -25,17 +25,13 @@ function change_to_next_mode() {
 /** @returns {void} */
 function dispose() {
 	const { lines } = state.mode.writing
+	state.stats.count_hit = 0
+	state.stats.count_shoot = 0
 	state.camera.x = 0
 	state.camera.y = 0
 	state.game.mode = null
 	state.input.mb_left = false
 	state.mode.writing.pointer = null
-	state.stats.count_crit = 0
-	state.stats.count_hit = 0
-	state.stats.count_shoot = 0
-	state.stats.sum_crit_ms = 0
-	state.stats.sum_hit_ms = 0
-	state.stats.sum_shoot_ms = 0
 	lines.clear()
 }
 /** @returns {void} */
@@ -92,7 +88,7 @@ function update_hud() {
 			)
 			set_text_if_changed(
 				writing_score_el,
-				state.mode.writing.best_score
+				state.mode.writing.best_score = score
 			)
 		}
 	}

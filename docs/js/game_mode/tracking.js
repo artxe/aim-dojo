@@ -41,8 +41,8 @@ function change_to_next_mode() {
 	if (!mode) throw Error()
 	const { peak_score } = state.mode[mode]
 	/** @type {GameModeName} */
-	const next_mode = "writing"
-	send_toast(`SCORE: ${peak_score}!`, 2500)
+	const next_mode = "twitch"
+	send_toast(`SCORE: ${peak_score}!`, 2_500)
 	dispose()
 	state.game.mode = next_mode
 	game_mode[next_mode].init()
@@ -52,9 +52,6 @@ function dispose() {
 	const { impacts, impacts_3d } = state
 	const { dimension } = state.camera
 	const { shoots } = state.stats
-	state.stats.count_crit = 0
-	state.stats.count_hit = 0
-	state.stats.count_shoot = 0
 	state.game.mode = null
 	state.input.mb_left = false
 	state.stats.sum_crit_ms = 0
@@ -307,13 +304,10 @@ function shoot() {
 			s: prev_ms
 		}
 	)
-	state.stats.count_shoot++
 	state.stats.sum_shoot_ms += now_ms - prev_ms
 	if (is_hit) {
-		state.stats.count_hit++
 		state.stats.sum_hit_ms += now_ms - prev_ms
 		if (is_crit) {
-			state.stats.count_crit++
 			state.stats.sum_crit_ms += now_ms - prev_ms
 		}
 	}
@@ -369,7 +363,7 @@ function update_hud() {
 			)
 			set_text_if_changed(
 				tracking_score_el,
-				state.mode.tracking.best_score
+				state.mode.tracking.best_score = score
 			)
 		}
 	}

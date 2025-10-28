@@ -39,14 +39,14 @@ export function change_bg_video() {
 				state.bg.soop_link = bg_link_input.value
 			)
 			bg_el.setAttribute("activate", "")
-			send_toast("Please press ESC", 2000)
+			send_toast("Please press ESC", 2_000)
 		} else if (type == "webview") {
 			localStorage.setItem(
 				"bg.web_view_link",
 				bg_iframe_el.src = state.bg.webview_link = bg_link_input.value
 			)
 			bg_el.setAttribute("activate", "")
-			send_toast("Please press ESC", 2000)
+			send_toast("Please press ESC", 2_000)
 		} else if (type == "youtube") {
 			const { host, pathname, searchParams } = new URL(bg_link_input.value)
 			if (host == "youtu.be") {
@@ -63,7 +63,7 @@ export function change_bg_video() {
 				state.bg.youtube_link = bg_link_input.value
 			)
 			bg_el.setAttribute("activate", "")
-			send_toast("Please press ESC", 2000)
+			send_toast("Please press ESC", 2_000)
 		} else {
 			throw Error(type)
 		}
@@ -74,7 +74,7 @@ export function change_bg_video() {
 			"bg.type",
 			state.bg.type = bg_type_input.value = "default"
 		)
-		send_toast(String(error), 3000)
+		send_toast(String(error), 3_000)
 	}
 }
 /** @returns {void} */

@@ -4,6 +4,7 @@ import {
 	setting_btn,
 	setting_view_el,
 	tracking_btn,
+	twitch_btn,
 	writing_btn
 } from "../document.js"
 import { start_game } from "../logic.js"
@@ -11,6 +12,7 @@ import state from "../state.js"
 aiming_btn.addEventListener("click", on_click_start_game)
 flick_btn.addEventListener("click", on_click_start_game)
 tracking_btn.addEventListener("click", on_click_start_game)
+twitch_btn.addEventListener("click", on_click_start_game)
 writing_btn.addEventListener("click", on_click_start_game)
 setting_btn.addEventListener("click", on_click_setting)
 /**
@@ -35,6 +37,9 @@ function on_click_start_game(ev) {
 		start_game()
 	} else if (ev.currentTarget == tracking_btn) {
 		state.game.mode = "tracking"
+		start_game()
+	} else if (ev.currentTarget == twitch_btn) {
+		state.game.mode = "twitch"
 		start_game()
 	} else if (ev.currentTarget == writing_btn) {
 		state.game.mode = "writing"

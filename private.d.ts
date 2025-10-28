@@ -70,7 +70,7 @@ type GameMode = {
 	update_fov: () => void
 	update_hud: () => void
 }
-type GameModeName = "aiming" | "flick" | "tracking" | "writing"
+type GameModeName = "aiming" | "flick" | "tracking" | "twitch" | "writing"
 type GameSensName = "cs2" | "fn" | "lol" | "mc" | "ow" | "pubg" | "sa" | "val"
 type Line = {
 	e: {

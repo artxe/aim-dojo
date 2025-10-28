@@ -14,11 +14,12 @@ const _ = {
 		spacing: .4
 	},
 	mode: {
-		aiming: { base_speed: .005 },
+		aiming: { base_speed: .005, score_mul: 700 },
 		flick: {
 			first_dist_mul: 4,
-			num_targets: 12,
-			pitch_limit: 30
+			num_targets: 20,
+			pitch_limit: 30,
+			score_mul: 200
 		},
 		tracking: {
 			base_speed: .01,
@@ -30,8 +31,13 @@ const _ = {
 			speed_lerp_ms: 100,
 			speed_steps: [ 1, 1, 2 ]
 		},
+		twitch: {
+			score_mul: 1300,
+			target_hide_duration_ms: 1_000,
+			target_show_duration_ms: 500
+		},
 		writing: {
-			line_width: 6,
+			line_width: 4,
 			offset_x: 10,
 			text: `Veni, vidi, vici.
 Give me liberty, or give me death!

@@ -71,6 +71,8 @@ export const flick_btn = /** @type {HTMLButtonElement} */(document.getElementByI
 export const flick_score_el = /** @type {HTMLSpanElement} */(document.getElementById("flick-score"))/**/
 export const tracking_btn = /** @type {HTMLButtonElement} */(document.getElementById("tracking"))/**/
 export const tracking_score_el = /** @type {HTMLSpanElement} */(document.getElementById("tracking-score"))/**/
+export const twitch_btn = /** @type {HTMLButtonElement} */(document.getElementById("twitch"))/**/
+export const twitch_score_el = /** @type {HTMLSpanElement} */(document.getElementById("twitch-score"))/**/
 export const writing_btn = /** @type {HTMLButtonElement} */(document.getElementById("writing"))/**/
 export const writing_score_el = /** @type {HTMLSpanElement} */(document.getElementById("writing-score"))/**/
 export const setting_btn = /** @type {HTMLButtonElement} */(document.getElementById("setting"))/**/
@@ -79,6 +81,7 @@ export const setting_btn = /** @type {HTMLButtonElement} */(document.getElementB
  * Menu - Setting
  */
 export const setting_view_el = /** @type {HTMLDivElement} */(document.getElementById("setting-view"))/**/
+export const version_el = /** @type {HTMLSpanElement} */(document.getElementById("version"))/**/
 export const mode_cycle_btn = /** @type {HTMLButtonElement} */(document.getElementById("mode-cycle"))/**/
 export const bg_type_input = /** @type {HTMLInputElement} */(document.getElementById("bg-type"))/**/
 export const bg_link_input = /** @type {HTMLInputElement} */(document.getElementById("bg-link"))/**/
