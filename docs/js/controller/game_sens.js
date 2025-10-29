@@ -30,7 +30,7 @@ import {
 	pubg_x15_el,
 	sa_el,
 	sa_hipfire_el,
-	tolerance_input,
+	mdm_input,
 	val_el,
 	val_guardian_el,
 	val_hipfire_el,
@@ -59,6 +59,7 @@ import {
 	calc_sens_val
 } from "../sens.js"
 import state from "../state.js"
+import { update_dpi_norm_result } from "./dpi_norm.js"
 import { set_text_if_changed } from "./index.js"
 monitor_res_btn.addEventListener(
 	"change",
@@ -78,19 +79,21 @@ monitor_res_btn.addEventListener(
 			throw Error(type)
 		}
 		localStorage.setItem(
-			"device.resolution",
-			state.device.resolution = type
+			"game.resolution",
+			state.game.resolution = type
 		)
 		update_game_sens()
+		update_dpi_norm_result()
 	}
 )
-tolerance_input.addEventListener(
+mdm_input.addEventListener(
 	"input",
 	function(ev) {
 		const target = /** @type {HTMLInputElement} */(ev.target)/**/
-		localStorage.setItem("game.tolerance", target.value)
-		state.game.tolerance = Number(target.value)
+		localStorage.setItem("game.mdm", target.value)
+		state.game.mdm = Number(target.value)
 		update_game_sens()
+		update_dpi_norm_result()
 	}
 )
 cs2_el.addEventListener(
@@ -248,7 +251,7 @@ export function update_game_sens() {
 	)
 	const mc_hipfire = calc_sens_mc(110)
 	set_text_if_changed(mc_hipfire_el, round(mc_hipfire))
-	const fn_hipfire = round_to(calc_sens_fn(80, width * .87), 1)
+	const fn_hipfire = round_to(calc_sens_fn(80, width * .85), 1)
 	set_text_if_changed(fn_hipfire_el, fn_hipfire)
 	const fn_ads = calc_sens_fn(80)
 	set_text_if_changed(
@@ -293,7 +296,7 @@ export function update_game_sens() {
 	)
 	const pubg_fov = 80
 	const pubg_hipfire = round(
-		calc_sens_pubg(pubg_fov, width * .87)
+		calc_sens_pubg(pubg_fov, width * .85)
 	)
 	set_text_if_changed(pubg_hipfire_el, pubg_hipfire)
 	const pubg_fpp_fov = calc_fpp_fov_pubg(pubg_hipfire)

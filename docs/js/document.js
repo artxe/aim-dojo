@@ -10,7 +10,7 @@ export const canvas_el = /** @type {HTMLCanvasElement} */(document.getElementByI
  * Game Sens
  */
 export const monitor_res_btn = /** @type {HTMLButtonElement} */(document.getElementById("monitor-res"))/**/
-export const tolerance_input = /** @type {HTMLInputElement} */(document.getElementById("tolerance"))/**/
+export const mdm_input = /** @type {HTMLInputElement} */(document.getElementById("mdm"))/**/
 export const lol_el = /** @type {HTMLLIElement} */(document.getElementById("lol"))/**/
 export const val_el = /** @type {HTMLLIElement} */(document.getElementById("val"))/**/
 export const val_hipfire_el = /** @type {HTMLSpanElement} */(document.getElementById("val-hipfire"))/**/

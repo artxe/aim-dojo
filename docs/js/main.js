@@ -33,25 +33,25 @@ import {
 	flick_score_el,
 	mode_cycle_btn,
 	monitor_res_btn,
-	tolerance_input,
+	mdm_input,
 	tracking_score_el,
 	twitch_score_el,
 	version_el,
 	writing_score_el
 } from "./document.js"
 import state from "./state.js"
-monitor_res_btn.value = state.device.resolution
-tolerance_input.value = String(state.game.tolerance)
+monitor_res_btn.value = state.game.resolution
+mdm_input.value = String(state.game.mdm)
 aiming_score_el.textContent = localStorage.getItem("aiming.best_score") || "0"
 flick_score_el.textContent = localStorage.getItem("flick.best_score") || "0"
 tracking_score_el.textContent = localStorage.getItem("tracking.best_score") || "0"
 twitch_score_el.textContent = localStorage.getItem("twitch.best_score") || "0"
 writing_score_el.textContent = localStorage.getItem("writing.best_score") || "0"
-const version = "v1.7.0"
+const version = "v1.8.0"
 const prev_version = localStorage.getItem("v")
 if (prev_version != version) {
 	if (prev_version == "v1.7.0") {
-		// no-op
+		localStorage.removeItem("game.tolerance")
 	} else if (prev_version == "v1.6.0") {
 		localStorage.removeItem("aiming.best_score")
 	} else {

@@ -1,4 +1,4 @@
-import { timer_el } from "../document.js"
+import { bg_el, setting_view_el, timer_el } from "../document.js"
 import game_mode from "../game_mode/index.js"
 import { stop_game, update_fov } from "../logic.js"
 import { clamp, EPS, floor, PI, round } from "../math.js"
@@ -53,12 +53,21 @@ function format_duration_ms(ms) {
  * @returns {void}
  */
 function on_keydown(ev) {
+	const { mode, rest_raf_id } = state.game
 	if (ev.code === "Escape") {
 		ev.preventDefault()
 		on_click_modal_backdrop()
 	} else if (ev.code == "Tab") {
 		ev.preventDefault()
 		cycle_active_game_sens()
+	}
+	if (!mode) {
+		if (rest_raf_id) {
+			clearTimeout(rest_raf_id)
+		}
+		if (!bg_el.hasAttribute("activate") && !setting_view_el.hasAttribute("active")) {
+			state.game.rest_raf_id = setTimeout(screen_saver, 10_000)
+		}
 	}
 }
 /** @returns {void} */
@@ -91,7 +100,7 @@ function on_mousedown(ev) {
  */
 function on_mousemove(ev) {
 	const { dimension, fov, pitch, y } = state.camera
-	const { width } = state.device
+	const { width } = state.camera
 	const { mode, rest_raf_id } = state.game
 	if (mode) {
 		const sens = compute_sens_rad(fov, width)
@@ -116,17 +125,9 @@ function on_mousemove(ev) {
 		if (rest_raf_id) {
 			clearTimeout(rest_raf_id)
 		}
-		state.game.rest_raf_id = setTimeout(screen_saver, 5000)
-	}
-	function screen_saver() {
-		clearTimeout(rest_raf_id)
-		state.game.rest_raf_id = 0
-		document.body.setAttribute("rest", "")
-		document.addEventListener(
-			"mousemove",
-			() => document.body.removeAttribute("rest"),
-			{ once: true }
-		)
+		if (!bg_el.hasAttribute("activate") && !setting_view_el.hasAttribute("active")) {
+			state.game.rest_raf_id = setTimeout(screen_saver, 5_000)
+		}
 	}
 }
 /**
@@ -153,6 +154,18 @@ function on_pointerlockchange() {
 			stop_game()
 		}
 	}
+}
+/** @returns {void} */
+function screen_saver() {
+	const { rest_raf_id } = state.game
+	clearTimeout(rest_raf_id)
+	state.game.rest_raf_id = 0
+	document.body.setAttribute("rest", "")
+	document.addEventListener(
+		"mousemove",
+		() => document.body.removeAttribute("rest"),
+		{ once: true }
+	)
 }
 /** @returns {void} */
 export function update_hud() {

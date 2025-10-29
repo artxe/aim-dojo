@@ -129,8 +129,7 @@ export function check_writing_stats() {
 }
 /** @returns {void} */
 export function draw() {
-	const { dimension } = state.camera
-	const { height, width } = state.device
+	const { dimension, height, width } = state.camera
 	const { mode, sens } = state.game
 	context.save()
 	context.clearRect(0, 0, width, height)
@@ -190,8 +189,7 @@ function draw_crosshair() {
 }
 /** @returns {void} */
 function draw_grid() {
-	const { x, y } = state.camera
-	const { height, width } = state.device
+	const { height, width, x, y } = state.camera
 	context.save()
 	context.translate(-x, -y)
 	context.fillStyle = grid_pattern
@@ -385,8 +383,8 @@ function draw_text() {
 }
 /** @returns {void} */
 export function resize_2d() {
-	canvas_el.width = state.device.width = innerWidth * devicePixelRatio
-	canvas_el.height = state.device.height = innerHeight * devicePixelRatio
+	canvas_el.width = state.camera.width = innerWidth * devicePixelRatio
+	canvas_el.height = state.camera.height = innerHeight * devicePixelRatio
 	resize_3d()
 	draw()
 }

@@ -1,17 +1,17 @@
-const device_resolution = /** @type {MonitorResolution} */(localStorage.getItem("device.resolution") || "fhd")/**/
+const game_resolution = /** @type {MonitorResolution} */(localStorage.getItem("game.resolution") || "fhd")/**/
 let game_height
 let game_width
-if (device_resolution == "fhd") {
+if (game_resolution == "fhd") {
 	game_height = 1_080
 	game_width = 1_920
-} else if (device_resolution == "hd") {
+} else if (game_resolution == "hd") {
 	game_height = 720
 	game_width = 1_280
-} else if (device_resolution == "qhd") {
+} else if (game_resolution == "qhd") {
 	game_height = 1_440
 	game_width = 2_560
 } else {
-	throw Error(device_resolution)
+	throw Error(game_resolution)
 }
 const dpi_norm_game = /** @type {GameSensName} */(localStorage.getItem("dpi_norm.game") || "lol")/**/
 let dpi_norm_fov
@@ -86,25 +86,22 @@ export default {
 		youtube_link: localStorage.getItem("bg.youtube_link") || ""
 	},
 	camera: {
-		fov: 103,
 		/** @type {"2d"|"3d"} */
 		dimension: "2d",
+		fov: 103,
+		height: 0,
 		pitch: 0,
 		proj: new Float32Array(16),
 		view: new Float32Array(16),
+		width: 0,
 		x: 0,
 		y: 0,
 		yaw: 0,
 		zoom: 51.5
 	},
-	device: {
-		height: 0,
-		resolution: device_resolution,
-		width: 0
-	},
 	dpi_norm: /** @type {DpiNormalizerState} */({
 		dpi: Number(
-			localStorage.getItem("dpi_norm.dpi") || 250
+			localStorage.getItem("dpi_norm.dpi") || 400
 		),
 		fov: dpi_norm_fov,
 		game: dpi_norm_game,
@@ -116,14 +113,15 @@ export default {
 			localStorage.getItem("game.cycle_id") || 1
 		),
 		height: game_height,
+		mdm: Number(
+			localStorage.getItem("game.mdm") || 600
+		),
 		/** @type {GameModeName?} */
 		mode: null,
 		raf_id: 0,
+		resolution: game_resolution,
 		rest_raf_id: 0,
 		sens: /** @type {GameSensName} */(localStorage.getItem("game.sens") || "lol")/**/,
-		tolerance: Number(
-			localStorage.getItem("game.tolerance") || 8
-		),
 		width: game_width
 	},
 	hud: { next_update_ms: 0 },

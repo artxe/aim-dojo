@@ -661,8 +661,11 @@ function make_shader(type, src) {
 }
 /** * @returns {void} */
 export function resize_3d() {
-	const { height, width } = state.device
-	canvas.width = width
-	canvas.height = height
-	context.viewport(0, 0, width, height)
+	const { height, width } = state.camera
+	context.viewport(
+		0,
+		0,
+		canvas.width = width,
+		canvas.height = height
+	)
 }

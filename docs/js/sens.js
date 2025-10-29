@@ -1,15 +1,9 @@
 import {
 	abs,
-	acos,
-	atan,
 	cbrt,
 	convert_deg_across_aspect,
 	floor,
-	LN2,
-	log,
-	max,
-	min,
-	sqrt,
+	log2,
 	tan,
 	to_rad
 } from "./math.js"
@@ -77,7 +71,7 @@ export function calc_dpi_fn() {
 	const { dpi, fov, sens } = state.dpi_norm
 	const { width } = state.game
 	if (fov == "hipfire") {
-		return dpi * sens / calc_sens_fn(80, width * .87)
+		return dpi * sens / calc_sens_fn(80, width * .85)
 	}
 	const { zoom } = state.dpi_norm
 	let hfov_deg
@@ -142,7 +136,7 @@ export function calc_dpi_pubg() {
 	if (fov == "tpp") {
 		const dpi_sens_rad = dpi * to_rad(base_yaw)
 			* 2 ** ((sens - base_sens) / step)
-		return dpi_sens_rad / compute_sens_rad(base_fov, width * .87)
+		return dpi_sens_rad / compute_sens_rad(base_fov, width * .85)
 	}
 	let hfov_deg
 	if (fov == "x1") {
@@ -218,7 +212,7 @@ export function calc_fpp_fov_pubg(sens) {
 	const step = 15.0515
 	let low = 80
 	let mid
-	let high = 103
+	let high = 150
 	let err = 1
 	while (low < high) {
 		mid = floor((low + high + 1) / 2)
@@ -295,7 +289,7 @@ export function calc_sens_pubg(
 	const step = 15.0515
 	const sens50_yaw = to_rad(hfov_deg / base_fov * base_yaw)
 	const rad_per_count = compute_sens_rad(hfov_deg, width)
-	return base_sens + step * (log(rad_per_count / sens50_yaw) / LN2)
+	return base_sens + step * (log2(rad_per_count / sens50_yaw))
 }
 /** @returns {number} */
 export function calc_sens_sa() {
@@ -318,33 +312,10 @@ export function calc_sens_val(hfov_deg) {
  * @returns {number}
  */
 export function compute_sens_rad(fov_deg, width) {
-	const { tolerance } = state.game
+	const { mdm } = state.game
 	const half_width = width / 2
-	const tangent_half_fov = tan(to_rad(fov_deg) / 2)
-	let low = 1
-	let mid
-	let high = floor(half_width)
-	while (low < high) {
-		mid = floor((low + high + 1) / 2)
-		const match_ratio = mid / half_width
-		const theta_proj = atan(match_ratio * tangent_half_fov)
-		const effective = theta_proj / match_ratio
-		const theta_star = acos(
-			sqrt(
-				max(
-					0,
-					min(1, effective / tangent_half_fov)
-				)
-			)
-		)
-		const max_err = half_width * (theta_star / effective - tan(theta_star) / tangent_half_fov)
-		if (tolerance >= max_err) {
-			low = mid
-		} else {
-			high = mid - 1
-		}
-	}
-	const match_ratio = low / half_width
-	const effective = atan(match_ratio * tangent_half_fov) / match_ratio
-	return 2 * effective / width
+	const tangent_half_fov = Math.tan(to_rad(fov_deg) / 2)
+	const ratio = mdm / half_width
+	const theta_proj = Math.atan(ratio * tangent_half_fov)
+	return theta_proj / ratio / half_width
 }

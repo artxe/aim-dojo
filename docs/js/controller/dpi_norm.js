@@ -248,7 +248,7 @@ function on_input_zoom(ev) {
 }
 
 /** @returns {void} */
-function update_dpi_norm_result() {
+export function update_dpi_norm_result() {
 	const { game } = state.dpi_norm
 	if (game == "cs2") {
 		dpi_norm_result_el.textContent = String(calc_dpi_cs2() | 0)

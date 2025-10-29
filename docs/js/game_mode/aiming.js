@@ -100,8 +100,7 @@ function init() {
 function on_frame() {
 	const { base_radius } = constants.target
 	const { base_speed } = constants.mode.aiming
-	const { dimension, fov, x, yaw } = state.camera
-	const { width } = state.device
+	const { dimension, fov, width, x, yaw } = state.camera
 	const { now_ms, prev_ms } = state.timer
 	const { target, target_3d } = state.mode.aiming
 	const dt = now_ms - prev_ms
@@ -134,8 +133,16 @@ function on_frame() {
 /** @returns {void} */
 function shoot() {
 	const { impacts, impacts_3d } = state
-	const { dimension, fov, pitch, x, y, yaw } = state.camera
-	const { height, width } = state.device
+	const {
+		dimension,
+		fov,
+		height,
+		pitch,
+		width,
+		x,
+		y,
+		yaw
+	} = state.camera
 	const { target, target_3d } = state.mode.aiming
 	const { shoots } = state.stats
 	const { now_ms, now_s, prev_ms } = state.timer

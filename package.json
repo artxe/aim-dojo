@@ -1,5 +1,5 @@
 {
-	"author": "artxe2",
+	"author": "artxe",
 	"description": "AIM DOJO",
 	"devDependencies": {
 		"eslint": "^9.38.0",
@@ -15,5 +15,5 @@
 		"lint": "eslint --cache --fix **/*.{d.ts,js,json} && tsc"
 	},
 	"type": "module",
-	"version": "1.7.0"
+	"version": "1.8.0"
 }

@@ -139,7 +139,7 @@ export function target_to_3d(t2) {
 }
 /** @returns {void} */
 export function update_fov() {
-	const { height, width } = state.device
+	const { height, width } = state.camera
 	const { mode, sens } = state.game
 	const { mb_right } = state.input
 	if (sens == "cs2") {

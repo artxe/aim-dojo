@@ -21,8 +21,7 @@ export function camera_to_3d() {
  * @returns {number}
  */
 export function px_to_rad(px) {
-	const { fov } = state.camera
-	const { width } = state.device
+	const { fov, width } = state.camera
 	return atan(
 		(2 * px / width) * tan(to_rad(fov) / 2)
 	)
@@ -32,7 +31,6 @@ export function px_to_rad(px) {
  * @returns {number}
  */
 export function rad_to_px(rad) {
-	const { fov } = state.camera
-	const { width } = state.device
+	const { fov, width } = state.camera
 	return (width / 2) * tan(rad) / tan(to_rad(fov) / 2)
 }

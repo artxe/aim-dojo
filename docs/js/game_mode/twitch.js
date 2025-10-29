@@ -85,8 +85,7 @@ function on_frame() {
 		target_hide_duration_ms,
 		target_show_duration_ms
 	} = constants.mode.twitch
-	const { dimension, fov, x, yaw } = state.camera
-	const { height, width } = state.device
+	const { dimension, fov, height, width, x, yaw } = state.camera
 	const { shoots } = state.stats
 	const {
 		next_hide_ms,
