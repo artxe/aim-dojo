@@ -3,7 +3,7 @@
  */
 export const bg_el = /** @type {HTMLDivElement} */(document.getElementById("bg"))/**/
 export const bg_iframe_el = /** @type {HTMLIFrameElement} */(document.getElementById("bg-iframe"))/**/
-export const bg_space_btn = /** @type {HTMLButtonElement} */(document.getElementById("bg-space"))/**/
+export const modal_backdrop_btn = /** @type {HTMLButtonElement} */(document.getElementById("modal-backdrop"))/**/
 export const canvas_el = /** @type {HTMLCanvasElement} */(document.getElementById("canvas"))/**/
 
 /**
@@ -25,6 +25,8 @@ export const mc_hipfire_el = /** @type {HTMLSpanElement} */(document.getElementB
 export const fn_el = /** @type {HTMLLIElement} */(document.getElementById("fn"))/**/
 export const fn_hipfire_el = /** @type {HTMLSpanElement} */(document.getElementById("fn-hipfire"))/**/
 export const fn_ads_el = /** @type {HTMLSpanElement} */(document.getElementById("fn-ads"))/**/
+export const fn_ar_el = /** @type {HTMLSpanElement} */(document.getElementById("fn-ar"))/**/
+export const fn_sr_el = /** @type {HTMLSpanElement} */(document.getElementById("fn-sr"))/**/
 export const cs2_el = /** @type {HTMLLIElement} */(document.getElementById("cs2"))/**/
 export const cs2_hipfire_el = /** @type {HTMLSpanElement} */(document.getElementById("cs2-hipfire"))/**/
 export const cs2_aug_el = /** @type {HTMLSpanElement} */(document.getElementById("cs2-aug"))/**/
@@ -101,6 +103,7 @@ export const dpi_norm_cs2_sens_input = /** @type {HTMLInputElement} */(document.
 export const dpi_norm_cs2_fov_btn = /** @type {HTMLButtonElement} */(document.getElementById("dpi-norm-cs2-fov"))/**/
 export const dpi_norm_cs2_zoom_input = /** @type {HTMLInputElement} */(document.getElementById("dpi-norm-cs2-zoom"))/**/
 export const dpi_norm_pubg_fov_btn = /** @type {HTMLButtonElement} */(document.getElementById("dpi-norm-pubg-fov"))/**/
+// eslint-disable-next-line max-len
 export const dpi_norm_pubg_sens_input = /** @type {HTMLInputElement} */(document.getElementById("dpi-norm-pubg-sens"))/**/
 export const dpi_norm_ow_sens_input = /** @type {HTMLInputElement} */(document.getElementById("dpi-norm-ow-sens"))/**/
 export const dpi_norm_ow_fov_btn = /** @type {HTMLButtonElement} */(document.getElementById("dpi-norm-ow-fov"))/**/

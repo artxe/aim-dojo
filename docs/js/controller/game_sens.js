@@ -38,7 +38,9 @@ import {
 	val_operator5_el,
 	val_operator25_el,
 	val_spectre_el,
-	val_vandal_el
+	val_vandal_el,
+	fn_ar_el,
+	fn_sr_el
 } from "../document.js"
 import { update_fov } from "../logic.js"
 import {
@@ -246,12 +248,22 @@ export function update_game_sens() {
 	)
 	const mc_hipfire = calc_sens_mc(110)
 	set_text_if_changed(mc_hipfire_el, round(mc_hipfire))
-	const fn_hipfire = round_to(calc_sens_fn(width * .87), 1)
+	const fn_hipfire = round_to(calc_sens_fn(80, width * .87), 1)
 	set_text_if_changed(fn_hipfire_el, fn_hipfire)
-	const fn_ads = calc_sens_fn()
+	const fn_ads = calc_sens_fn(80)
 	set_text_if_changed(
 		fn_ads_el,
 		round_to(fn_ads / fn_hipfire * 100, 1)
+	)
+	const fn_ar = calc_sens_fn(40)
+	set_text_if_changed(
+		fn_ar_el,
+		round_to(fn_ar / fn_hipfire * 100, 1)
+	)
+	const fn_sr = calc_sens_fn(15)
+	set_text_if_changed(
+		fn_sr_el,
+		round_to(fn_sr / fn_hipfire * 100, 1)
 	)
 	const cs2_hipfire = round_to(calc_sens_cs2(90), 2)
 	const cs2_45 = calc_sens_cs2(45)

@@ -119,9 +119,10 @@ export default {
 		/** @type {GameModeName?} */
 		mode: null,
 		raf_id: 0,
+		rest_raf_id: 0,
 		sens: /** @type {GameSensName} */(localStorage.getItem("game.sens") || "lol")/**/,
 		tolerance: Number(
-			localStorage.getItem("game.tolerance") || 2
+			localStorage.getItem("game.tolerance") || 8
 		),
 		width: game_width
 	},

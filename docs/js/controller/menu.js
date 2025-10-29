@@ -28,7 +28,12 @@ function on_click_setting(ev) {
  * @returns {void}
  */
 function on_click_start_game(ev) {
+	const { rest_raf_id } = state.game
 	ev.preventDefault()
+	if (rest_raf_id) {
+		clearTimeout(rest_raf_id)
+		state.game.rest_raf_id = 0
+	}
 	if (ev.currentTarget == aiming_btn) {
 		state.game.mode = "aiming"
 		start_game()

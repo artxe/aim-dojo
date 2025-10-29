@@ -3,8 +3,8 @@ import {
 	bg_el,
 	bg_iframe_el,
 	bg_link_input,
-	bg_space_btn,
 	bg_type_input,
+	modal_backdrop_btn,
 	mode_cycle_btn,
 	save_bg_btn,
 	setting_view_el,
@@ -16,7 +16,7 @@ mode_cycle_btn.addEventListener("click", toggle_mode_cycle)
 bg_type_input.addEventListener("change", on_change_bg_type)
 activate_bg_btn.addEventListener("click", on_click_activate_bg)
 save_bg_btn.addEventListener("click", on_click_save_bg)
-bg_space_btn.addEventListener("click", close_bg_activate)
+modal_backdrop_btn.addEventListener("click", on_click_modal_backdrop)
 /** @returns {void} */
 export function change_bg_video() {
 	const type = /** @type {BackgroundType} */(bg_type_input.value)/**/
@@ -77,18 +77,6 @@ export function change_bg_video() {
 		send_toast(String(error), 3_000)
 	}
 }
-/** @returns {void} */
-export function close_bg_activate() {
-	bg_el.removeAttribute("activate")
-	if (toast_el.textContent) {
-		for (const span of toast_el.children) {
-			clearTimeout(
-				Number(span.getAttribute("timer"))
-			)
-		}
-		toast_el.textContent = ""
-	}
-}
 /**	@returns {void} */
 export function on_change_bg_type() {
 	const type = /** @type {BackgroundType} */(bg_type_input.value)/**/
@@ -108,6 +96,22 @@ export function on_change_bg_type() {
 function on_click_activate_bg() {
 	setting_view_el.removeAttribute("active")
 	bg_el.setAttribute("activate", "")
+}
+/** @returns {void} */
+export function on_click_modal_backdrop() {
+	if (bg_el.hasAttribute("activate")) {
+		bg_el.removeAttribute("activate")
+		if (toast_el.textContent) {
+			for (const span of toast_el.children) {
+				clearTimeout(
+					Number(span.getAttribute("timer"))
+				)
+			}
+			toast_el.textContent = ""
+		}
+	} else if (setting_view_el.hasAttribute("active")) {
+		setting_view_el.removeAttribute("active")
+	}
 }
 /** @returns {void} */
 function on_click_save_bg() {

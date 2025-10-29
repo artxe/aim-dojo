@@ -4,17 +4,17 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>AIM DOJO - The fastest way to improve your FPS skills</title>
-		<meta name="description" content="AIM DOJO — Browser-based FPS aim trainer for flick, tracking, aiming, and writing modes. Preset conversions for CS2, VALORANT, Overwatch, PUBG, LoL, and Minecraft. Adjust sensitivity, FOV/scopes, tolerance and canvas size; track peak score, accuracy, and crit rate.">
+		<meta name="description" content="AIM DOJO — Unify mouse sensitivity across CS2, VALORANT, Overwatch, PUBG, Fortnite, LoL, and Minecraft to keep aim consistent between training and real matches.">
 		<link rel="canonical" href="https://artxe.github.io/aim-dojo/">
 		<meta name="robots" content="index,follow">
 		<meta property="og:title" content="AIM DOJO — FPS Aim Trainer">
-		<meta property="og:description" content="AIM DOJO — Browser-based FPS aim trainer for flick, tracking, aiming, and writing modes. Preset conversions for CS2, VALORANT, Overwatch, PUBG, LoL, and Minecraft. Adjust sensitivity, FOV/scopes, tolerance and canvas size; track peak score, accuracy, and crit rate.">
+		<meta property="og:description" content="AIM DOJO — Unify mouse sensitivity across CS2, VALORANT, Overwatch, PUBG, Fortnite, LoL, and Minecraft to keep aim consistent between training and real matches.">
 		<meta property="og:type" content="website">
 		<meta property="og:url" content="https://artxe.github.io/aim-dojo/">
 		<meta property="og:image" content="https://artxe.github.io/aim-dojo/bg.png">
 		<meta name="twitter:card" content="summary_large_image">
 		<meta name="twitter:title" content="AIM DOJO — FPS Aim Trainer">
-		<meta name="twitter:description" content="AIM DOJO — Browser-based FPS aim trainer for flick, tracking, aiming, and writing modes. Preset conversions for CS2, VALORANT, Overwatch, PUBG, LoL, and Minecraft. Adjust sensitivity, FOV/scopes, tolerance and canvas size; track peak score, accuracy, and crit rate.">
+		<meta name="twitter:description" content="AIM DOJO — Unify mouse sensitivity across CS2, VALORANT, Overwatch, PUBG, Fortnite, LoL, and Minecraft to keep aim consistent between training and real matches.">
 		<meta name="twitter:image" content="https://artxe.github.io/aim-dojo/bg.png">
 		<meta name="theme-color" content="#3d2423">
 		<link rel="icon" href="https://artxe.github.io/aim-dojo/bg.png">
@@ -27,7 +27,7 @@
 				"operatingSystem": "Web",
 				"url": "https://artxe.github.io/aim-dojo/",
 				"image": "https://artxe.github.io/aim-dojo/bg.png",
-				"description": "AIM DOJO — Browser-based FPS aim trainer for flick, tracking, aiming, and writing modes. Preset conversions for CS2, VALORANT, Overwatch, PUBG, LoL, and Minecraft. Adjust sensitivity, FOV/scopes, tolerance and canvas size; track peak score, accuracy, and crit rate.",
+				"description": "AIM DOJO — Unify mouse sensitivity across CS2, VALORANT, Overwatch, PUBG, Fortnite, LoL, and Minecraft to keep aim consistent between training and real matches.",
 				"offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
 			}
 		</script>
@@ -152,7 +152,7 @@
 									target.value = min(
 										Number(target.value) + 10 ** -decimals,
 										max_value
-									).toFixed(decimals).replace(/0+$/, "")
+									).toFixed(decimals).replace(/(?<=\.\d*)0+$/, "")
 								}
 								this.dispatchEvent(new Event("input"))
 							}
@@ -163,24 +163,24 @@
 		</script>
 	</head>
 	<body class="bg=#3d2423 c=#eee ff=ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace fs=16px h=100% o=clip pe=none us=none wsp=-.4
-		:not([locked])_canvas/ft=blur(4px);tt=filter_1s_ease;a=none
+		:has(#bg[activate],#setting-view[active])>#modal-backdrop/z=1
+		:not([locked])_canvas/bf=brightness(.6);ft=blur(2px);tt=filter_1s_ease
 		:not([locked])_[hud]/none
-		[locked]_[menu]/none">
-		<div class="fixed h=100% pe=auto o=hidden w=100%
-			[activate]/z=1
+		[locked]_[menu]/none
+		[rest]>:not(img,#bg)/none">
+		<img alt="pre image for video" class="fixed h=100% of=cover w=100%" src="./bg.png" />
+		<button class="bf=blur(3px) fixed h=100% pe=auto w=100%" id="modal-backdrop"></button>
+		<div class="fixed h=100% o=hidden pe=auto w=100%
+			:has(iframe[src])>video/none
+			[activate]/br=1;tf=scale(.8)_translateY(-12.5%);z=2
 			[activate]>button/bg=rgba(0,0,0,.8)
-			[activate]>iframe/br=1;tf=scale(.8)_translateY(-12.5%);z=1
-			[activate]>img/none
-			[activate]>video/br=1;tf=scale(.8)_translateY(-12.5%);z=1
-			:has(iframe[src])>video/none" id="bg">
-			<img alt="pre image for video" class="fixed h=100% of=cover w=100%" src="./bg.png" />
+			[activate]>img/none" id="bg">
 			<video autoplay class="fixed h=100% of=cover w=100%" loop muted playsinline>
 				<source src="./bg.mp4" type="video/mp4">
 			</video>
 			<iframe class="bd=none fixed h=100% w=100% :not([src])/none" id="bg-iframe"></iframe>
-			<button class="bg=rgba(0,0,0,.4) fixed h=100% w=100%" id="bg-space"></button>
 		</div>
-		<canvas class="fixed h=100% pe=auto w=100%" id="canvas"></canvas>
+		<canvas class="bf=blur(1px) fixed h=100% pe=auto w=100%" id="canvas"></canvas>
 		<div class="c=#ccc fixed l=.5 t=.5 ws=nowrap">
 			<span class="op=.5" menu>(Tab: Next game sens)<br></span>
 			<div class="flex p=.25">
@@ -208,7 +208,7 @@
 					</ul>
 				</div>
 				<div class="w=.5"></div>
-				<span class="c=#fff">T:</span><input class="bd=none bg=none c=#9cd2ff pe=auto w=1.5ch" id="tolerance" max="9" min="0" />
+				<span class="c=#fff">T:</span><input class="bd=none bg=none c=#9cd2ff pe=auto w=2.5ch" id="tolerance" max="99" min="0" />
 			</div>
 			<ul class="pe=auto
 				:active>li/block
@@ -240,7 +240,9 @@
 					<b class="c=#fff fs=1.5">Fortnite</b>
 					<div>
 						<span class="c=#fff">Hipfire(x0.87): <span class="bold c=#fff" id="fn-hipfire">—</span>%</span><br>
-						<span class="c=#fff">ASD/Scope: <span class="bold c=#fff" id="fn-ads">-</span>%</span><br>
+						<span class="c=#fff">ADS: <span class="bold c=#fff" id="fn-ads">-</span>%</span><br>
+						<span class="c=#fff">AR: <span class="bold c=#fff" id="fn-ar">-</span>%</span><br>
+						Sniper: <span id="fn-sr">-</span>%<br>
 						<span class="c=#fff">Zoom Scaling: </span><span class="bold c=#fff">Standard</span>
 					</div>
 				</li>
@@ -258,7 +260,7 @@
 					<div>
 						<span class="c=#fff">FPP FoV: </span><span class="bold c=#fff" id="pubg-fpp">—</span><br>
 						<span class="c=#fff">Hipfire(x0.87): </span><span class="bold c=#fff" id="pubg-hipfire">—</span><br>
-						<span class="c=#fff">ASD/Scope: </span><span class="bold c=#fff" id="pubg-ads">—</span><br>
+						<span class="c=#fff">ADS/Scope: </span><span class="bold c=#fff" id="pubg-ads">—</span><br>
 						<span class="c=#fff">Vertical: </span><span class="bold c=#fff">1</span><br>
 						<span class="c=#fff">x2: </span><span class="bold c=#fff" id="pubg-x2">—</span><br>
 						<span class="c=#fff">x3: </span><span class="bold c=#fff" id="pubg-x3">—</span><br>
@@ -319,7 +321,7 @@
 				Setting
 			</button>
 		</div>
-		<div class="bf=blur(2px) bg=rgba(0,0,0,.8) br=.5 fixed fs=2 h=90% l=50% none pe=auto t=50% tf=translate(-50%,-50%) w=90%
+		<div class="bg=rgba(0,0,0,.8) br=.5 fixed fs=2 h=90% l=50% none pe=auto t=50% tf=translate(-50%,-50%) w=90% z=2
 			[active]/block" id="setting-view">
 			<span class="absolute fs=.5 l=1 t=1" id="version">-</span>
 			<div class="grid m=1_auto ox=hidden oy=scroll p=0_1 scrollbar-gutter=stable_both-edges w=max-content xh=calc(100%-2em)
@@ -525,7 +527,7 @@
 										<li class="p=.25"
 											onclick="selector_option_onclick.call(this)"
 											value="ads">
-											ASD/Scope
+											ADS/Scope
 										</li>
 										<li class="p=.25"
 											onclick="selector_option_onclick.call(this)"

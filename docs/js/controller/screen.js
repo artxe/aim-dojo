@@ -1,4 +1,4 @@
-import { bg_el, setting_view_el, timer_el } from "../document.js"
+import { timer_el } from "../document.js"
 import game_mode from "../game_mode/index.js"
 import { stop_game, update_fov } from "../logic.js"
 import { clamp, EPS, floor, PI, round } from "../math.js"
@@ -6,7 +6,7 @@ import { compute_sens_rad } from "../sens.js"
 import state from "../state.js"
 import { cycle_active_game_sens } from "./game_sens.js"
 import { on_resize, set_text_if_changed } from "./index.js"
-import { close_bg_activate } from "./setting.js"
+import { on_click_modal_backdrop } from "./setting.js"
 addEventListener(
 	"contextmenu",
 	e => e.preventDefault()
@@ -55,11 +55,7 @@ function format_duration_ms(ms) {
 function on_keydown(ev) {
 	if (ev.code === "Escape") {
 		ev.preventDefault()
-		if (bg_el.hasAttribute("activate")) {
-			close_bg_activate()
-		} else if (setting_view_el.hasAttribute("active")) {
-			setting_view_el.removeAttribute("active")
-		}
+		on_click_modal_backdrop()
 	} else if (ev.code == "Tab") {
 		ev.preventDefault()
 		cycle_active_game_sens()
@@ -96,24 +92,40 @@ function on_mousedown(ev) {
 function on_mousemove(ev) {
 	const { dimension, fov, pitch, y } = state.camera
 	const { width } = state.device
-	const { mode } = state.game
-	if (!mode) return
-	const sens = compute_sens_rad(fov, width)
-	if (dimension == "2d") {
-		const y_limit = floor(PI / 2 / sens - EPS)
-		state.camera.x += ev.movementX
-		state.camera.y = clamp(
-			-y_limit,
-			y + ev.movementY,
-			y_limit
-		)
+	const { mode, rest_raf_id } = state.game
+	if (mode) {
+		const sens = compute_sens_rad(fov, width)
+		if (dimension == "2d") {
+			const y_limit = floor(PI / 2 / sens - EPS)
+			state.camera.x += ev.movementX
+			state.camera.y = clamp(
+				-y_limit,
+				y + ev.movementY,
+				y_limit
+			)
+		} else {
+			const pitch_limit = PI / 2 - EPS
+			state.camera.yaw += ev.movementX * sens
+			state.camera.pitch = clamp(
+				-pitch_limit,
+				pitch - ev.movementY * sens,
+				pitch_limit
+			)
+		}
 	} else {
-		const pitch_limit = PI / 2 - EPS
-		state.camera.yaw += ev.movementX * sens
-		state.camera.pitch = clamp(
-			-pitch_limit,
-			pitch - ev.movementY * sens,
-			pitch_limit
+		if (rest_raf_id) {
+			clearTimeout(rest_raf_id)
+		}
+		state.game.rest_raf_id = setTimeout(screen_saver, 5000)
+	}
+	function screen_saver() {
+		clearTimeout(rest_raf_id)
+		state.game.rest_raf_id = 0
+		document.body.setAttribute("rest", "")
+		document.addEventListener(
+			"mousemove",
+			() => document.body.removeAttribute("rest"),
+			{ once: true }
 		)
 	}
 }

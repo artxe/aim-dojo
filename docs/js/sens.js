@@ -77,12 +77,12 @@ export function calc_dpi_fn() {
 	const { dpi, fov, sens } = state.dpi_norm
 	const { width } = state.game
 	if (fov == "hipfire") {
-		return dpi * sens / calc_sens_fn(width * .87)
+		return dpi * sens / calc_sens_fn(80, width * .87)
 	}
 	const { zoom } = state.dpi_norm
 	let hfov_deg
 	if (fov == "ads") {
-		return dpi * sens * zoom / 100 / calc_sens_fn()
+		return dpi * sens * zoom / 100 / calc_sens_fn(80)
 	}
 	if (fov == "ar_legacy") {
 		hfov_deg = 40
@@ -246,11 +246,18 @@ export function calc_sens_cs2(hfov_deg) {
 		/ to_rad(.022 * hfov_deg / 90)
 }
 /**
+ * @param {number} hfov_deg
  * @param {number} [width]
  * @returns {number}
  */
-export function calc_sens_fn(width = state.game.width) {
-	return compute_sens_rad(80, width) / to_rad(.005555)
+export function calc_sens_fn(
+	hfov_deg,
+	width = state.game.width
+) {
+	return compute_sens_rad(hfov_deg, width)
+		/ to_rad(
+			.005555 * tan(to_rad(hfov_deg) / 2) / tan(to_rad(80) / 2)
+		)
 }
 /**
  * @param {number} vfov_deg

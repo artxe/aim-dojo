@@ -14,7 +14,7 @@ const _ = {
 		spacing: .4
 	},
 	mode: {
-		aiming: { base_speed: .005, score_mul: 700 },
+		aiming: { base_speed: .005, score_mul: 600 },
 		flick: {
 			first_dist_mul: 4,
 			num_targets: 20,
@@ -32,7 +32,7 @@ const _ = {
 			speed_steps: [ 1, 1, 2 ]
 		},
 		twitch: {
-			score_mul: 1300,
+			score_mul: 1500,
 			target_hide_duration_ms: 1_000,
 			target_show_duration_ms: 500
 		},
