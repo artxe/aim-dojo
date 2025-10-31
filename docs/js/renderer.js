@@ -11,12 +11,18 @@ const crosshair_image = (() => {
 	off.height = height
 	off.width = width
 	context.save()
-	off_context.fillStyle = "#fff"
-	off_context.lineWidth = 1.25
-	off_context.strokeStyle = "rgba(255,0,0,.9)"
+	off_context.lineWidth = 2
+	off_context.strokeStyle = "lime"
 	off_context.beginPath()
-	off_context.arc(4, 4, 2.75, 0, TAU)
-	off_context.fill()
+	off_context.moveTo(14, 12)
+	off_context.lineTo(14, 0)
+	off_context.moveTo(16, 14)
+	off_context.lineTo(28, 14)
+	off_context.moveTo(14, 16)
+	off_context.lineTo(14, 28)
+	off_context.moveTo(12, 14)
+	off_context.lineTo(0, 14)
+	off_context.moveTo
 	off_context.stroke()
 	off_context.restore()
 	return off.transferToImageBitmap()
@@ -350,13 +356,17 @@ function draw_target(target, alpha) {
 }
 /** @returns {void} */
 function draw_targets() {
+	const { required_dwell_ms } = constants.mode.aiming
 	const { mode } = state.game
-	const { target } = state.mode.aiming
+	const { aim_dwell_ms, target } = state.mode.aiming
 	const { targets } = state.mode.flick
 	const { target: tracking_target } = state.mode.tracking
 	const { target: twitch_target } = state.mode.twitch
 	if (mode == "aiming") {
-		draw_target(target, 1)
+		draw_target(
+			target,
+			aim_dwell_ms >= required_dwell_ms ? 1 : .5
+		)
 	} else if (mode == "flick") {
 		if (!targets.length) return
 		for (let i = 0; i + 1 < targets.length; i++) {

@@ -49,7 +49,8 @@ import {
 	round_to
 } from "../math.js"
 import {
-	calc_fpp_fov_pubg,
+	calc_pubg_converted,
+	calc_pubg_fpp_fov,
 	calc_sens_cs2,
 	calc_sens_fn,
 	calc_sens_mc,
@@ -251,7 +252,7 @@ export function update_game_sens() {
 	)
 	const mc_hipfire = calc_sens_mc(110)
 	set_text_if_changed(mc_hipfire_el, round(mc_hipfire))
-	const fn_hipfire = round_to(calc_sens_fn(80, width * .85), 1)
+	const fn_hipfire = round_to(calc_sens_fn(80, width * .87), 1)
 	set_text_if_changed(fn_hipfire_el, fn_hipfire)
 	const fn_ads = calc_sens_fn(80)
 	set_text_if_changed(
@@ -295,26 +296,48 @@ export function update_game_sens() {
 		round_to(cs2_10 / cs2_hipfire, 2)
 	)
 	const pubg_fov = 80
-	const pubg_hipfire = round(
-		calc_sens_pubg(pubg_fov, width * .85)
+	const pubg_hipfire = calc_sens_pubg(pubg_fov, width * .87)
+	set_text_if_changed(
+		pubg_hipfire_el,
+		`${round_to(pubg_hipfire, 6)}, ${round_to(calc_pubg_converted(pubg_hipfire), 6)}`
 	)
-	set_text_if_changed(pubg_hipfire_el, pubg_hipfire)
-	const pubg_fpp_fov = calc_fpp_fov_pubg(pubg_hipfire)
+	const pubg_fpp_fov = calc_pubg_fpp_fov(pubg_hipfire)
 	set_text_if_changed(pubg_fpp_el, pubg_fpp_fov)
 	const pubg_ads = calc_sens_pubg(pubg_fov)
-	set_text_if_changed(pubg_ads_el, round(pubg_ads))
+	set_text_if_changed(
+		pubg_ads_el,
+		`${round_to(pubg_ads, 6)}, ${round_to(calc_pubg_converted(pubg_ads), 6)}`
+	)
 	const pubg_x2 = calc_sens_pubg(pubg_fov / 2)
-	set_text_if_changed(pubg_x2_el, round(pubg_x2))
+	set_text_if_changed(
+		pubg_x2_el,
+		`${round_to(pubg_x2, 6)}, ${round_to(calc_pubg_converted(pubg_x2), 6)}`
+	)
 	const pubg_x3 = calc_sens_pubg(pubg_fov / 3)
-	set_text_if_changed(pubg_x3_el, round(pubg_x3))
+	set_text_if_changed(
+		pubg_x3_el,
+		`${round_to(pubg_x3, 6)}, ${round_to(calc_pubg_converted(pubg_x3), 6)}`
+	)
 	const pubg_x4 = calc_sens_pubg(pubg_fov / 4)
-	set_text_if_changed(pubg_x4_el, round(pubg_x4))
+	set_text_if_changed(
+		pubg_x4_el,
+		`${round_to(pubg_x4, 6)}, ${round_to(calc_pubg_converted(pubg_x4), 6)}`
+	)
 	const pubg_x6 = calc_sens_pubg(pubg_fov / 6)
-	set_text_if_changed(pubg_x6_el, round(pubg_x6))
+	set_text_if_changed(
+		pubg_x6_el,
+		`${round_to(pubg_x6, 6)}, ${round_to(calc_pubg_converted(pubg_x6), 6)}`
+	)
 	const pubg_x8 = calc_sens_pubg(pubg_fov / 8)
-	set_text_if_changed(pubg_x8_el, round(pubg_x8))
+	set_text_if_changed(
+		pubg_x8_el,
+		`${round_to(pubg_x8, 6)}, ${round_to(calc_pubg_converted(pubg_x8), 6)}`
+	)
 	const pubg_x15 = calc_sens_pubg(pubg_fov / 15)
-	set_text_if_changed(pubg_x15_el, round(pubg_x15))
+	set_text_if_changed(
+		pubg_x15_el,
+		`${round_to(pubg_x15, 6)}, ${round_to(calc_pubg_converted(pubg_x15), 6)}`
+	)
 	const ow_hipfire = round_to(calc_sens_ow(base_hfov), 2)
 	set_text_if_changed(ow_hipfire_el, ow_hipfire)
 	const widow = calc_sens_ow(

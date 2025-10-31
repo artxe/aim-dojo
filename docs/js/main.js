@@ -47,22 +47,10 @@ flick_score_el.textContent = localStorage.getItem("flick.best_score") || "0"
 tracking_score_el.textContent = localStorage.getItem("tracking.best_score") || "0"
 twitch_score_el.textContent = localStorage.getItem("twitch.best_score") || "0"
 writing_score_el.textContent = localStorage.getItem("writing.best_score") || "0"
-const version = "v1.8.0"
-const prev_version = localStorage.getItem("v")
-if (prev_version != version) {
-	if (prev_version == "v1.7.0") {
-		localStorage.removeItem("game.tolerance")
-	} else if (prev_version == "v1.6.0") {
-		localStorage.removeItem("aiming.best_score")
-	} else {
-		localStorage.clear()
-	}
-	localStorage.setItem("v", version)
-}
-version_el.textContent = version
+version_el.textContent = "v1.9.0"
 mode_cycle_btn.setAttribute(
 	"on",
-	state.game.cycle_id ? "true" : "false"
+	state.game.cycle_timeout ? "true" : "false"
 )
 bg_type_input.value = state.bg.type
 dpi_norm_dpi_input.value = String(state.dpi_norm.dpi)

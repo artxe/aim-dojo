@@ -2,6 +2,7 @@
 	"author": "artxe",
 	"description": "AIM DOJO",
 	"devDependencies": {
+		"@types/node": "^24.9.2",
 		"eslint": "^9.38.0",
 		"eslint-plugin-lube": "^0.5.1",
 		"serve": "^14.2.5",
@@ -15,5 +16,5 @@
 		"lint": "eslint --cache --fix **/*.{d.ts,js,json} && tsc"
 	},
 	"type": "module",
-	"version": "1.8.0"
+	"version": "1.9.0"
 }

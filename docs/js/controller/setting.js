@@ -120,17 +120,17 @@ function on_click_save_bg() {
 }
 /** @returns {void} */
 function toggle_mode_cycle() {
-	const { cycle_id } = state.game
+	const { cycle_timeout: cycle_id } = state.game
 	if (cycle_id) {
 		localStorage.setItem(
-			"game.cycle_id",
-			String(state.game.cycle_id = 0)
+			"game.cycle_timeout",
+			String(state.game.cycle_timeout = 0)
 		)
 		mode_cycle_btn.setAttribute("on", "false")
 	} else {
 		localStorage.setItem(
-			"game.cycle_id",
-			String(state.game.cycle_id = 1)
+			"game.cycle_timeout",
+			String(state.game.cycle_timeout = 1)
 		)
 		mode_cycle_btn.setAttribute("on", "true")
 	}

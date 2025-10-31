@@ -1,13 +1,5 @@
 type BackgroundType = "default" | "soop" | "webview" | "youtube"
 type CameraMode = "2d" | "3d"
-type DeepReadonly<T> = Readonly<{
-	[K in keyof T]:
-		T[K] extends (number | string | symbol)
-			? Readonly<T[K]>
-			: T[K] extends readonly (infer A)[]
-				? ReadonlyArray<DeepReadonly<A>>
-				: DeepReadonly<T[K]>
-}>
 type DpiNormalizerState = {
 	dpi: number
 	game: GameSensName

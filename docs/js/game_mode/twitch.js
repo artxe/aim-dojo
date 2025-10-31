@@ -68,14 +68,14 @@ function dispose() {
 /** @returns {void} */
 function init() {
 	const { target_hide_duration_ms } = constants.mode.twitch
-	const { cycle_id, sens } = state.game
+	const { cycle_timeout: cycle_id, sens } = state.game
 	const { now_ms } = state.timer
 	state.camera.dimension = sens == "lol" ? "2d" : "3d"
 	state.mode.twitch.peak_score = 0
 	state.mode.twitch.next_hide_ms = 0
 	state.mode.twitch.next_show_ms = now_ms + target_hide_duration_ms / 2
 	if (cycle_id) {
-		state.game.cycle_id = setTimeout(change_to_next_mode, 50_000)
+		state.game.cycle_timeout = setTimeout(change_to_next_mode, 50_000)
 	}
 }
 /** @returns {void} */

@@ -78,7 +78,7 @@ function init() {
 		move_change_interval_ms,
 		size_change_interval_ms
 	} = constants.mode.tracking
-	const { cycle_id, sens } = state.game
+	const { cycle_timeout: cycle_id, sens } = state.game
 	const { target, target_3d } = state.mode.tracking
 	const { now_ms } = state.timer
 	state.camera.dimension = sens == "lol" ? "2d" : "3d"
@@ -107,7 +107,7 @@ function init() {
 		target_3d.y = 0
 	}
 	if (cycle_id) {
-		state.game.cycle_id = setTimeout(change_to_next_mode, 50_000)
+		state.game.cycle_timeout = setTimeout(change_to_next_mode, 50_000)
 	}
 }
 /** @returns {void} */

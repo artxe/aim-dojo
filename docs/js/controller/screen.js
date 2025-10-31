@@ -53,7 +53,7 @@ function format_duration_ms(ms) {
  * @returns {void}
  */
 function on_keydown(ev) {
-	const { mode, rest_raf_id } = state.game
+	const { mode, rest_timeout: rest_raf_id } = state.game
 	if (ev.code === "Escape") {
 		ev.preventDefault()
 		on_click_modal_backdrop()
@@ -66,7 +66,7 @@ function on_keydown(ev) {
 			clearTimeout(rest_raf_id)
 		}
 		if (!bg_el.hasAttribute("activate") && !setting_view_el.hasAttribute("active")) {
-			state.game.rest_raf_id = setTimeout(screen_saver, 10_000)
+			state.game.rest_timeout = setTimeout(screen_saver, 10_000)
 		}
 	}
 }
@@ -100,10 +100,9 @@ function on_mousedown(ev) {
  */
 function on_mousemove(ev) {
 	const { dimension, fov, pitch, y } = state.camera
-	const { width } = state.camera
-	const { mode, rest_raf_id } = state.game
+	const { mode, rest_timeout: rest_raf_id } = state.game
 	if (mode) {
-		const sens = compute_sens_rad(fov, width)
+		const sens = compute_sens_rad(fov)
 		if (dimension == "2d") {
 			const y_limit = floor(PI / 2 / sens - EPS)
 			state.camera.x += ev.movementX
@@ -126,7 +125,7 @@ function on_mousemove(ev) {
 			clearTimeout(rest_raf_id)
 		}
 		if (!bg_el.hasAttribute("activate") && !setting_view_el.hasAttribute("active")) {
-			state.game.rest_raf_id = setTimeout(screen_saver, 5_000)
+			state.game.rest_timeout = setTimeout(screen_saver, 5_000)
 		}
 	}
 }
@@ -157,9 +156,9 @@ function on_pointerlockchange() {
 }
 /** @returns {void} */
 function screen_saver() {
-	const { rest_raf_id } = state.game
+	const { rest_timeout: rest_raf_id } = state.game
 	clearTimeout(rest_raf_id)
-	state.game.rest_raf_id = 0
+	state.game.rest_timeout = 0
 	document.body.setAttribute("rest", "")
 	document.addEventListener(
 		"mousemove",

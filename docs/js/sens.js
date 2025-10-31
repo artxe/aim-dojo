@@ -71,7 +71,7 @@ export function calc_dpi_fn() {
 	const { dpi, fov, sens } = state.dpi_norm
 	const { width } = state.game
 	if (fov == "hipfire") {
-		return dpi * sens / calc_sens_fn(80, width * .85)
+		return dpi * sens / calc_sens_fn(80, width * .87)
 	}
 	const { zoom } = state.dpi_norm
 	let hfov_deg
@@ -86,7 +86,7 @@ export function calc_dpi_fn() {
 		throw Error(fov)
 	}
 	return dpi * sens * zoom / 100
-		/ (compute_sens_rad(hfov_deg, width) / to_rad(.005555 * hfov_deg / 80))
+		/ (compute_sens_rad(hfov_deg) / to_rad(.005555 * hfov_deg / 80))
 }
 /** @returns {number} */
 export function calc_dpi_mc() {
@@ -97,7 +97,7 @@ export function calc_dpi_mc() {
 	const { width, height } = state.game
 	const hfov_deg = convert_deg_across_aspect(110, height, width)
 	const dpi_sens_rad = dpi * to_rad(1.2) * (.2 + .006 * sens) ** 3
-	return dpi_sens_rad / compute_sens_rad(hfov_deg, width)
+	return dpi_sens_rad / compute_sens_rad(hfov_deg)
 }
 /** @returns {number} */
 export function calc_dpi_ow() {
@@ -136,7 +136,7 @@ export function calc_dpi_pubg() {
 	if (fov == "tpp") {
 		const dpi_sens_rad = dpi * to_rad(base_yaw)
 			* 2 ** ((sens - base_sens) / step)
-		return dpi_sens_rad / compute_sens_rad(base_fov, width * .85)
+		return dpi_sens_rad / compute_sens_rad(base_fov, width * .87)
 	}
 	let hfov_deg
 	if (fov == "x1") {
@@ -158,7 +158,7 @@ export function calc_dpi_pubg() {
 	}
 	const dpi_sens_rad = dpi * to_rad(hfov_deg / base_fov * base_yaw)
 			* 2 ** ((sens - base_sens) / step)
-	return dpi_sens_rad / compute_sens_rad(hfov_deg, width)
+	return dpi_sens_rad / compute_sens_rad(hfov_deg)
 }
 /** @returns {number} */
 export function calc_dpi_sa() {
@@ -204,8 +204,16 @@ export function calc_dpi_val() {
  * @param {number} sens
  * @returns {number}
  */
-export function calc_fpp_fov_pubg(sens) {
-	const { width } = state.game
+export function calc_pubg_converted(sens) {
+	const base_sens = 50
+	const step = 15.0515
+	return .02 * 2 ** ((sens - base_sens) / step)
+}
+/**
+ * @param {number} sens
+ * @returns {number}
+ */
+export function calc_pubg_fpp_fov(sens) {
 	const base_fov = 80
 	const base_sens = 50
 	const base_yaw = .0444400004444
@@ -216,7 +224,7 @@ export function calc_fpp_fov_pubg(sens) {
 	let err = 1
 	while (low < high) {
 		mid = floor((low + high + 1) / 2)
-		const rad_per_count = compute_sens_rad(mid, width)
+		const rad_per_count = compute_sens_rad(mid)
 		const sens_rad = to_rad(mid / base_fov * base_yaw)
 			* 2 ** ((sens - base_sens) / step)
 		if (abs(rad_per_count - sens_rad) <= err) {
@@ -236,7 +244,7 @@ export function calc_sens_cs2(hfov_deg) {
 	const { height, width } = state.game
 	const vfov_deg = convert_deg_across_aspect(hfov_deg, height * 4 / 3, height)
 	const real_hfov_deg = convert_deg_across_aspect(vfov_deg, height, width)
-	return compute_sens_rad(real_hfov_deg, width)
+	return compute_sens_rad(real_hfov_deg)
 		/ to_rad(.022 * hfov_deg / 90)
 }
 /**
@@ -260,7 +268,7 @@ export function calc_sens_fn(
 export function calc_sens_mc(vfov_deg) {
 	const { width, height } = state.game
 	const hfov_deg = convert_deg_across_aspect(vfov_deg, height, width)
-	const rad_per_count = compute_sens_rad(hfov_deg, width)
+	const rad_per_count = compute_sens_rad(hfov_deg)
 	return (
 		cbrt(rad_per_count / to_rad(1.2)) - .2
 	) / .006
@@ -270,8 +278,7 @@ export function calc_sens_mc(vfov_deg) {
  * @returns {number}
  */
 export function calc_sens_ow(hfov_deg) {
-	const { width } = state.game
-	return compute_sens_rad(hfov_deg, width)
+	return compute_sens_rad(hfov_deg)
 		/ to_rad(.0066)
 }
 /**
@@ -302,16 +309,18 @@ export function calc_sens_sa() {
  * @returns {number}
  */
 export function calc_sens_val(hfov_deg) {
-	const { width } = state.game
-	return compute_sens_rad(hfov_deg, width)
+	return compute_sens_rad(hfov_deg)
 		/ to_rad(.07 * hfov_deg / 103)
 }
 /**
  * @param {number} fov_deg
- * @param {number} width
+ * @param {number} [width]
  * @returns {number}
  */
-export function compute_sens_rad(fov_deg, width) {
+export function compute_sens_rad(
+	fov_deg,
+	width = state.game.width
+) {
 	const { mdm } = state.game
 	const half_width = width / 2
 	const tangent_half_fov = Math.tan(to_rad(fov_deg) / 2)

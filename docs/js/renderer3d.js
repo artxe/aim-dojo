@@ -584,13 +584,17 @@ function draw_target(target, alpha) {
 }
 /** @returns {void} */
 function draw_targets() {
+	const { required_dwell_ms } = constants.mode.aiming
 	const { mode } = state.game
-	const { target_3d } = state.mode.aiming
+	const { aim_dwell_ms, target_3d } = state.mode.aiming
 	const { targets_3d } = state.mode.flick
 	const { target_3d: tracking_target } = state.mode.tracking
 	const { target_3d: twitch_target } = state.mode.twitch
 	if (mode == "aiming") {
-		draw_target(target_3d, 1)
+		draw_target(
+			target_3d,
+			aim_dwell_ms >= required_dwell_ms ? 1 : .5
+		)
 	} else if (mode == "flick") {
 		if (!targets_3d.length) return
 		for (let i = 0; i + 1 < targets_3d.length; i++) {

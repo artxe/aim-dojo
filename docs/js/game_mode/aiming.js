@@ -26,6 +26,7 @@ import {
 	cos,
 	dot,
 	max,
+	min,
 	random,
 	round_to,
 	tan,
@@ -70,7 +71,7 @@ function dispose() {
 /** @returns {void} */
 function init() {
 	const { base_radius } = constants.target
-	const { cycle_id, sens } = state.game
+	const { cycle_timeout: cycle_id, sens } = state.game
 	const { target, target_3d } = state.mode.aiming
 	state.camera.dimension = sens == "lol" ? "2d" : "3d"
 	state.mode.aiming.peak_score = 0
@@ -93,21 +94,26 @@ function init() {
 		target_3d.y = 0
 	}
 	if (cycle_id) {
-		state.game.cycle_id = setTimeout(change_to_next_mode, 50_000)
+		state.game.cycle_timeout = setTimeout(change_to_next_mode, 50_000)
 	}
 }
 /** @returns {void} */
 function on_frame() {
+	const { required_dwell_ms } = constants.mode.aiming
 	const { base_radius } = constants.target
 	const { base_speed } = constants.mode.aiming
-	const { dimension, fov, width, x, yaw } = state.camera
+	const { dimension, fov, pitch, width, x, y, yaw } = state.camera
+	const {
+		aim_dwell_ms,
+		direction,
+		target,
+		target_3d
+	} = state.mode.aiming
 	const { now_ms, prev_ms } = state.timer
-	const { target, target_3d } = state.mode.aiming
 	const dt = now_ms - prev_ms
 	if (dimension == "2d") {
 		target.r = abs(x - target.x) / (width / 4) * base_radius * 4 + base_radius * 2
 		target.cr = calc_core_radius(target.r, base_radius)
-		const direction = x < target.x ? 1 : -1
 		const speed = target.r * base_speed * direction
 		target.cx = target.x = clamp(
 			x - width / 2,
@@ -115,12 +121,25 @@ function on_frame() {
 			x + width / 2
 		)
 		target.cy = target.y - target.r + target.cr
+		const { cr, cy, r, x: target_x, y: target_y } = target
+		const dx = target_x - x
+		if (dx ** 2 + (target_y - y) ** 2 <= r * r) {
+			state.mode.aiming.aim_dwell_ms = min(
+				required_dwell_ms,
+				aim_dwell_ms + dt
+			)
+			if (dx ** 2 + (cy - y) ** 2 <= cr * cr) {
+				return
+			}
+		} else {
+			state.mode.aiming.aim_dwell_ms = max(0, aim_dwell_ms - dt)
+		}
+		state.mode.aiming.direction = x < target_x ? 1 : -1
 	} else {
 		const base_radius_rad = px_to_rad(base_radius)
 		const fov_rad = to_rad(fov)
 		target_3d.r = abs(yaw - target_3d.y) / (fov_rad / 4) * base_radius_rad * 4 + base_radius_rad * 2
 		target_3d.cr = calc_core_radius(target_3d.r, base_radius_rad)
-		const direction = yaw < target_3d.y ? 1 : -1
 		const speed = target_3d.r * base_speed * direction
 		target_3d.cy = target_3d.y = clamp(
 			yaw - fov_rad / 2,
@@ -128,10 +147,27 @@ function on_frame() {
 			yaw + fov_rad / 2
 		)
 		target_3d.cp = target_3d.p + target_3d.r - target_3d.cr
+		const { cp, cr, cy, p, r, y: target_y } = target_3d
+		const d_cam = dir_from_yaw_pitch(yaw, pitch)
+		const d_body = dir_from_yaw_pitch(target_y, p)
+		const d_core = dir_from_yaw_pitch(cy, cp)
+		if (dot(d_cam, d_body) >= cos(r)) {
+			state.mode.aiming.aim_dwell_ms = min(
+				required_dwell_ms,
+				aim_dwell_ms + dt
+			)
+			if (dot(d_cam, d_core) >= cos(cr)) {
+				return
+			}
+		} else {
+			state.mode.aiming.aim_dwell_ms = max(0, aim_dwell_ms - dt)
+		}
+		state.mode.aiming.direction = yaw < target_y ? 1 : -1
 	}
 }
 /** @returns {void} */
 function shoot() {
+	const { required_dwell_ms } = constants.mode.aiming
 	const { impacts, impacts_3d } = state
 	const {
 		dimension,
@@ -143,62 +179,64 @@ function shoot() {
 		y,
 		yaw
 	} = state.camera
-	const { target, target_3d } = state.mode.aiming
+	const { aim_dwell_ms, target, target_3d } = state.mode.aiming
 	const { shoots } = state.stats
 	const { now_ms, now_s, prev_ms } = state.timer
 	let is_hit = false
 	let is_crit = false
-	if (dimension == "2d") {
-		const { cr, cy, r, x: target_x, y: target_y } = target
-		const dx = target_x - x
-		is_hit = dx ** 2 + (target_y - y) ** 2 <= r * r
-		is_crit = dx ** 2 + (cy - y) ** 2 <= cr * cr
-		if (is_hit) {
-			if (is_crit) {
-				play_crit()
-			} else {
-				play_hit()
-			}
-			impacts.push(
-				{ c: is_crit, r, t: now_s, x: x, y: y }
-			)
-			const tx = width / 4 * (random() < .5 ? -1 : 1)
-			const ty = height / 2 * (random() - .5)
-			target.cx += tx
-			target.cy = ty - r + cr
-			target.x += tx
-			target.y = ty
-		}
-	} else {
-		const { cp, cr, cy, p, r, y: target_y } = target_3d
-		const d_cam = dir_from_yaw_pitch(yaw, pitch)
-		const d_body = dir_from_yaw_pitch(target_y, p)
-		const d_core = dir_from_yaw_pitch(cy, cp)
-		is_hit = dot(d_cam, d_body) >= cos(r)
-		is_crit = dot(d_cam, d_core) >= cos(cr)
-		if (is_hit) {
-			if (is_crit) {
-				play_crit()
-			} else {
-				play_hit()
-			}
-			impacts_3d.push(
-				{
-					c: is_crit,
-					p: pitch,
-					r,
-					t: now_s,
-					y: yaw
+	if (aim_dwell_ms >= required_dwell_ms) {
+		if (dimension == "2d") {
+			const { cr, cy, r, x: target_x, y: target_y } = target
+			const dx = target_x - x
+			is_hit = dx ** 2 + (target_y - y) ** 2 <= r * r
+			is_crit = dx ** 2 + (cy - y) ** 2 <= cr * cr
+			if (is_hit) {
+				if (is_crit) {
+					play_crit()
+				} else {
+					play_hit()
 				}
-			)
-			const tp = to_rad(
-				convert_deg_across_aspect(fov, width, height)
-			) / 2 * (random() - .5)
-			const ty = to_rad(fov / 4) * (random() < .5 ? -1 : 1)
-			target_3d.cp = tp + r - cr
-			target_3d.cy += ty
-			target_3d.p = tp
-			target_3d.y += ty
+				impacts.push(
+					{ c: is_crit, r, t: now_s, x: x, y: y }
+				)
+				const tx = width / 4 * (random() < .5 ? -1 : 1)
+				const ty = height / 2 * (random() - .5)
+				target.cx += tx
+				target.cy = ty - r + cr
+				target.x += tx
+				target.y = ty
+			}
+		} else {
+			const { cp, cr, cy, p, r, y: target_y } = target_3d
+			const d_cam = dir_from_yaw_pitch(yaw, pitch)
+			const d_body = dir_from_yaw_pitch(target_y, p)
+			const d_core = dir_from_yaw_pitch(cy, cp)
+			is_hit = dot(d_cam, d_body) >= cos(r)
+			is_crit = dot(d_cam, d_core) >= cos(cr)
+			if (is_hit) {
+				if (is_crit) {
+					play_crit()
+				} else {
+					play_hit()
+				}
+				impacts_3d.push(
+					{
+						c: is_crit,
+						p: pitch,
+						r,
+						t: now_s,
+						y: yaw
+					}
+				)
+				const tp = to_rad(
+					convert_deg_across_aspect(fov, width, height)
+				) / 2 * (random() - .5)
+				const ty = to_rad(fov / 4) * (random() < .5 ? -1 : 1)
+				target_3d.cp = tp + r - cr
+				target_3d.cy += ty
+				target_3d.p = tp
+				target_3d.y += ty
+			}
 		}
 	}
 	shoots.push(

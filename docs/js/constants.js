@@ -1,6 +1,7 @@
-const _ = {
+
+export default /** @type {const} */({
 	audio: { volume: .5 },
-	crosshair: { height: 8, width: 8 },
+	crosshair: { height: 28, width: 28 },
 	grid: {
 		major_every: 9,
 		size: 80,
@@ -14,7 +15,11 @@ const _ = {
 		spacing: .4
 	},
 	mode: {
-		aiming: { base_speed: .005, score_mul: 600 },
+		aiming: {
+			base_speed: .005,
+			required_dwell_ms: 100,
+			score_mul: 800
+		},
 		flick: {
 			first_dist_mul: 4,
 			num_targets: 20,
@@ -54,5 +59,4 @@ Yes we can.`
 	},
 	stats: { window_ms: 30_000 },
 	target: { base_radius: 5 }
-}
-export default /** @type {DeepReadonly<typeof _>} */(_)/**/
+})/**/

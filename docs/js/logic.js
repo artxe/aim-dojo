@@ -99,7 +99,11 @@ export async function start_game() {
 }
 /** @returns {void} */
 export function stop_game() {
-	const { cycle_id, mode, raf_id } = state.game
+	const {
+		cycle_timeout: cycle_id,
+		mode,
+		raf_id
+	} = state.game
 	if (!mode) throw Error()
 	cancelAnimationFrame(raf_id)
 	if (cycle_id) {

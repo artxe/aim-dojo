@@ -70,11 +70,11 @@ function dispose() {
 }
 /** @returns {void} */
 function init() {
-	const { cycle_id, sens } = state.game
+	const { cycle_timeout: cycle_id, sens } = state.game
 	state.camera.dimension = sens == "lol" ? "2d" : "3d"
 	state.mode.flick.peak_score = 0
 	if (cycle_id) {
-		state.game.cycle_id = setTimeout(change_to_next_mode, 50_000)
+		state.game.cycle_timeout = setTimeout(change_to_next_mode, 50_000)
 	}
 }
 /** @returns {void} */

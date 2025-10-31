@@ -101,7 +101,7 @@ export default {
 	},
 	dpi_norm: /** @type {DpiNormalizerState} */({
 		dpi: Number(
-			localStorage.getItem("dpi_norm.dpi") || 400
+			localStorage.getItem("dpi_norm.dpi") || 300
 		),
 		fov: dpi_norm_fov,
 		game: dpi_norm_game,
@@ -109,18 +109,20 @@ export default {
 		zoom: dpi_norm_zoom
 	})/**/,
 	game: {
-		cycle_id: Number(
-			localStorage.getItem("game.cycle_id") || 1
-		),
+		cycle_timeout: /** @type {NodeJS.Timeout|0|1} */(Number(
+			localStorage.getItem("game.cycle_timeout") || 1
+		))/**/,
 		height: game_height,
 		mdm: Number(
-			localStorage.getItem("game.mdm") || 600
+			localStorage.getItem("game.mdm") || 135
 		),
 		/** @type {GameModeName?} */
 		mode: null,
+		/** @type {number} */
 		raf_id: 0,
 		resolution: game_resolution,
-		rest_raf_id: 0,
+		/** @type {NodeJS.Timeout|0} */
+		rest_timeout: 0,
 		sens: /** @type {GameSensName} */(localStorage.getItem("game.sens") || "lol")/**/,
 		width: game_width
 	},
@@ -148,9 +150,12 @@ export default {
 	input: { mb_left: false, mb_right: false },
 	mode: {
 		aiming: {
+			aim_dwell_ms: 0,
 			best_score: Number(
 				localStorage.getItem("aiming.best_score") || 0
 			),
+			/** @type {1|-1} */
+			direction: 1,
 			peak_score: 0,
 			/** @type {Target} */
 			target: { cr: 0, cx: 0, cy: 0, r: 0, x: 0, y: 0 },
@@ -172,7 +177,8 @@ export default {
 				localStorage.getItem("tracking.best_score") || 0
 			),
 			move: {
-				direction: 0,
+				/** @type {1|-1} */
+				direction: 1,
 				speed: 0,
 				direction_change_rate: 0
 			},
