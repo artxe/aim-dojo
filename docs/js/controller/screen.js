@@ -101,18 +101,12 @@ function on_mousedown(ev) {
 function on_mousemove({ movementX, movementY }) {
 	const { dimension, fov, pitch, width, y } = state.camera
 	const { mode, rest_timeout: rest_raf_id } = state.game
-	const { rotation, sens_mult, y_ratio } = state.mode.sens_finder
+	const { sens_mult, y_ratio } = state.mode.sens_finder
 	if (mode) {
 		const sens = compute_sens_rad(fov, width)
 		if (mode == "sens_finder") {
-			const lx = movementX * sens_mult
-			const ly = movementY * sens_mult * y_ratio
-			const c = Math.cos(rotation || 0)
-			const s = Math.sin(rotation || 0)
-			const dx = lx * c - ly * s
-			const dy = lx * s + ly * c
-			state.camera.x += dx
-			state.camera.y += dy
+			state.camera.x += movementX * sens_mult
+			state.camera.y += movementY * sens_mult * y_ratio
 		} else if (dimension == "2d") {
 			const y_limit = floor(PI / 2 / sens - EPS)
 			state.camera.x += movementX

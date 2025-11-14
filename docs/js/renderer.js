@@ -81,13 +81,11 @@ function crop_sa_aspect_side() {
 /** @returns {void} */
 export function draw_crosshair() {
 	const { height, width } = constants.crosshair
-	context_2d.save()
 	context_2d.drawImage(
 		crosshair_image,
 		-round(width / 2),
 		-round(height / 2)
 	)
-	context_2d.restore()
 	crop_sa_aspect_side()
 }
 /** @returns {void} */

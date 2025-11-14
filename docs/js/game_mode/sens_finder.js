@@ -6,18 +6,15 @@ import {
 } from "../document.js"
 import {
 	abs,
-	atan2,
 	EPS,
-	hypot,
 	min,
 	random,
 	round,
 	round_to,
 	sign,
-	TAU,
-	to_deg
+	TAU
 } from "../math.js"
-import { context_2d } from "../renderer.js"
+import { context_2d, draw_crosshair } from "../renderer.js"
 import { play_crit, play_hit } from "../sfx.js"
 import state from "../state.js"
 /** @returns {void} */
@@ -169,18 +166,18 @@ function init() {
 	state.mode.writing.peak_score = 0
 	state.mode.sens_finder.next_target = {
 		x: random() * target_zone - target_zone / 2,
-		y: random() * target_zone - target_zone / 2
+		y: random() * target_zone / 2 - target_zone / 4
 	}
-	state.mode.sens_finder.prev_target = { x: 0, y: 0 }
+	state.mode.sens_finder.prev_shot = { x: 0, y: 0 }
 	state.mode.sens_finder.sens_mult = 1
 	state.mode.sens_finder.target = {
 		x: random() * target_zone - target_zone / 2,
-		y: random() * target_zone - target_zone / 2
+		y: random() * target_zone / 2 - target_zone / 4
 	}
 	state.mode.sens_finder.y_ratio = 1
 	peak_score_el.textContent = "Sens Multiplier"
 	accuracy_el.textContent = "Y/X Ratio"
-	crit_rate_el.textContent = "Rotation"
+	crit_rate_el.textContent = "Accuracy"
 }
 /** @returns {void} */
 function on_frame() {
@@ -188,8 +185,8 @@ function on_frame() {
 }
 /** @returns {void} */
 function render() {
-	const { height, width } = state.camera
-	const { next_target, prev_target, target } = state.mode.sens_finder
+	const { height, width, x, y } = state.camera
+	const { next_target, target } = state.mode.sens_finder
 	context_2d.save()
 	context_2d.clearRect(0, 0, width, height)
 	context_2d.translate(
@@ -201,7 +198,7 @@ function render() {
 	context_2d.lineWidth = 4
 	context_2d.strokeStyle = "white"
 	context_2d.beginPath()
-	context_2d.moveTo(prev_target.x, prev_target.y)
+	context_2d.moveTo(x, y)
 	context_2d.lineTo(target.x, target.y)
 	context_2d.lineTo(next_target.x, next_target.y)
 	context_2d.stroke()
@@ -209,6 +206,8 @@ function render() {
 	_draw_target(next_target, false)
 	_draw_target(target, true)
 	_draw_impacts()
+	context_2d.translate(x, y)
+	draw_crosshair()
 	context_2d.restore()
 }
 /** @returns {void} */
@@ -217,24 +216,19 @@ function shoot() {
 	const { target_zone } = constants.sens
 	const { impacts } = state
 	const { x, y } = state.camera
-	const { next_target, prev_target, target } = state.mode.sens_finder
+	const { next_target, prev_shot, target } = state.mode.sens_finder
 	const { shoots } = state.stats
 	const { now_ms, now_s, prev_ms } = state.timer
 	const dx = target.x - x
+	const dy = target.y - y
 	let is_hit
-	if (is_hit = dx ** 2 + (target.y - y) ** 2 <= r * r) {
+	if (is_hit = dx * dx + dy * dy <= r * r) {
 		play_crit()
 	} else {
 		play_hit()
 	}
 	impacts.push(
-		{
-			c: is_hit,
-			r,
-			t: now_s,
-			x: target.x,
-			y: target.y
-		}
+		{ c: is_hit, r, t: now_s, x, y }
 	)
 	shoots.push(
 		{
@@ -249,24 +243,21 @@ function shoot() {
 		state.stats.count_hit++
 	} else {
 		const corr = 1 - state.stats.count_hit / (state.stats.count_shoot || EPS)
+		const dx_t = target.x - prev_shot.x
+		const dy_t = target.y - prev_shot.y
+		const dx_c = x - prev_shot.x
+		const dy_c = y - prev_shot.y
 		let x_mult = 1
 		let y_mult = 1
-		const dx_t = target.x - prev_target.x
-		const dy_t = target.y - prev_target.y
-		const dx_c = x - prev_target.x
-		const dy_c = y - prev_target.y
 		if (abs(dx_t) > r / 2) {
 			const same_dir_x = sign(dx_t) === sign(dx_c) && sign(dx_c) !== 0
 			const x_move = abs(dx_c) / (abs(dx_t) || EPS)
 			if (same_dir_x) {
 				if (x_move > 1) {
-					x_mult = 1 / (1 + (x_move - 1) * corr / 10)
+					x_mult = 1 / (1 + (x_move - 1) * corr / 3)
 				} else {
-					x_mult = 1 / (1 - (1 - x_move) * corr / 10)
+					x_mult = 1 / (1 - (1 - x_move) * corr / 3)
 				}
-			} else {
-				const penalty = 1 + min(x_move, 2) * (corr / 5)
-				x_mult = 1 / penalty
 			}
 		}
 		if (abs(dy_t) > r / 2) {
@@ -274,51 +265,20 @@ function shoot() {
 			const y_move = abs(dy_c) / (abs(dy_t) || EPS)
 			if (same_dir_y) {
 				if (y_move > 1) {
-					y_mult = 1 / (1 + (y_move - 1) * corr / 10)
+					y_mult = 1 / (1 + (y_move - 1) * corr / 3)
 				} else {
-					y_mult = 1 / (1 - (1 - y_move) * corr / 10)
+					y_mult = 1 / (1 - (1 - y_move) * corr / 3)
 				}
-			} else {
-				const penalty = 1 + min(y_move, 2) * (corr / 5)
-				y_mult = 1 / penalty
 			}
-		}
-		const len_t = hypot(dx_t, dy_t)
-		const len_c = hypot(dx_c, dy_c)
-		if (len_t > r / 2 && len_c > EPS) {
-			const ang_target = atan2(dy_t, dx_t)
-			const ang_current = atan2(dy_c, dx_c)
-			let ang_err = ang_current - ang_target
-			while (ang_err > TAU / 2) {
-				ang_err -= TAU
-			}
-			while (ang_err < -TAU / 2) {
-				ang_err += TAU
-			}
-			const dot = dx_t * dx_c + dy_t * dy_c
-			const is_opposite = dot < 0
-			let rot_step = -ang_err * (corr / 10)
-			if (is_opposite) {
-				rot_step *= 2.5
-			}
-			const step_limit = TAU / 12
-			if (rot_step > step_limit) {
-				rot_step = step_limit
-			} else if (rot_step < -step_limit) {
-				rot_step = -step_limit
-			}
-			state.mode.sens_finder.rotation += rot_step
 		}
 		state.mode.sens_finder.sens_mult *= x_mult
 		state.mode.sens_finder.y_ratio *= y_mult / x_mult
 	}
-	state.camera.x = target.x
-	state.camera.y = target.y
 	state.mode.sens_finder.next_target = {
 		x: random() * target_zone - target_zone / 2,
-		y: random() * target_zone - target_zone / 2
+		y: random() * target_zone / 2 - target_zone / 4
 	}
-	state.mode.sens_finder.prev_target = target
+	state.mode.sens_finder.prev_shot = { x, y }
 	state.mode.sens_finder.target = next_target
 }
 /** @returns {void} */
@@ -328,7 +288,8 @@ function update_fov() {
 /** @returns {void} */
 function update_hud() {
 	const { update_interval_ms } = constants.hud
-	const { rotation, sens_mult, y_ratio } = state.mode.sens_finder
+	const { sens_mult, y_ratio } = state.mode.sens_finder
+	const { count_hit, count_shoot } = state.stats
 	const { now_ms } = state.timer
 	state.hud.next_update_ms = now_ms + update_interval_ms
 	peak_score_el.setAttribute(
@@ -341,7 +302,11 @@ function update_hud() {
 	)
 	crit_rate_el.setAttribute(
 		"value",
-		String(round_to(to_deg(rotation), 5))
+		count_hit
+			? String(
+				round_to(count_hit / count_shoot * 100, 1)
+			)
+			: "0"
 	)
 }
 /** @type {GameMode} */
