@@ -6,12 +6,12 @@ import {
 } from "../document.js"
 import {
 	abs,
-	EPS,
+	clamp,
 	min,
 	random,
 	round,
 	round_to,
-	sign,
+	sqrt,
 	TAU
 } from "../math.js"
 import { context_2d, draw_crosshair } from "../renderer.js"
@@ -242,43 +242,43 @@ function shoot() {
 	if (is_hit) {
 		state.stats.count_hit++
 	} else {
-		const corr = 1 - state.stats.count_hit / (state.stats.count_shoot || EPS)
-		const dx_t = target.x - prev_shot.x
-		const dy_t = target.y - prev_shot.y
-		const dx_c = x - prev_shot.x
-		const dy_c = y - prev_shot.y
-		let x_mult = 1
-		let y_mult = 1
-		if (abs(dx_t) > r / 2) {
-			const same_dir_x = sign(dx_t) === sign(dx_c) && sign(dx_c) !== 0
-			const x_move = abs(dx_c) / (abs(dx_t) || EPS)
-			if (same_dir_x) {
-				if (x_move > 1) {
-					x_mult = 1 / (1 + (x_move - 1) * corr / 3)
-				} else {
-					x_mult = 1 / (1 - (1 - x_move) * corr / 3)
-				}
-			}
-		}
-		if (abs(dy_t) > r / 2) {
-			const same_dir_y = sign(dy_t) === sign(dy_c) && sign(dy_c) !== 0
-			const y_move = abs(dy_c) / (abs(dy_t) || EPS)
-			if (same_dir_y) {
-				if (y_move > 1) {
-					y_mult = 1 / (1 + (y_move - 1) * corr / 3)
-				} else {
-					y_mult = 1 / (1 - (1 - y_move) * corr / 3)
-				}
-			}
-		}
+		const corr = 1 - (state.stats.count_hit / state.stats.count_shoot || .5)
+		const xd = corr / sqrt(
+			target_zone / abs(x - target.x)
+		) || corr
+		const yd = corr / sqrt(
+			target_zone / abs(y - target.y)
+		) || corr
+		let x_mult = target.x > prev_shot.x && x > prev_shot.x || target.x < prev_shot.x && x < prev_shot.x
+			? clamp(
+				.5,
+				(target.x - prev_shot.x) / (x - prev_shot.x),
+				2
+			)
+			: 1
+		let y_mult = target.y > prev_shot.y && y > prev_shot.y || target.y < prev_shot.y && y < prev_shot.y
+			? clamp(
+				.5,
+				(target.y - prev_shot.y) / (y - prev_shot.y),
+				2
+			)
+			: 1
+		x_mult = x_mult > 1
+			? (x_mult - 1) * xd + 1
+			: 1 - (1 - x_mult) * xd
+		y_mult = y_mult > 1
+			? (y_mult - 1) * yd + 1
+			: 1 - (1 - y_mult) * yd
 		state.mode.sens_finder.sens_mult *= x_mult
 		state.mode.sens_finder.y_ratio *= y_mult / x_mult
 	}
+	state.camera.x = target.x
+	state.camera.y = target.y
 	state.mode.sens_finder.next_target = {
 		x: random() * target_zone - target_zone / 2,
 		y: random() * target_zone / 2 - target_zone / 4
 	}
-	state.mode.sens_finder.prev_shot = { x, y }
+	state.mode.sens_finder.prev_shot = target
 	state.mode.sens_finder.target = next_target
 }
 /** @returns {void} */
@@ -302,11 +302,7 @@ function update_hud() {
 	)
 	crit_rate_el.setAttribute(
 		"value",
-		count_hit
-			? String(
-				round_to(count_hit / count_shoot * 100, 1)
-			)
-			: "0"
+		`${(count_shoot ? round_to(count_hit / count_shoot * 100, 2) : 0)}%`
 	)
 }
 /** @type {GameMode} */

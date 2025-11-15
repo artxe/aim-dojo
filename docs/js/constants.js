@@ -27,8 +27,8 @@ export default /** @type {const} */({
 			score_mul: 250
 		},
 		sens_finder: {
-			target_radius: 20,
-			window_ms: 10_000
+			target_radius: 5,
+			window_ms: 2_000
 		},
 		tracking: {
 			base_speed: .01,

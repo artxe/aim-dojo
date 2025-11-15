@@ -477,25 +477,25 @@ function update_hud() {
 	)
 	accuracy_el.setAttribute(
 		"value",
-		String(
+		`${(
 			sum_shoot_ms
 				? round_to(
 					sum_hit_ms / sum_shoot_ms * 100,
 					2
 				)
 				: 0
-		) + "%"
+		)}%`
 	)
 	crit_rate_el.setAttribute(
 		"value",
-		String(
+		`${(
 			sum_hit_ms
 				? round_to(
 					sum_crit_ms / sum_hit_ms * 100,
 					2
 				)
 				: 0
-		) + "%"
+		)}%`
 	)
 }
 /** @type {GameMode} */

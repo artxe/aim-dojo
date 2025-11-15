@@ -155,9 +155,7 @@ function update_hud() {
 	)
 	accuracy_el.setAttribute(
 		"value",
-		String(
-			count_shoot ? round_to(count_hit / count_shoot * 100, 2) : 0
-		) + "%"
+		`${(count_shoot ? round_to(count_hit / count_shoot * 100, 2) : 0)}%`
 	)
 }
 /** @type {GameMode} */

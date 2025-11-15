@@ -380,15 +380,11 @@ function update_hud() {
 	)
 	accuracy_el.setAttribute(
 		"value",
-		String(
-			count_shoot ? round_to(count_hit / count_shoot * 100, 2) : 0
-		) + "%"
+		`${(count_shoot ? round_to(count_hit / count_shoot * 100, 2) : 0)}%`
 	)
 	crit_rate_el.setAttribute(
 		"value",
-		String(
-			count_hit ? round_to(count_crit / count_hit * 100, 2) : 0
-		) + "%"
+		`${(count_hit ? round_to(count_crit / count_hit * 100, 2) : 0)}%`
 	)
 }
 /** @type {GameMode} */
