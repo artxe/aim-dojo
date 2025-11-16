@@ -6,7 +6,6 @@ no-restricted-syntax: [
 */
 import constants from "../constants.js"
 import {
-	atan,
 	cbrt,
 	convert_deg_across_aspect,
 	log2,
@@ -120,10 +119,7 @@ export function calc_sens_val(hfov_deg, width) {
  * @returns {number}
  */
 export function compute_sens_rad(fov_deg, width) {
-	const { target_zone } = constants.sens
-	return atan(
-		2 * tan(to_rad(fov_deg / 2)) * target_zone / width
-	) / target_zone
+	return 2 * tan(to_rad(fov_deg / 2)) / width
 }
 /**
  * @param {number} fov_deg
