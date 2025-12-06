@@ -112,7 +112,7 @@ function update_game_sens(height, tpp_width_ratio, width) {
 	const operator25 = calc_sens_val(zoom_fov, width)
 	zoom_fov = convert_deg_across_aspect(base_hfov, 5, 1)
 	const operator5 = calc_sens_val(zoom_fov, width)
-	const mc_hipfire = calc_sens_mc(110, height, width)
+	const mc_hipfire = calc_sens_mc(99, height, width)
 	const fn_hipfire = round_to(calc_sens_fn_tpp(80, width), 1)
 	const fn_ads = calc_sens_fn(80, width)
 	const fn_ar = calc_sens_fn(40, width)
