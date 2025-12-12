@@ -11,11 +11,17 @@ export const crosshair_image = (() => {
 	off.height = height
 	off.width = width
 	context_2d.save()
-	off_context.lineWidth = 6
+	off_context.lineWidth = 2
 	off_context.strokeStyle = "lime"
 	off_context.beginPath()
-	off_context.moveTo(0, 3)
-	off_context.lineTo(6, 3)
+	off_context.moveTo(0, 10)
+	off_context.lineTo(8, 10)
+	off_context.moveTo(20, 10)
+	off_context.lineTo(12, 10)
+	off_context.moveTo(10, 0)
+	off_context.lineTo(10, 8)
+	off_context.moveTo(10, 20)
+	off_context.lineTo(10, 12)
 	off_context.stroke()
 	off_context.restore()
 	return off.transferToImageBitmap()

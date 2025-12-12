@@ -237,21 +237,21 @@
 	<body class="bg=#3d2423 c=#eee ff=ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace fs=16px h=100% o=clip pe=none us=none wsp=-.4
 	:has(#bg[activate],#setting-view[active])>#modal-backdrop/z=1
 	:not([locked])_canvas/ft=blur(2px);tt=filter_1s_ease
-	:not([locked])_iframe/ft=brightness(.7)
-	:not([locked])_video/ft=brightness(.7)
+	:not([locked])_iframe/ft=brightness(.85)
+	:not([locked])_video/ft=brightness(.85)
 	:not([locked])_[hud]/none
 	[locked]_[menu]/none
 	[rest]>:not(img,main,#bg)/none">
-		<img alt="pre image for video" class="fixed ft=brightness(.7) h=100% of=cover w=100%" src="./bg.png" />
+		<img alt="pre image for video" class="fixed ft=brightness(.85) h=100% of=cover w=100%" src="./bg.png" />
 		<button class="bf=blur(3px) fixed h=100% pe=auto w=100%" id="modal-backdrop"></button>
 		<div class="fixed h=100% o=hidden pe=auto w=100%
 			:has(iframe[src])>video/none
 			[activate]/br=1;tf=scale(.8)_translateY(-12.5%);z=2
 			[activate]>button/bg=rgba(0,0,0,.8)" id="bg">
-			<video autoplay class="fixed ft=blur(1px)_brightness(.85) h=100% of=cover w=100%" loop muted playsinline>
+			<video autoplay class="fixed ft=blur(1px)_brightness(.7) h=100% of=cover w=100%" loop muted playsinline>
 				<source src="./bg.mp4" type="video/mp4">
 			</video>
-			<iframe class="bd=none fixed ft=blur(1px)_brightness(.85) h=100% w=100% :not([src])/none" id="bg-iframe" sandbox="allow-same-origin allow-scripts"></iframe>
+			<iframe class="bd=none fixed ft=blur(1px)_brightness(.7) h=100% w=100% :not([src])/none" id="bg-iframe" sandbox="allow-same-origin allow-scripts"></iframe>
 		</div>
 		<canvas class="fixed h=100% pe=auto w=100%" id="canvas"></canvas>
 		<main class="c=#ccc fixed l=.5 t=.5 ws=nowrap">
@@ -304,13 +304,13 @@
 				<li class="lh=1.5 :hover>b/c=#9cd2ff :not([active])/none" id="mc">
 					<b class="c=#fff fs=1.5">Minecraft</b>
 					<div>
-						<span class="c=#fff">Hipfire(110): <span class="bold c=#fff" id="mc-hipfire">—</span>%</span>
+						<span class="c=#fff">Hipfire(99): <span class="bold c=#fff" id="mc-hipfire">—</span>%</span>
 					</div>
 				</li>
 				<li class="lh=1.5 :hover>b/c=#9cd2ff :not([active])/none" id="fn">
 					<b class="c=#fff fs=1.5">Fortnite</b>
 					<div>
-						<span class="c=#fff">Hipfire(10 ~ 20m): <span class="bold c=#fff" id="fn-hipfire">—</span>%</span><br>
+						<span class="c=#fff">Hipfire(x0.9): <span class="bold c=#fff" id="fn-hipfire">—</span>%</span><br>
 						<span class="c=#fff">ADS: <span class="bold c=#fff" id="fn-ads">-</span>%</span><br>
 						<span class="c=#fff">AR: <span class="bold c=#fff" id="fn-ar">-</span>%</span><br>
 						Sniper: <span id="fn-sr">-</span>%<br>
@@ -330,7 +330,7 @@
 					<b class="c=#fff fs=1.5">PUBG: BATTLEGROUNDS</b>
 					<div>
 						<span class="c=#fff">FPP FoV: </span><span class="bold c=#fff" id="pubg-fpp">—</span><br>
-						<span class="c=#fff">Hipfire(10 ~ 20m): </span><span class="bold c=#fff" id="pubg-hipfire">—</span><br>
+						<span class="c=#fff">Hipfire(x0.9): </span><span class="bold c=#fff" id="pubg-hipfire">—</span><br>
 						<span class="c=#fff">ADS/Scope: </span><span class="bold c=#fff" id="pubg-ads">—</span><br>
 						<span class="c=#fff">Vertical: </span><span class="bold c=#fff">1</span><br>
 						<span class="c=#fff">x2: </span><span class="bold c=#fff" id="pubg-x2">—</span><br>

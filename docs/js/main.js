@@ -41,7 +41,7 @@ flick_score_el.textContent = localStorage.getItem("flick.best_score") || "0"
 tracking_score_el.textContent = localStorage.getItem("tracking.best_score") || "0"
 twitch_score_el.textContent = localStorage.getItem("twitch.best_score") || "0"
 writing_score_el.textContent = localStorage.getItem("writing.best_score") || "0"
-version_el.textContent = "v1.0.0"
+version_el.textContent = "v1.0.1"
 mode_cycle_btn.setAttribute(
 	"on",
 	state.game.cycle_timeout ? "true" : "false"

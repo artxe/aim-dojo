@@ -1,4 +1,4 @@
-import { normalize_rad, PI, sin, TAU, to_rad } from "./math.js"
+import { normalize_rad, PI, tan, TAU, to_rad } from "./math.js"
 import state from "./state.js"
 /** @returns {void} */
 export function camera_to_2d() {
@@ -23,9 +23,7 @@ export function camera_to_3d() {
  */
 export function px_to_rad(px) {
 	const { fov, width } = state.camera
-	const arc = to_rad(fov)
-	const chord = 2 * sin(arc / 2)
-	return arc / chord * arc * px / width
+	return 2 * tan(to_rad(fov) / 2) / width * px
 }
 /**
  * @param {number} rad
@@ -33,9 +31,7 @@ export function px_to_rad(px) {
  */
 export function rad_to_px(rad) {
 	const { fov, width } = state.camera
-	const arc = to_rad(fov)
-	const chord = 2 * sin(arc / 2)
-	return chord / arc * width * rad / arc
+	return width * rad / (2 * tan(to_rad(fov) / 2))
 }
 /**
  * @param {Target3D} target

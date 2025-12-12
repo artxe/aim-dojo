@@ -340,65 +340,23 @@ export function update_game_sens(
 	sa_hipfire
 ) {
 	set_text_if_changed(val_hipfire_el, val_hipfire)
-	set_text_if_changed(
-		val_spectre_el,
-		round_to(spectre / val_hipfire, 3)
-	)
-	set_text_if_changed(
-		val_vandal_el,
-		round_to(vandal / val_hipfire, 3)
-	)
-	set_text_if_changed(
-		val_guardian_el,
-		round_to(guardian / val_hipfire, 3)
-	)
-	set_text_if_changed(
-		val_marshal_el,
-		round_to(marshal / val_hipfire, 3)
-	)
-	set_text_if_changed(
-		val_operator25_el,
-		round_to(operator25 / val_hipfire, 3)
-	)
-	set_text_if_changed(
-		val_operator5_el,
-		round_to(operator5 / val_hipfire, 3)
-	)
-	set_text_if_changed(mc_hipfire_el, round(mc_hipfire))
+	set_text_if_changed(val_spectre_el, spectre)
+	set_text_if_changed(val_vandal_el, vandal)
+	set_text_if_changed(val_guardian_el, guardian)
+	set_text_if_changed(val_marshal_el, marshal)
+	set_text_if_changed(val_operator25_el, operator25)
+	set_text_if_changed(val_operator5_el, operator5)
+	set_text_if_changed(mc_hipfire_el, mc_hipfire)
 	set_text_if_changed(fn_hipfire_el, fn_hipfire)
-	set_text_if_changed(
-		fn_ads_el,
-		round_to(fn_ads / fn_hipfire * 100, 1)
-	)
-	set_text_if_changed(
-		fn_ar_el,
-		round_to(fn_ar / fn_hipfire * 100, 1)
-	)
-	set_text_if_changed(
-		fn_sr_el,
-		round_to(fn_sr / fn_hipfire * 100, 1)
-	)
+	set_text_if_changed(fn_ads_el, fn_ads)
+	set_text_if_changed(fn_ar_el, fn_ar)
+	set_text_if_changed(fn_sr_el, fn_sr)
 	set_text_if_changed(cs2_hipfire_el, cs2_hipfire)
-	set_text_if_changed(
-		cs2_aug_el,
-		round_to(cs2_45 / cs2_hipfire, 2)
-	)
-	set_text_if_changed(
-		cs2_auto1_el,
-		round_to(cs2_40 / cs2_hipfire, 2)
-	)
-	set_text_if_changed(
-		cs2_auto2_el,
-		round_to(cs2_15 / cs2_hipfire, 2)
-	)
-	set_text_if_changed(
-		cs2_awp1_el,
-		round_to(cs2_40 / cs2_hipfire, 2)
-	)
-	set_text_if_changed(
-		cs2_awp2_el,
-		round_to(cs2_10 / cs2_hipfire, 2)
-	)
+	set_text_if_changed(cs2_aug_el, cs2_45)
+	set_text_if_changed(cs2_auto1_el, cs2_40)
+	set_text_if_changed(cs2_auto2_el, cs2_15)
+	set_text_if_changed(cs2_awp1_el, cs2_40)
+	set_text_if_changed(cs2_awp2_el, cs2_10)
 	set_text_if_changed(
 		pubg_hipfire_el,
 		`${round_to(pubg_hipfire, 6)}, ${round_to(calc_pubg_converted(pubg_hipfire), 6)}`
@@ -436,17 +394,8 @@ export function update_game_sens(
 		`${round_to(pubg_x15, 6)}, ${round_to(calc_pubg_converted(pubg_x15), 6)}`
 	)
 	set_text_if_changed(ow_hipfire_el, ow_hipfire)
-	set_text_if_changed(
-		ow_widow_el,
-		round_to(widow / ow_hipfire * 100, 2)
-	)
-	set_text_if_changed(
-		ow_ashe_el,
-		round_to(ashe / ow_hipfire * 100, 2)
-	)
-	set_text_if_changed(
-		ow_freja_el,
-		round_to(freja / ow_hipfire * 100, 2)
-	)
+	set_text_if_changed(ow_widow_el, widow)
+	set_text_if_changed(ow_ashe_el, ashe)
+	set_text_if_changed(ow_freja_el, freja)
 	set_text_if_changed(sa_hipfire_el, round(sa_hipfire))
 }

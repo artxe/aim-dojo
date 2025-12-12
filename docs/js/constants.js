@@ -1,7 +1,7 @@
 
 export default /** @type {const} */({
 	audio: { volume: .5 },
-	crosshair: { height: 6, width: 6 },
+	crosshair: { height: 20, width: 20 },
 	grid: {
 		major_every: 9,
 		size: 80,
@@ -18,7 +18,7 @@ export default /** @type {const} */({
 		aiming: {
 			base_speed: .005,
 			required_dwell_ms: 100,
-			score_mul: 1200
+			score_mul: 1500
 		},
 		flick: {
 			first_dist_mul: 4,
@@ -32,19 +32,19 @@ export default /** @type {const} */({
 			move_change_interval_ms: 500,
 			size_change_interval_ms: 1_000,
 			size_lerp_ms: 100,
-			size_steps: [ 1, 1, 2, 3, 5, 8 ],
+			size_steps: [ 1, 2, 3, 5, 8 ],
 			speed_lerp_ms: 100,
-			speed_steps: [ 1, 1, 2 ]
+			speed_steps: [ 1, 1, 1.5 ]
 		},
 		twitch: {
 			height_div: 6,
-			score_mul: 1.5,
+			score_mul: 2.5,
 			target_hide_duration_ms: 500,
 			target_show_duration_ms: 1_000,
 			width_div: 3
 		},
 		writing: {
-			line_width: 4,
+			line_width: 2,
 			offset_x: 10,
 			text: `Veni, vidi, vici.
 Give me liberty, or give me death!
@@ -58,10 +58,6 @@ In the middle of difficulty lies opportunity.
 Stay hungry, stay foolish.
 Yes we can.`
 		}
-	},
-	sens: {
-		target_zone: 240,
-		tpp_target_meter: [ 10, 20 ]
 	},
 	stats: { window_ms: 30_000 },
 	target: { base_radius: 5 }

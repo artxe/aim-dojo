@@ -1,5 +1,6 @@
 import {
 	convert_deg_across_aspect,
+	round,
 	round_to
 } from "./math.js"
 import { calc_pubg_fpp_fov } from "./sens/calc_pubg.js"
@@ -27,11 +28,7 @@ onmessage = function({ data }) {
 			data.width
 		)
 	} else if (fn == "update_game_sens") {
-		update_game_sens(
-			data.height,
-			data.tpp_width_ratio,
-			data.width
-		)
+		update_game_sens(data.height, data.width)
 	} else {
 		throw Error(fn)
 	}
@@ -90,41 +87,81 @@ export function check_writing_stats(
 }
 /**
  * @param {number} height
- * @param {number} tpp_width_ratio
  * @param {number} width
  * @returns {void}
  */
-function update_game_sens(height, tpp_width_ratio, width) {
+function update_game_sens(height, width) {
 	const base_hfov = 103
 	const val_hipfire = round_to(
 		calc_sens_val(base_hfov, width),
 		3
 	)
 	let zoom_fov = convert_deg_across_aspect(base_hfov, 1.15, 1)
-	const spectre = calc_sens_val(zoom_fov, width)
+	const spectre = round_to(
+		calc_sens_val(zoom_fov, width) / val_hipfire,
+		3
+	)
 	zoom_fov = convert_deg_across_aspect(base_hfov, 1.25, 1)
-	const vandal = calc_sens_val(zoom_fov, width)
+	const vandal = round_to(
+		calc_sens_val(zoom_fov, width) / val_hipfire,
+		3
+	)
 	zoom_fov = convert_deg_across_aspect(base_hfov, 1.5, 1)
-	const guardian = calc_sens_val(zoom_fov, width)
+	const guardian = round_to(
+		calc_sens_val(zoom_fov, width) / val_hipfire,
+		3
+	)
 	zoom_fov = convert_deg_across_aspect(base_hfov, 3.5, 1)
-	const marshal = calc_sens_val(zoom_fov, width)
+	const marshal = round_to(
+		calc_sens_val(zoom_fov, width) / val_hipfire,
+		3
+	)
 	zoom_fov = convert_deg_across_aspect(base_hfov, 2.5, 1)
-	const operator25 = calc_sens_val(zoom_fov, width)
+	const operator25 = round_to(
+		calc_sens_val(zoom_fov, width) / val_hipfire,
+		3
+	)
 	zoom_fov = convert_deg_across_aspect(base_hfov, 5, 1)
-	const operator5 = calc_sens_val(zoom_fov, width)
-	const mc_hipfire = calc_sens_mc(110, height, width)
+	const operator5 = round_to(
+		calc_sens_val(zoom_fov, width) / val_hipfire,
+		3
+	)
+	const mc_hipfire = round(
+		calc_sens_mc(99, height, width)
+	)
 	const fn_hipfire = round_to(calc_sens_fn_tpp(80, width), 1)
-	const fn_ads = calc_sens_fn(80, width)
-	const fn_ar = calc_sens_fn(40, width)
-	const fn_sr = calc_sens_fn(15, width)
+	const fn_ads = round_to(
+		calc_sens_fn(80, width) / fn_hipfire * 100,
+		1
+	)
+	const fn_ar = round_to(
+		calc_sens_fn(40, width) / fn_hipfire * 100,
+		1
+	)
+	const fn_sr = round_to(
+		calc_sens_fn(15, width) / fn_hipfire * 100,
+		1
+	)
 	const cs2_hipfire = round_to(
 		calc_sens_cs2(90, height, width),
 		2
 	)
-	const cs2_45 = calc_sens_cs2(45, height, width)
-	const cs2_40 = calc_sens_cs2(40, height, width)
-	const cs2_15 = calc_sens_cs2(15, height, width)
-	const cs2_10 = calc_sens_cs2(10, height, width)
+	const cs2_45 = round_to(
+		calc_sens_cs2(45, height, width) / cs2_hipfire,
+		2
+	)
+	const cs2_40 = round_to(
+		calc_sens_cs2(40, height, width) / cs2_hipfire,
+		2
+	)
+	const cs2_15 = round_to(
+		calc_sens_cs2(15, height, width) / cs2_hipfire,
+		2
+	)
+	const cs2_10 = round_to(
+		calc_sens_cs2(10, height, width) / cs2_hipfire,
+		2
+	)
 	const pubg_fov = 80
 	const pubg_hipfire = calc_sens_pubg_tpp(pubg_fov, width)
 	const pubg_fpp_fov = calc_pubg_fpp_fov(pubg_hipfire, width)
@@ -139,15 +176,24 @@ function update_game_sens(height, tpp_width_ratio, width) {
 		calc_sens_ow(base_hfov, width),
 		2
 	)
-	const widow = calc_sens_ow(
-		convert_deg_across_aspect(30, height, width),
-		width
+	const widow = round_to(
+		calc_sens_ow(
+			convert_deg_across_aspect(30, height, width),
+			width
+		) / ow_hipfire * 100,
+		2
 	)
-	const ashe = calc_sens_ow(
-		convert_deg_across_aspect(40, height, width),
-		width
+	const ashe = round_to(
+		calc_sens_ow(
+			convert_deg_across_aspect(40, height, width),
+			width
+		) / ow_hipfire * 100,
+		2
 	)
-	const freja = calc_sens_ow(76, width)
+	const freja = round_to(
+		calc_sens_ow(76, width) / ow_hipfire * 100,
+		2
+	)
 	const sa_hipfire = calc_sens_sa(height)
 	postMessage(
 		[

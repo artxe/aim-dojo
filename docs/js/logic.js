@@ -81,7 +81,7 @@ export function update_fov() {
 	} else if (sens == "lol") {
 		state.camera.fov = 103
 	} else if (sens == "mc") {
-		state.camera.fov = convert_deg_across_aspect(110, height, width)
+		state.camera.fov = convert_deg_across_aspect(99, height, width)
 	} else if (sens == "ow") {
 		if (mb_right) {
 			state.camera.fov = convert_deg_across_aspect(30, height, width)

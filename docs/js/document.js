@@ -5,7 +5,6 @@ export const bg_el = /** @type {HTMLDivElement} */(document.getElementById("bg")
 export const bg_iframe_el = /** @type {HTMLIFrameElement} */(document.getElementById("bg-iframe"))/**/
 export const modal_backdrop_btn = /** @type {HTMLButtonElement} */(document.getElementById("modal-backdrop"))/**/
 export const canvas_el = /** @type {HTMLCanvasElement} */(document.getElementById("canvas"))/**/
-
 /**
  * Game Sens
  */
@@ -51,19 +50,16 @@ export const ow_ashe_el = /** @type {HTMLSpanElement} */(document.getElementById
 export const ow_freja_el = /** @type {HTMLSpanElement} */(document.getElementById("ow-freja"))/**/
 export const sa_el = /** @type {HTMLLIElement} */(document.getElementById("sa"))/**/
 export const sa_hipfire_el = /** @type {HTMLLIElement} */(document.getElementById("sa-hipfire"))/**/
-
 /**
  * Stat HUD
  */
 export const peak_score_el = /** @type {HTMLSpanElement} */(document.getElementById("peak-score"))/**/
 export const accuracy_el = /** @type {HTMLSpanElement} */(document.getElementById("accuracy"))/**/
 export const crit_rate_el = /** @type {HTMLSpanElement} */(document.getElementById("crit-rate"))/**/
-
 /**
  * Timer
  */
 export const timer_el = /** @type {HTMLSpanElement} */(document.getElementById("timer"))/**/
-
 /**
  * Menu
  */
@@ -78,7 +74,6 @@ export const twitch_score_el = /** @type {HTMLSpanElement} */(document.getElemen
 export const writing_btn = /** @type {HTMLButtonElement} */(document.getElementById("writing"))/**/
 export const writing_score_el = /** @type {HTMLSpanElement} */(document.getElementById("writing-score"))/**/
 export const setting_btn = /** @type {HTMLButtonElement} */(document.getElementById("setting"))/**/
-
 /**
  * Menu - Setting
  */
@@ -112,7 +107,6 @@ export const dpi_norm_sa_sens_input = /** @type {HTMLInputElement} */(document.g
 export const dpi_norm_sa_fov_btn = /** @type {HTMLButtonElement} */(document.getElementById("dpi-norm-sa-fov"))/**/
 export const dpi_norm_result_el = /** @type {HTMLSpanElement} */(document.getElementById("dpi-norm-result"))/**/
 export const copy_apo_filter_btn = /** @type {HTMLButtonElement} */(document.getElementById("copy-apo-filter"))/**/
-
 /**
  * Toast
  */
