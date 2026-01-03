@@ -8,7 +8,7 @@
 		"eslint-plugin-lube": "^0.5.1",
 		"serve": "^14.2.5",
 		"typescript": "^5.9.3",
-		"typescript-eslint": "^8.50.1"
+		"typescript-eslint": "^8.51.0"
 	},
 	"keywords": [],
 	"name": "aim-dojo",
