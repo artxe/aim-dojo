@@ -178,7 +178,7 @@ function on_frame() {
 	}
 	const dt = now_ms - prev_ms
 	if (dimension == "2d") {
-		const speed = target.r * state.mode.tracking.move.speed * state.mode.tracking.move.direction
+		const speed = target.r * state.mode.tracking.move.speed
 		target.x += speed * dt
 		if (size_lerp.active) {
 			const p = clamp(
@@ -222,7 +222,7 @@ function on_frame() {
 			speed_lerp.active = true
 			speed_lerp.from = state.mode.tracking.move.speed
 			speed_lerp.start_ms = now_ms
-			speed_lerp.to = base_speed * speed_steps[index]
+			speed_lerp.to = base_speed * speed_steps[index] * state.mode.tracking.move.direction
 			state.mode.tracking.next_change_move_ms = now_ms + constants.mode.tracking.move_change_interval_ms
 		}
 		const theta = to_rad(
@@ -233,32 +233,8 @@ function on_frame() {
 		target.cy = target.y + cd * sin(theta)
 	} else {
 		const base_radius_rad = px_to_rad(base_radius)
-		const speed = target_3d.r * state.mode.tracking.move.speed * state.mode.tracking.move.direction
+		const speed = target_3d.r * state.mode.tracking.move.speed
 		target_3d.y += speed * dt
-		if (speed_lerp.active) {
-			const p = clamp(
-				0,
-				(now_ms - speed_lerp.start_ms) / speed_lerp_ms,
-				1
-			)
-			if (p == 1) {
-				speed_lerp.active = false
-				state.mode.tracking.move.speed = speed_lerp.to
-			} else {
-				state.mode.tracking.move.speed = lerp(speed_lerp.from, speed_lerp.to, p)
-			}
-		} else if (now_ms >= state.mode.tracking.next_change_move_ms) {
-			if (random() < (state.mode.tracking.move.direction_change_rate += .2)) {
-				state.mode.tracking.move.direction *= -1
-				state.mode.tracking.move.direction_change_rate = 0
-			}
-			const index = (random() * speed_steps.length) | 0
-			speed_lerp.active = true
-			speed_lerp.from = state.mode.tracking.move.speed
-			speed_lerp.start_ms = now_ms
-			speed_lerp.to = base_speed * speed_steps[index]
-			state.mode.tracking.next_change_move_ms = now_ms + constants.mode.tracking.move_change_interval_ms
-		}
 		if (size_lerp.active) {
 			const p = clamp(
 				0,
@@ -281,6 +257,30 @@ function on_frame() {
 				base_radius * size_steps[index]
 			)
 			state.mode.tracking.next_change_size_ms = now_ms + constants.mode.tracking.size_change_interval_ms
+		}
+		if (speed_lerp.active) {
+			const p = clamp(
+				0,
+				(now_ms - speed_lerp.start_ms) / speed_lerp_ms,
+				1
+			)
+			if (p == 1) {
+				speed_lerp.active = false
+				state.mode.tracking.move.speed = speed_lerp.to
+			} else {
+				state.mode.tracking.move.speed = lerp(speed_lerp.from, speed_lerp.to, p)
+			}
+		} else if (now_ms >= state.mode.tracking.next_change_move_ms) {
+			if (random() < (state.mode.tracking.move.direction_change_rate += .2)) {
+				state.mode.tracking.move.direction *= -1
+				state.mode.tracking.move.direction_change_rate = 0
+			}
+			const index = (random() * speed_steps.length) | 0
+			speed_lerp.active = true
+			speed_lerp.from = state.mode.tracking.move.speed
+			speed_lerp.start_ms = now_ms
+			speed_lerp.to = base_speed * speed_steps[index] * state.mode.tracking.move.direction
+			state.mode.tracking.next_change_move_ms = now_ms + constants.mode.tracking.move_change_interval_ms
 		}
 		const theta = to_rad(
 			state.mode.tracking.move.direction * 30 - 90

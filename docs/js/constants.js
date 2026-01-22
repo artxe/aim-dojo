@@ -34,9 +34,9 @@ export default /** @type {const} */({
 			impact_interval_s: .1,
 			move_change_interval_ms: 500,
 			size_change_interval_ms: 1_000,
-			size_lerp_ms: 100,
+			size_lerp_ms: 250,
 			size_steps: [ 1, 2, 3, 5 ],
-			speed_lerp_ms: 100,
+			speed_lerp_ms: 150,
 			speed_steps: [ 0.75, 1, 1.25 ]
 		},
 		twitch: {
@@ -52,9 +52,9 @@ export default /** @type {const} */({
 			move_change_interval_ms: 500,
 			pitch_limit: 30,
 			size_change_interval_ms: 1_000,
-			size_lerp_ms: 100,
+			size_lerp_ms: 250,
 			size_steps: [ 1, 2, 3, 5 ],
-			speed_lerp_ms: 100,
+			speed_lerp_ms: 150,
 			speed_steps: [ 0.5, 0.75, 1 ],
 			v_speed_steps: [ 0, 0.75, 1, 1.25 ]
 		},

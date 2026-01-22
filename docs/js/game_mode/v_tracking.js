@@ -16,6 +16,7 @@ import {
 } from "../document.js"
 import mat4 from "../mat4.js"
 import {
+	abs,
 	atan,
 	calc_core_radius,
 	clamp,
@@ -184,14 +185,18 @@ function on_frame() {
 	}
 	const dt = now_ms - prev_ms
 	if (dimension == "2d") {
-		const speed = target.r * state.mode.v_tracking.move.speed * state.mode.v_tracking.move.direction
-		const v_speed = target.r * state.mode.v_tracking.v_move.speed * state.mode.v_tracking.v_move.direction
+		const speed = target.r * state.mode.v_tracking.move.speed
+		const v_speed = target.r * state.mode.v_tracking.v_move.speed
 		target.x += speed * dt
 		target.y += v_speed * dt
 		const range_px = rad_to_px(to_rad(pitch_limit))
 		if (target.y >= range_px || target.y <= -range_px) {
 			state.mode.v_tracking.v_move.direction = target.y >= range_px ? -1 : 1
 			state.mode.v_tracking.v_move.direction_change_rate = 0
+			state.mode.v_tracking.v_move.speed = state.mode.v_tracking.v_move.direction
+				* abs(
+					state.mode.v_tracking.v_move.speed
+				)
 			state.mode.v_tracking.next_change_v_move_ms = now_ms + constants.mode.v_tracking.move_change_interval_ms
 		}
 		if (size_lerp.active) {
@@ -236,7 +241,7 @@ function on_frame() {
 			speed_lerp.active = true
 			speed_lerp.from = state.mode.v_tracking.move.speed
 			speed_lerp.start_ms = now_ms
-			speed_lerp.to = base_speed * speed_steps[index]
+			speed_lerp.to = base_speed * speed_steps[index] * state.mode.v_tracking.move.direction
 			state.mode.v_tracking.next_change_move_ms = now_ms + constants.mode.v_tracking.move_change_interval_ms
 		}
 		if (v_speed_lerp.active) {
@@ -264,7 +269,7 @@ function on_frame() {
 			v_speed_lerp.active = true
 			v_speed_lerp.from = state.mode.v_tracking.v_move.speed
 			v_speed_lerp.start_ms = now_ms
-			v_speed_lerp.to = base_speed * v_speed_steps[index]
+			v_speed_lerp.to = base_speed * v_speed_steps[index] * state.mode.v_tracking.v_move.direction
 			state.mode.v_tracking.next_change_v_move_ms = now_ms + constants.mode.v_tracking.move_change_interval_ms
 		}
 		const theta = to_rad(
@@ -275,14 +280,18 @@ function on_frame() {
 		target.cy = target.y + cd * sin(theta)
 	} else {
 		const base_radius_rad = px_to_rad(base_radius)
-		const speed = target_3d.r * state.mode.v_tracking.move.speed * state.mode.v_tracking.move.direction
-		const v_speed = target_3d.r * state.mode.v_tracking.v_move.speed * state.mode.v_tracking.v_move.direction
+		const speed = target_3d.r * state.mode.v_tracking.move.speed
+		const v_speed = target_3d.r * state.mode.v_tracking.v_move.speed
 		target_3d.y += speed * dt
 		target_3d.p += v_speed * dt
 		const range_rad = to_rad(pitch_limit)
 		if (target_3d.p >= range_rad || target_3d.p <= -range_rad) {
 			state.mode.v_tracking.v_move.direction = target_3d.p >= range_rad ? -1 : 1
 			state.mode.v_tracking.v_move.direction_change_rate = 0
+			state.mode.v_tracking.v_move.speed = state.mode.v_tracking.v_move.direction
+				* abs(
+					state.mode.v_tracking.v_move.speed
+				)
 			state.mode.v_tracking.next_change_v_move_ms = now_ms + constants.mode.v_tracking.move_change_interval_ms
 		}
 		if (size_lerp.active) {
@@ -329,7 +338,7 @@ function on_frame() {
 			speed_lerp.active = true
 			speed_lerp.from = state.mode.v_tracking.move.speed
 			speed_lerp.start_ms = now_ms
-			speed_lerp.to = base_speed * speed_steps[index]
+			speed_lerp.to = base_speed * speed_steps[index] * state.mode.v_tracking.move.direction
 			state.mode.v_tracking.next_change_move_ms = now_ms + constants.mode.v_tracking.move_change_interval_ms
 		}
 		if (v_speed_lerp.active) {
@@ -357,7 +366,7 @@ function on_frame() {
 			v_speed_lerp.active = true
 			v_speed_lerp.from = state.mode.v_tracking.v_move.speed
 			speed_lerp.start_ms = now_ms
-			v_speed_lerp.to = base_speed * v_speed_steps[index]
+			v_speed_lerp.to = base_speed * v_speed_steps[index] * state.mode.v_tracking.v_move.direction
 			state.mode.v_tracking.next_change_v_move_ms = now_ms + constants.mode.v_tracking.move_change_interval_ms
 		}
 		const theta = to_rad(
