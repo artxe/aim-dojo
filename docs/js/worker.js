@@ -161,10 +161,10 @@ function update_game_sens(height, width) {
 	const pubg_fov = 80
 	const pubg_hipfire = calc_sens_pubg(pubg_fov, width)
 	const pubg_fpp_fov = calc_pubg_fpp_fov(pubg_hipfire, width)
-	const pubg_ads = pubg_hipfire
+	const pubg_ads = calc_sens_pubg(pubg_fov / 1.5, width)
 	const pubg_x2 = calc_sens_pubg(pubg_fov / 2, width)
 	const pubg_x3 = calc_sens_pubg(pubg_fov / 3, width)
-	const pubg_x4 = calc_sens_pubg(pubg_fov / 4, width)
+	const pubg_x4 = calc_sens_pubg(pubg_fov / 4 - 1, width)
 	const pubg_x6 = calc_sens_pubg(pubg_fov / 6, width)
 	const pubg_x8 = calc_sens_pubg(pubg_fov / 8, width)
 	const pubg_x15 = calc_sens_pubg(pubg_fov / 15, width)
