@@ -15,8 +15,12 @@ export const crosshair_image = (() => {
 	off_context.strokeStyle = "lime"
 	off_context.beginPath()
 	off_context.moveTo(width / 2, 0)
+	off_context.lineTo(width / 2, height / 2 - 1)
+	off_context.moveTo(width / 2, height / 2 + 1)
 	off_context.lineTo(width / 2, height)
 	off_context.moveTo(0, height / 2)
+	off_context.lineTo(width / 2 - 1, height / 2)
+	off_context.moveTo(width / 2 + 1, height / 2)
 	off_context.lineTo(width, height / 2)
 	off_context.stroke()
 	off_context.restore()
