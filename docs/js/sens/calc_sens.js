@@ -5,9 +5,10 @@ no-restricted-syntax: [
 ]
 */
 import {
-	atan,
 	cbrt,
 	convert_deg_across_aspect,
+	GL64_W,
+	GL64_X,
 	log2,
 	tan,
 	to_rad
@@ -95,9 +96,17 @@ export function calc_sens_val(hfov_deg, width) {
  */
 export function compute_sens_rad(fov_deg, width) {
 	const fov = to_rad(fov_deg)
-	const half = width / 2
-	const f = half / tan(fov / 2)
-	const center = 1 / f
-	const edge = atan(half / f) / half
-	return (center + edge) / 2
+	const h = width / 2
+	const f = h / tan(fov / 2)
+	let num = 0
+	let den = 0
+	for (let i = 0; i < 64; i++) {
+		const m = 0.5 * (GL64_X[i] + 1)
+		const w = 0.5 * GL64_W[i]
+		const theta = Math.atan(m * h / f)
+		const s = theta / (m * h)
+		num += w * s * theta
+		den += w * theta
+	}
+	return num / den
 }
