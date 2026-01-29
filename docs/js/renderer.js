@@ -7,7 +7,7 @@ export const context_2d = /** @type {CanvasRenderingContext2D} */(canvas_el.getC
 const off = new OffscreenCanvas(1, 1)
 const off_context = /** @type {OffscreenCanvasRenderingContext2D} */(off.getContext("2d"))/**/
 export const crosshair_image = (() => {
-	const { height, width } = constants.crosshair
+	const { height, gap, width } = constants.crosshair
 	off.height = height
 	off.width = width
 	context_2d.save()
@@ -15,12 +15,12 @@ export const crosshair_image = (() => {
 	off_context.strokeStyle = "lime"
 	off_context.beginPath()
 	off_context.moveTo(width / 2, 0)
-	off_context.lineTo(width / 2, height / 2 - 1)
-	off_context.moveTo(width / 2, height / 2 + 1)
+	off_context.lineTo(width / 2, height / 2 - gap)
+	off_context.moveTo(width / 2, height / 2 + gap)
 	off_context.lineTo(width / 2, height)
 	off_context.moveTo(0, height / 2)
-	off_context.lineTo(width / 2 - 1, height / 2)
-	off_context.moveTo(width / 2 + 1, height / 2)
+	off_context.lineTo(width / 2 - gap, height / 2)
+	off_context.moveTo(width / 2 + gap, height / 2)
 	off_context.lineTo(width, height / 2)
 	off_context.stroke()
 	off_context.restore()
