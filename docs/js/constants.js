@@ -1,7 +1,7 @@
 
 export default /** @type {const} */({
 	audio: { volume: .5 },
-	crosshair: { height: 40, gap: 2, width: 40 },
+	crosshair: { height: 24, gap: 2, width: 24 },
 	grid: {
 		major_every: 9,
 		size: 80,
