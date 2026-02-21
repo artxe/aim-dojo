@@ -14,6 +14,8 @@ import {
 	copy_apo_filter_btn,
 	flick_score_el,
 	modal_backdrop_btn,
+	recommend_dpi_el,
+	recommend_v_sens_el,
 	save_bg_btn,
 	setting_view_el,
 	toast_el,
@@ -22,12 +24,19 @@ import {
 	v_tracking_score_el,
 	writing_score_el
 } from "../document.js"
+import { round, round_to, sqrt } from "../math.js"
 import state from "../state.js"
 import { send_toast, set_text_if_changed } from "./index.js"
 modal_backdrop_btn.addEventListener("click", on_click_modal_backdrop)
 bg_type_input.addEventListener("change", on_change_bg_type)
 activate_bg_btn.addEventListener("click", on_click_activate_bg)
 save_bg_btn.addEventListener("click", on_click_save_bg)
+recommend_dpi_el.textContent = String(
+	round(
+		5 * 1920 / 24 / (16 / sqrt(16 ** 2 + 9 ** 2))
+	)
+)
+recommend_v_sens_el.textContent = String(round_to(16 / 9, 5))
 copy_apo_filter_btn.addEventListener(
 	"click",
 	on_click_copy_apo_filter
