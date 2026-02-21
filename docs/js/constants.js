@@ -3,8 +3,8 @@ export default /** @type {const} */({
 	audio: { volume: .5 },
 	crosshair: {
 		color: "#ff0",
-		height: 32,
-		gap: 2,
+		height: 24,
+		gap: 6,
 		width: 2
 	},
 	grid: {
