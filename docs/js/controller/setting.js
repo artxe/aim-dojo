@@ -24,7 +24,7 @@ import {
 	v_tracking_score_el,
 	writing_score_el
 } from "../document.js"
-import { round, round_to, sqrt } from "../math.js"
+import { round, sqrt } from "../math.js"
 import state from "../state.js"
 import { send_toast, set_text_if_changed } from "./index.js"
 modal_backdrop_btn.addEventListener("click", on_click_modal_backdrop)
@@ -36,7 +36,7 @@ recommend_dpi_el.textContent = String(
 		5 * 1920 / 24 / (16 / sqrt(16 ** 2 + 9 ** 2))
 	)
 )
-recommend_v_sens_el.textContent = String(round_to(16 / 9, 5))
+recommend_v_sens_el.textContent = "1.8"
 copy_apo_filter_btn.addEventListener(
 	"click",
 	on_click_copy_apo_filter
