@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"allowSyntheticDefaultImports": true,
+		"allowUmdGlobalAccess": true,
+		"checkJs": true,
+		"exactOptionalPropertyTypes": true,
+		"lib": [ "ES2024", "DOM", "DOM.Iterable" ],
+		"module": "nodenext",
+		"moduleResolution": "nodenext",
+		"noEmit": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"target": "esnext"
+	},
+	"exclude": [ "docs/lib/" ],
+	"ts-node": { "esm": true }
+}

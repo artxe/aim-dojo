@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<link href="https://artxe.github.io/aim-dojo/" rel="canonical">
+		<link href="https://artxe.github.io/aim-dojo/bg.png" rel="icon">
+		<meta charset="utf-8" />
+		<meta content="width=device-width, initial-scale=1" name="viewport" />
+		<meta content="AIM DOJO — Unify mouse sensitivity across CS2, VALORANT, Overwatch, PUBG, Fortnite, LoL, and Minecraft to keep aim consistent between training and real matches." name="description">
+		<meta content="index,follow" name="robots">
+		<meta content="#3d2423" name="theme-color">
+		<meta content="summary_large_image" name="twitter:card">
+		<meta content="AIM DOJO — FPS Aim Trainer" name="twitter:title">
+		<meta content="AIM DOJO — Unify mouse sensitivity across CS2, VALORANT, Overwatch, PUBG, Fortnite, LoL, and Minecraft to keep aim consistent between training and real matches." name="twitter:description">
+		<meta content="https://artxe.github.io/aim-dojo/bg.png" name="twitter:image">
+		<meta content="AIM DOJO — Unify mouse sensitivity across CS2, VALORANT, Overwatch, PUBG, Fortnite, LoL, and Minecraft to keep aim consistent between training and real matches." property="og:description">
+		<meta content="https://artxe.github.io/aim-dojo/bg.png" property="og:image">
+		<meta content="AIM DOJO — FPS Aim Trainer" property="og:title">
+		<meta content="website" property="og:type">
+		<meta content="https://artxe.github.io/aim-dojo/" property="og:url">
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "SoftwareApplication",
+				"name": "AIM DOJO",
+				"applicationCategory": "GameApplication",
+				"operatingSystem": "Web",
+				"url": "https://artxe.github.io/aim-dojo/",
+				"image": "https://artxe.github.io/aim-dojo/bg.png",
+				"description": "AIM DOJO — Unify mouse sensitivity across CS2, VALORANT, Overwatch, PUBG, Fortnite, LoL, and Minecraft to keep aim consistent between training and real matches.",
+				"offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+			}
+		</script>
+		<script src="./lib/click-css.min.js"></script>
+		<script src="./js/main.js" type="module"></script>
+		<script>
+			// @ts-check
+			document.addEventListener(
+				"DOMContentLoaded",
+				function() {
+					const {
+						get: get_input_value,
+						set: set_input_value
+					} = /** @type {{ get(): *, set(v: *): void }} */(Object.getOwnPropertyDescriptor(
+						HTMLInputElement.prototype,
+						"value"
+					))/**/
+					const { max, min } = Math
+					const radio_set = new Set()
+					for (const radio of document.querySelectorAll("input[type='radio']")) {
+						radio_set.add(radio.getAttribute("name"))
+					}
+					for (const radio_name of radio_set) {
+						const radio_input = document.getElementById(radio_name)
+						Object.defineProperty(
+							radio_input,
+							"value",
+							{
+								get() {
+									return get_input_value.call(this)
+								},
+								set(value) {
+									const radio_item = this.parentNode.querySelector(
+										`input[name='${radio_name}'][value='${value}']`
+									)
+									if (radio_item && this.value != value) {
+										radio_item.checked = true
+										set_input_value.call(this, value)
+										this.dispatchEvent(new Event("change"))
+									}
+								}
+							}
+						)
+					}
+					for (const selector_btn of document.querySelectorAll(
+						"[onclick='selector_button_onclick.call(this)']"
+					)) {
+						Object.defineProperty(
+							selector_btn,
+							"value",
+							{
+								get() {
+									return this.getAttribute("value")
+								},
+								set(value) {
+									const option = this.nextElementSibling.querySelector(`li[value="${value}"]`)
+									if (option && this.value != value) {
+										this.setAttribute("value", value)
+										this.textContent = option.textContent
+										this.dispatchEvent(new Event("change"))
+									}
+								}
+							}
+						)
+					}
+					for (const number_input of /** @type {NodeListOf<HTMLInputElement>} */(document.querySelectorAll("input[min][max]"))/**/) {
+						const max_str = /** @type {string} */(number_input.getAttribute("max"))/**/
+						const length = max_str.includes(".") ? max_str.indexOf(".") : max_str.length
+						const decimals = Number(
+							number_input.getAttribute("decimals")
+						)
+						const min_value = Number(
+							number_input.getAttribute("min")
+						)
+						const max_value = Number(
+							number_input.getAttribute("max")
+						)
+						if (!number_input.value) {
+							number_input.value = String(min_value)
+						}
+						number_input.addEventListener(
+							"blur",
+							/**
+							 * @param {Event & { target: HTMLInputElement }} ev
+							 * @returns {void}
+							 */
+							function({ target }) {
+								const new_value = Number(target.value)
+								if (new_value > max_value) {
+									target.value = String(max_value)
+								} else if (new_value < min_value) {
+									target.value =  String(min_value)
+								} else if (String(new_value) != target.value) {
+									target.value = String(new_value)
+								}
+							}
+						)
+						number_input.addEventListener(
+							"change",
+							/**
+							 * @param {Event & { target: HTMLInputElement }} ev
+							 * @returns {void}
+							 */
+							function({ target }) {
+								let new_value = target.value.replace(/[^\d.]/g, "").replace(/^0+(?=\d)/, "")
+								if (decimals && new_value.includes(".")) {
+									if (new_value.indexOf(".") != new_value.length - 1) {
+										const [ integer, decimal ] =new_value.split(".")
+										new_value = integer.substring(0, length) + "." + decimal.substring(0, decimals)
+									}
+								} else {
+									new_value = new_value.substring(0, length)
+								}
+								if (new_value != target.value) {
+									target.value = new_value
+								}
+							}
+						)
+						number_input.addEventListener(
+							"keydown",
+							/**
+							 * @param {Event & { code: string, target: HTMLInputElement }} ev
+							 * @returns {void}
+							 */
+							function({ code, target }) {
+								if (code == "ArrowDown") {
+									target.value = max(
+										Number(target.value) - 10 ** -decimals,
+										min_value
+									).toFixed(decimals)
+								} else if (code == "ArrowUp") {
+									target.value = min(
+										Number(target.value) + 10 ** -decimals,
+										max_value
+									).toFixed(decimals)
+										.replace(/(?<=\.\d*)0+$/, "")
+								}
+								this.dispatchEvent(new Event("change"))
+							}
+						)
+					}
+					for (const el of /** @type {NodeListOf<HTMLDivElement>} */(document.querySelectorAll("[dragover]"))/**/) {
+						el.addEventListener(
+							"dragenter",
+							/**
+							 * @param {Event & { target: Element }} ev
+							 * @returns {void}
+							 */
+							function({ target }) {
+								target.setAttribute("dragover", "true")
+							}
+						)
+						el.addEventListener(
+							"dragleave",
+							/**
+							 * @param {Event & { target: Element }} ev
+							 * @returns {void}
+							 */
+							function({ target }) {
+								target.setAttribute("dragover", "false")
+							}
+						)
+						el.addEventListener(
+							"dragover",
+							ev => ev.preventDefault()
+						)
+						el.addEventListener(
+							"drop",
+							/**
+							 * @param {Event & { target: Element }} ev
+							 * @returns {void}
+							 */
+							function({ target }) {
+								target.setAttribute("dragover", "false")
+							}
+						)
+					}
+				}
+			)
+			function radio_item_onchange() {
+				const input = /** @type {HTMLInputElement} */(document.getElementById(this.getAttribute("name")))/**/
+				input.value = this.value
+			}
+			function selector_button_onclick() {
+				this.nextElementSibling.setAttribute("open", "")
+				this.nextElementSibling.focus()
+			}
+			function selector_option_onclick() {
+				this.parentNode.blur()
+				this.parentNode.previousElementSibling.value = this.getAttribute("value")
+			}
+		</script>
+		<title>AIM DOJO - The fastest way to improve your FPS skills</title>
+	</head>
+	<body class="bg=#3d2423 c=#eee ff=ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace fs=16px h=100% o=clip pe=none us=none word-spacing=-6
+	:has(#bg[activate],#setting-view[active])>#modal-backdrop/z=1
+	:not([locked])_[hud]/none
+	:not([locked])_canvas/ft=blur(2px);tt=filter_1s_ease
+	:not([locked])_iframe/ft=brightness(.85)
+	:not([locked])_video/ft=brightness(.85)
+	[locked]_[menu]/none
+	[rest]>:not(img,main,#bg)/none">
+		<img class="fixed ft=brightness(.85) h=100% of=cover w=100%" alt="pre image for video" src="./bg.png" />
+		<button class="bf=blur(3px) fixed h=100% pe=auto w=100%" id="modal-backdrop"></button>
+		<div class="fixed h=100% o=hidden pe=auto w=100%
+		:has(iframe[src])>video/none
+		[activate]/br=16;tf=scale(.8)_translateY(-12.5%);z=2
+		[activate]>button/bg=rgba(0,0,0,.8)" id="bg">
+			<video class="fixed ft=blur(1px)_brightness(.7) h=100% of=cover w=100%" autoplay loop muted playsinline>
+				<source src="./bg.mp4" type="video/mp4">
+			</video>
+			<iframe class="bd=none fixed ft=blur(1px)_brightness(.7) h=100% w=100%
+			:not([src])/none" id="bg-iframe" sandbox="allow-same-origin allow-scripts"></iframe>
+		</div>
+		<canvas class="fixed h=100% pe=auto w=100%" id="canvas"></canvas>
+		<main class="c=#ccc fixed l=8 t=8 ws=nowrap">
+			<span class="op=.5" menu>(Tab: Next game sens)<br></span>
+			<div class="flex p=4">
+				<div class="c=#9cd2ff pe=auto relative">
+					<button id="monitor-res"
+					onclick="selector_button_onclick.call(this)">-</button>
+					<ul class="absolute bf=blur(2px) bg=rgba(0,0,0,.5) block br=8 l=0 w=max-content
+					:not([open])/none" tabindex="-1"
+					onblur="this.removeAttribute('open')">
+						<li class="p=4" value="hd"
+						onclick="selector_option_onclick.call(this)">1280x720(HD)</li>
+						<li class="p=4" value="fhd"
+						onclick="selector_option_onclick.call(this)">1920x1080(FHD)</li>
+						<li class="p=4" value="qhd"
+						onclick="selector_option_onclick.call(this)">2560x1440(QHD)</li>
+					</ul>
+				</div>
+			</div>
+			<ul class="ai=start column flex pe=auto
+			:active>li/block
+			:active>li:not([active])>div/none">
+				<li class="lh=24
+				:hover>b/c=#9cd2ff
+				:not([active])/none" id="lol">
+					<b class="c=#fff fs=24">League of Legends</b>
+					<div>
+						<span class="c=#fff">Window(6): </span><span class="c=#fff fw=700">50</span>
+					</div>
+				</li>
+				<li class="lh=24
+				:hover>b/c=#9cd2ff
+				:not([active])/none" id="val">
+					<b class="c=#fff fs=24">VALORANT</b>
+					<div>
+						<span class="c=#fff">Hipfire: </span><span class="c=#fff fw=700" id="val-hipfire">—</span><br>
+						<span class="c=#fff">Operator: </span><span class="c=#fff fw=700" id="val-operator25">—</span> / <span id="val-operator5">—</span><br>
+						<span class="c=#fff">Vandal/Phantom/Bulldog: </span><span class="c=#fff fw=700" id="val-vandal">—</span><br>
+						Guardian: <span id="val-guardian">—</span><br>
+						Marshal/Outlaw: <span id="val-marshal">—</span><br>
+						Spectre/Stinger/Ares/Odin: <span id="val-spectre">—</span>
+					</div>
+				</li>
+				<li class="lh=24
+				:hover>b/c=#9cd2ff
+				:not([active])/none" id="mc">
+					<b class="c=#fff fs=24">Minecraft</b>
+					<div>
+						<span class="c=#fff">Hipfire(110): <span class="c=#fff fw=700" id="mc-hipfire">—</span>%</span>
+					</div>
+				</li>
+				<li class="lh=24
+				:hover>b/c=#9cd2ff
+				:not([active])/none" id="fn">
+					<b class="c=#fff fs=24">Fortnite</b>
+					<div>
+						<span class="c=#fff">Hipfire: <span class="c=#fff fw=700" id="fn-hipfire">—</span>%</span><br>
+						<span class="c=#fff">ADS: <span class="c=#fff fw=700" id="fn-ads">-</span>%</span><br>
+						<span class="c=#fff">AR: <span class="c=#fff fw=700" id="fn-ar">-</span>%</span><br>
+						<span class="c=#fff">Sniper: <span id="fn-sr">-</span>%</span><br>
+						<span class="c=#fff">Zoom Scaling: </span><span class="c=#fff fw=700">Legacy</span>
+					</div>
+				</li>
+				<li class="lh=24
+				:hover>b/c=#9cd2ff
+				:not([active])/none" id="cs2">
+					<b class="c=#fff fs=24">Counter-Strike 2</b>
+					<div>
+						<span class="c=#fff">Hipfire(16:9): </span><span class="c=#fff fw=700" id="cs2-hipfire">—</span><br>
+						AUG/SG556: <span id="cs2-aug">—</span><br>
+						Automatic/SSG08: <span id="cs2-auto1">—</span> / <span id="cs2-auto2">—</span><br>
+						<span class="c=#fff">AWP: </span><span class="c=#fff fw=700" id="cs2-awp1">—</span> / <span id="cs2-awp2">—</span>
+					</div>
+				</li>
+				<li class="lh=24
+				:hover>b/c=#9cd2ff
+				:not([active])/none" id="pubg">
+					<b class="c=#fff fs=24">PUBG: BATTLEGROUNDS</b>
+					<div>
+						<span class="c=#fff">FPP FoV: </span><span class="c=#fff fw=700" id="pubg-fpp">—</span><br>
+						<span class="c=#fff">Hipfire: </span><span class="c=#fff fw=700" id="pubg-hipfire">—</span><br>
+						<span class="c=#fff">ADS/Scope: </span><span class="c=#fff fw=700" id="pubg-ads">—</span><br>
+						<span class="c=#fff">Vertical: </span><span class="c=#fff fw=700">1</span><br>
+						<span class="c=#fff">x2: </span><span class="c=#fff fw=700" id="pubg-x2">—</span><br>
+						<span class="c=#fff">x3: </span><span class="c=#fff fw=700" id="pubg-x3">—</span><br>
+						<span class="c=#fff">x4: </span><span class="c=#fff fw=700" id="pubg-x4">—</span><br>
+						<span class="c=#fff">x6: </span><span class="c=#fff fw=700" id="pubg-x6">—</span><br>
+						<span class="c=#fff">x8: </span><span class="c=#fff fw=700" id="pubg-x8">—</span><br>
+						<span class="c=#fff">x15: </span><span class="c=#fff fw=700" id="pubg-x15">—</span>
+						<fieldset class="ai=center br=12 flex h=96 jc=center relative w=fit-content
+						:hover:after/absolute;bf=blur(1.5px);bg=rgba(170,170,170,.25);br=12;ct='C:\\Users\\$\\AppData\\Local\\TslGame\\Saved\\Config\\WindowsNoEditor\\';l=12;p=12;t=-12
+						[dragover=true]/c=#9cd2ff" dragover="false" id="pubg-file">
+							<legend class="m=0_auto_-.75 p=6 pe=none">Drop file for update</legend>
+							<span class="p=12 pe=none">GameUserSettings.ini</span>
+						</fieldset>
+					</div>
+				</li>
+				<li class="lh=24
+				:hover>b/c=#9cd2ff
+				:not([active])/none" id="ow">
+					<b class="c=#fff fs=24">Overwatch</b>
+					<div>
+						<span class="c=#fff">Hipfire(103): <span class="fw=700" id="ow-hipfire">—</span>%</span><br>
+						<span class="c=#fff">Widow/Ana: <span class="fw=700" id="ow-widow">—</span>%</span><br>
+						<span class="c=#fff">Ashe/Cassidy: <span class="fw=700" id="ow-ashe">—</span>%</span><br>
+						<span class="c=#fff">Freja: <span class="fw=700" id="ow-freja">—</span>%</span><br>
+						<span class="c=#fff">Emre: <span class="fw=700" id="ow-emre">—</span>%</span><br>
+						<span class="c=#fff">GAMMA CORRECTION: <span class="fw=700">1.60</span></span><br>
+						<span class="c=#fff">CONTRAST: <span class="fw=700">1.10</span></span><br>
+						<span class="c=#fff">BRIGHTNESS: <span class="fw=700">1.10</span></span>
+					</div>
+				</li>
+				<li class="lh=24
+				:hover>b/c=#9cd2ff
+				:not([active])/none" id="sa">
+					<b class="c=#fff fs=24">Sudden Attack</b>
+					<div>
+						<span class="c=#fff">Hipfire(1152x864): </span><span class="c=#fff fw=700" id="sa-hipfire">—</span>
+					</div>
+				</li>
+			</ul>
+		</main>
+		<div class="fixed l=50% t=8 tf=translateX(-50%) ws=nowrap" hud>
+			<span class="c=#9cd2ff fw=700
+			:after/c=#fff;ct=attr(value);pl=8;pr=16
+			:not([value])/none" id="peak-score">Score/Peak</span>
+			<span class="c=#9cd2ff fw=700
+			:after/c=#fff;ct=attr(value);pl=8;pr=16
+			:not([value])/none" id="accuracy">Accuracy</span>
+			<span class="c=#9cd2ff fw=700
+			:after/c=#fff;ct=attr(value);pl=8;pr=16
+			:not([value])/none" id="crit-rate">Critical</span>
+		</div>
+		<div class="fixed r=8 t=8" hud>
+			<span class="pe=none" id="timer">00:00</span>
+		</div>
+		<header class="ai=center column fixed flex fw=700 l=50% t=60% tf=translate(-50%,-50%)" menu>
+			<h1 class="-webkit-text-stroke=2.5px_white c=#4488ff fs=72 fw=700">AIM DOJO</h1>
+			<button class="fs=32 pe=auto relative
+			:hover/tf=scale(1.25);tt=.1s" id="aim-booster">
+				Aim Booster
+				<span class="absolute fs=16 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="aim-booster-score">-</span>
+			</button>
+			<button class="fs=32 pe=auto relative
+			:hover/tf=scale(1.25);tt=.1s" id="flick">
+				Flick
+				<span class="absolute fs=16 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="flick-score">-</span>
+			</button>
+			<button class="fs=32 pe=auto relative
+			:hover/tf=scale(1.25);tt=.1s" id="tracking">
+				Tracking
+				<span class="absolute fs=16 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="tracking-score">-</span>
+			</button>
+			<button class="fs=32 pe=auto relative
+			:hover/tf=scale(1.25);tt=.1s" id="twitch">
+				Twitch
+				<span class="absolute fs=16 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="twitch-score">-</span>
+			</button>
+			<button class="fs=32 pe=auto relative
+			:hover/tf=scale(1.25);tt=.1s" id="v-tracking">
+				V-Tracking
+				<span class="absolute fs=16 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="v-tracking-score">-</span>
+			</button>
+			<button class="fs=32 pe=auto relative
+			:hover/tf=scale(1.25);tt=.1s" id="writing">
+				Writing
+				<span class="absolute fs=16 l=50% pe=none t=90% tf=translate(-50%,-50%)" id="writing-score">-</span>
+			</button>
+			<br>
+			<button class="fs=24 pe=auto relative
+			:hover/tf=scale(1.25);tt=.1s" id="setting"
+			onfocus="this.blur()">Setting</button>
+		</header>
+		<div class="bg=rgba(0,0,0,.8) br=16 fixed fs=32 h=90% l=50% none pe=auto t=50% tf=translate(-50%,-50%) w=90% z=2
+		[active]/block" id="setting-view">
+			<span class="absolute fs=16 l=16 t=16" id="version">-</span>
+			<div class="grid m=32_auto max-height=calc(100%-64px) max-width=calc(100%-32px) ox=hidden oy=scroll p=0_32 scrollbar-gutter=stable_both-edges w=max-content
+			::-webkit-scrollbar-thumb/bg=rgba(170,170,170,.8);br=16
+			::-webkit-scrollbar-track/bg=rgba(85,85,85,.8);br=16
+			::-webkit-scrollbar/w=8">
+				<fieldset class="ai=center bd=1px_solid_#fff br=8 column flex p=16
+				:has(#bg-type[value='default'])_#bg-link/none">
+					<legend class="m=0_auto_-24 p=8">Background Video</legend>
+					<div>
+						<input id="bg-type" type="hidden" />
+						<label class="cs=pointer">
+							<input class="cs=pointer" name="bg-type" type="radio" value="default"
+							onchange="radio_item_onchange.call(this)" />Default</label>
+						<label class="cs=pointer">
+							<input class="cs=pointer" name="bg-type" type="radio" value="youtube"
+							onchange="radio_item_onchange.call(this)" />Youtube</label>
+						<label class="cs=pointer">
+							<input class="cs=pointer" name="bg-type" type="radio" value="soop"
+							onchange="radio_item_onchange.call(this)" />Soop</label>
+						<label class="cs=pointer">
+							<input class="cs=pointer" name="bg-type" type="radio" value="webview"
+							onchange="radio_item_onchange.call(this)" />Web View</label>
+					</div>
+					<div class="h=48">
+						<input class="bd=none bg=none c=#9cd2ff p=0_8 pe=auto w=25ch" id="bg-link" placeholder="https://..." />
+					</div>
+					<div class="flex g=32 jc=center">
+						<button class="pe=auto
+						:hover/fw=700;c=#9cd2ff" id="activate-bg"
+						onfocus="this.blur()">Activate</button>
+						<button class="pe=auto
+						:hover/fw=700;c=#9cd2ff" id="save-bg"
+						onfocus="this.blur()">Save</button>
+					</div>
+				</fieldset>
+				<br>
+				<fieldset class="bd=1px_solid_#fff br=8 column flex p=16">
+					<legend class="m=0_auto_-24 p=8">DPI Normalizer</legend>
+					<fieldset class="bd=1px_solid_#fff column flex g=16 p=16">
+						<legend class="m=-24_0 p=8">From</legend>
+						<div class="ai=center flex fs=20 g=20
+						:not(:has(#dpi-norm-game[value='cs2']))>#dpi-norm-cs2-detail/none
+						:not(:has(#dpi-norm-game[value='fn']))>#dpi-norm-fn-detail/none
+						:not(:has(#dpi-norm-game[value='lol']))>#dpi-norm-lol-detail/none
+						:not(:has(#dpi-norm-game[value='mc']))>#dpi-norm-mc-detail/none
+						:not(:has(#dpi-norm-game[value='ow']))>#dpi-norm-ow-detail/none
+						:not(:has(#dpi-norm-game[value='pubg']))>#dpi-norm-pubg-detail/none
+						:not(:has(#dpi-norm-game[value='sa']))>#dpi-norm-sa-detail/none
+						:not(:has(#dpi-norm-game[value='val']))>#dpi-norm-val-detail/none">
+							<label>
+								DPI:
+								<input class="bd=none bg=none c=#9cd2ff w=5.5ch" id="dpi-norm-dpi" max="99999" min="1" />
+							</label>
+							<div class="c=#9cd2ff pe=auto relative">
+								<button class="p=5" id="dpi-norm-game"
+								onclick="selector_button_onclick.call(this)">-</button>
+								<ul class="absolute bf=blur(2px) bg=rgba(0,0,0,.5) block br=16 l=0 w=max-content
+								:not([open])/none" tabindex="-1"
+								onblur="this.removeAttribute('open')">
+									<li class="p=5" value="lol"
+									onclick="selector_option_onclick.call(this)">League of Legends</li>
+									<li class="p=5" value="val"
+									onclick="selector_option_onclick.call(this)">VALORANT</li>
+									<li class="p=5" value="mc"
+									onclick="selector_option_onclick.call(this)">Minecraft</li>
+									<li class="p=5" value="fn"
+									onclick="selector_option_onclick.call(this)">Fortnite</li>
+									<li class="p=5" value="cs2"
+									onclick="selector_option_onclick.call(this)">Counter-Strike 2</li>
+									<li class="p=5" value="pubg"
+									onclick="selector_option_onclick.call(this)">PUBG: BATTLEGROUNDS</li>
+									<li class="p=5" value="ow"
+									onclick="selector_option_onclick.call(this)">Overwatch</li>
+									<li class="p=5" value="sa"
+									onclick="selector_option_onclick.call(this)">Sudden Attack</li>
+								</ul>
+							</div>
+							<div class="ai=center flex g=20" id="dpi-norm-lol-detail">
+								<label>
+									Sens:
+									<input class="bd=none bg=none c=#9cd2ff w=3.5ch" id="dpi-norm-lol-sens" max="100" min="0" />
+								</label>
+							</div>
+							<div class="ai=center flex g=20
+							:has(#dpi-norm-val-fov[value=hipfire])_label:has(#dpi-norm-val-zoom)/none" id="dpi-norm-val-detail">
+								<label>
+									Sens:
+									<input class="bd=none bg=none c=#9cd2ff w=5.5ch" decimals="3" id="dpi-norm-val-sens" max="10" min=".01" />
+								</label>
+								<div class="c=#9cd2ff pe=auto relative">
+									<button class="p=5" id="dpi-norm-val-fov"
+									onclick="selector_button_onclick.call(this)">-</button>
+									<ul class="absolute bf=blur(2px) bg=rgba(0,0,0,.5) block br=16 l=0 w=max-content
+									:not([open])/none" tabindex="-1"
+									onblur="this.removeAttribute('open')">
+										<li class="p=5" value="hipfire"
+										onclick="selector_option_onclick.call(this)">Hipfire</li>
+										<li class="p=5" value="spectre"
+										onclick="selector_option_onclick.call(this)">Spectre/Stinger/Ares/Odin</li>
+										<li class="p=5" value="vandal"
+										onclick="selector_option_onclick.call(this)">Vandal/Phantom/Bulldog</li>
+										<li class="p=5" value="guardian"
+										onclick="selector_option_onclick.call(this)">Guardian</li>
+										<li class="p=5" value="marshal"
+										onclick="selector_option_onclick.call(this)">Marshal/Outlaw</li>
+										<li class="p=5" value="operator"
+										onclick="selector_option_onclick.call(this)">Operator</li>
+									</ul>
+								</div>
+								<label>
+									Zoom:
+									<input class="bd=none bg=none c=#9cd2ff w=5.5ch" decimals="3" id="dpi-norm-val-zoom" max="10" min=".01" />
+								</label>
+							</div>
+							<div class="ai=center flex g=20" id="dpi-norm-mc-detail">
+								<label>
+									Sens:
+									<input class="bd=none bg=none c=#9cd2ff w=3.5ch" id="dpi-norm-mc-sens" max="100" min="0" />
+								</label>
+							</div>
+							<div class="ai=center flex g=20
+							:has(#dpi-norm-fn-fov[value=hipfire])_label:has(#dpi-norm-fn-zoom)/none" id="dpi-norm-fn-detail">
+								<label>
+									Sens:
+									<input class="bd=none bg=none c=#9cd2ff w=5.5ch" decimals="1" id="dpi-norm-fn-sens" max="100" min="1" />
+								</label>
+								<div class="c=#9cd2ff pe=auto relative">
+									<button class="p=5" id="dpi-norm-fn-fov"
+									onclick="selector_button_onclick.call(this)">-</button>
+									<ul class="absolute bf=blur(2px) bg=rgba(0,0,0,.5) block br=16 l=0 w=max-content
+									:not([open])/none" tabindex="-1"
+									onblur="this.removeAttribute('open')">
+										<li class="p=5" value="hipfire"
+										onclick="selector_option_onclick.call(this)">Hipfire</li>
+										<li class="p=5" value="ads"
+										onclick="selector_option_onclick.call(this)">ADS/Scope</li>
+									</ul>
+								</div>
+								<label>
+									Zoom:
+									<input class="bd=none bg=none c=#9cd2ff w=5.5ch" decimals="1" id="dpi-norm-fn-zoom" max="100" min="1" />
+								</label>
+							</div>
+							<div class="ai=center flex g=20
+							:has(#dpi-norm-cs2-fov[value=hipfire])_label:has(#dpi-norm-cs2-zoom)/none" id="dpi-norm-cs2-detail">
+								<label>
+									Sens:
+									<input class="bd=none bg=none c=#9cd2ff w=4.5ch" decimals="2" id="dpi-norm-cs2-sens" max="8" min=".1" />
+								</label>
+								<div class="c=#9cd2ff pe=auto relative">
+									<button class="p=5" id="dpi-norm-cs2-fov"
+									onclick="selector_button_onclick.call(this)">-</button>
+									<ul class="absolute bf=blur(2px) bg=rgba(0,0,0,.5) block br=.5 l=0 w=max-content
+									:not([open])/none" tabindex="-1"
+									onblur="this.removeAttribute('open')">
+										<li class="p=5" value="hipfire"
+										onclick="selector_option_onclick.call(this)">Hipfire</li>
+										<li class="p=5" value="aug"
+										onclick="selector_option_onclick.call(this)">AUG/SG556</li>
+										<li class="p=5" value="awp"
+										onclick="selector_option_onclick.call(this)">AWP/Automatic/SSG08</li>
+									</ul>
+								</div>
+								<label>
+									Zoom:
+									<input class="bd=none bg=none c=#9cd2ff w=4.5ch" decimals="2" id="dpi-norm-cs2-zoom" max="3" min=".01" />
+								</label>
+							</div>
+							<div class="ai=center flex g=20" id="dpi-norm-pubg-detail">
+								<div class="c=#9cd2ff pe=auto relative">
+									<button class="p=5" id="dpi-norm-pubg-fov"
+									onclick="selector_button_onclick.call(this)">-</button>
+									<ul class="absolute bf=blur(2px) bg=rgba(0,0,0,.5) block br=.5 l=0 w=max-content
+									:not([open])/none" tabindex="-1"
+									onblur="this.removeAttribute('open')">
+										<li class="p=5" value="tpp"
+										onclick="selector_option_onclick.call(this)">TPP</li>
+										<li class="p=5" value="x1"
+										onclick="selector_option_onclick.call(this)">x1</li>
+										<li class="p=5" value="x2"
+										onclick="selector_option_onclick.call(this)">x2</li>
+										<li class="p=5" value="x3"
+										onclick="selector_option_onclick.call(this)">x3</li>
+										<li class="p=5" value="x4"
+										onclick="selector_option_onclick.call(this)">x4</li>
+										<li class="p=5" value="x6"
+										onclick="selector_option_onclick.call(this)">x6</li>
+										<li class="p=5" value="x8"
+										onclick="selector_option_onclick.call(this)">x8</li>
+										<li class="p=5" value="x15"
+										onclick="selector_option_onclick.call(this)">x15</li>
+									</ul>
+								</div>
+								<label>
+									Sens:
+									<input class="bd=none bg=none c=#9cd2ff w=3.5ch" id="dpi-norm-pubg-sens" max="100" min="0" />
+								</label>
+							</div>
+							<div class="ai=center flex g=20
+							:has(#dpi-norm-ow-fov[value=hipfire])_label:has(#dpi-norm-ow-zoom)/none" id="dpi-norm-ow-detail">
+								<label>
+									Sens:
+									<input class="bd=none bg=none c=#9cd2ff w=6.5ch" decimals="2" id="dpi-norm-ow-sens" max="100" min=".01" />
+								</label>
+								<div class="c=#9cd2ff pe=auto relative">
+									<button class="p=5" id="dpi-norm-ow-fov"
+									onclick="selector_button_onclick.call(this)">-</button>
+									<ul class="absolute bf=blur(2px) bg=rgba(0,0,0,.5) block br=16 l=0 w=max-content
+									:not([open])/none" tabindex="-1"
+									onblur="this.removeAttribute('open')">
+										<li class="p=5" value="hipfire"
+										onclick="selector_option_onclick.call(this)">Hipfire</li>
+										<li class="p=5" value="widow"
+										onclick="selector_option_onclick.call(this)">Widow/Ana</li>
+										<li class="p=5" value="ashe"
+										onclick="selector_option_onclick.call(this)">Ashe/Cassidy</li>
+										<li class="p=5" value="freja"
+										onclick="selector_option_onclick.call(this)">Freja</li>
+									</ul>
+								</div>
+								<label>
+									Zoom:
+									<input class="bd=none bg=none c=#9cd2ff w=6.5ch" decimals="2" id="dpi-norm-ow-zoom" max="100" min=".01" />
+								</label>
+							</div>
+							<div class="ai=center flex g=20" id="dpi-norm-sa-detail">
+								<label>
+									Sens:
+									<input class="bd=none bg=none c=#9cd2ff w=3.5ch" id="dpi-norm-sa-sens" max="100" min="0" />
+								</label>
+								<div class="c=#9cd2ff pe=auto relative">
+									<button class="p=5" id="dpi-norm-sa-fov"
+									onclick="selector_button_onclick.call(this)">-</button>
+									<ul class="absolute bf=blur(2px) bg=rgba(0,0,0,.5) block br=.5 l=0 w=max-content
+									:not([open])/none" tabindex="-1"
+									onblur="this.removeAttribute('open')">
+										<li class="p=5" value="normal"
+										onclick="selector_option_onclick.call(this)">Normal</li>
+										<li class="p=5" value="wide"
+										onclick="selector_option_onclick.call(this)">Wide</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+					<fieldset class="bd=1px_solid_#fff column flex p=16">
+						<legend class="m=0_auto_-24 p=8">Result</legend>
+						<div class="fs=20">
+							DPI: <span id="dpi-norm-result">-</span>
+						</div>
+					</fieldset>
+				</fieldset>
+				<br>
+				<fieldset class="ai=center bd=1px_solid_#fff br=8 column flex p=16">
+					<legend class="m=0_auto_-24 p=8">Raw Accel</legend>
+					<span class="fs=16">Recommend DPI: 525, V-Sens: 2, 1000hz</span>
+					<a class="fs=24
+					:hover/c=#9cd2ff" href="https://rawaccel.net/" target="_blank">https://rawaccel.net/</a>
+				</fieldset>
+				<br>
+				<fieldset class="ai=center bd=1px_solid_#fff br=8 column flex p=16">
+					<legend class="m=0_auto_-24 p=8">Equalizer APO</legend>
+					<a class="fs=24
+					:hover/c=#9cd2ff" href="https://equalizerapo.com/" target="_blank">https://equalizerapo.com/</a>
+					<button class="pe=auto
+					:hover/fw=700;c=#9cd2ff" id="copy-apo-filter">Copy Filter</button>
+				</fieldset>
+				<br>
+				<fieldset class="ai=center bd=1px_solid_#fff br=8 column grid gtc=repeat(3,1fr) p=16">
+					<legend class="m=0_auto_-24 p=8">Clear Score</legend>
+					<button class="fs=24 pe=auto
+					:hover/fw=700;c=#9cd2ff" id="clear-aim-booster">Aim booster</button>
+					<button class="fs=24 pe=auto
+					:hover/fw=700;c=#9cd2ff" id="clear-flick">Flick</button>
+					<button class="fs=24 pe=auto
+					:hover/fw=700;c=#9cd2ff" id="clear-tracking">Tracking</button>
+					<button class="fs=24 pe=auto
+					:hover/fw=700;c=#9cd2ff" id="clear-twitch">Twitch</button>
+					<button class="fs=24 pe=auto
+					:hover/fw=700;c=#9cd2ff" id="clear-v-tracking">V-Tracking</button>
+					<button class="fs=24 pe=auto
+					:hover/fw=700;c=#9cd2ff" id="clear-writing">Writing</button>
+				</fieldset>
+				<br>
+			</div>
+		</div>
+		<div class="ai=center b=35% column-reverse fixed flex g=8 l=50% tf=translateX(-50%) z=2
+		>p/bf=blur(2px);bg=#555555aa;br=12;fs=24;p=0_12" id="toast">
+			<!-- <p>message</p> -->
+		</div>
+	</body>
+</html>
