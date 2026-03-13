@@ -3,9 +3,9 @@ export default /** @type {const} */({
 	audio: { volume: .5 },
 	crosshair: {
 		color: "#0f0",
-		gap: 0,
-		height: 12,
-		width: 12
+		gap: 2,
+		height: 6,
+		width: 6
 	},
 	grid: {
 		major_every: 9,
