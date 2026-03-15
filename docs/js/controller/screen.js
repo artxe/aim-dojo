@@ -2,7 +2,9 @@ import { bg_el, setting_view_el, timer_el } from "../document.js"
 import game_mode from "../game_mode/index.js"
 import { stop_game, update_fov } from "../logic.js"
 import { clamp, EPS, PI, round } from "../math.js"
-import { compute_sens_rad } from "../sens/index.js"
+import {
+	calc_avg_spherical_rad_per_px_horizontal_weighted
+} from "../sens/index.js"
 import state from "../state.js"
 import { cycle_active_game_sens } from "./game_sens.js"
 import { on_resize, set_text_if_changed } from "./index.js"
@@ -102,7 +104,7 @@ function on_mousemove({ movementX, movementY }) {
 	const { dimension, fov, height, pitch, width, y } = state.camera
 	const { mode, rest_timeout: rest_raf_id } = state.game
 	if (mode) {
-		const sens = compute_sens_rad(fov, width, height)
+		const sens = calc_avg_spherical_rad_per_px_horizontal_weighted(fov, width, height)
 		if (dimension == "2d") {
 			const y_limit = (PI / 2 / sens - EPS) | 0
 			state.camera.x += movementX

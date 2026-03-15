@@ -5,14 +5,14 @@ import {
 } from "./math.js"
 import { calc_pubg_fpp_fov } from "./sens/calc_pubg.js"
 import {
+	calc_avg_spherical_rad_per_px_horizontal_weighted,
 	calc_sens_cs2,
 	calc_sens_fn,
 	calc_sens_mc,
 	calc_sens_ow,
 	calc_sens_pubg,
 	calc_sens_sa,
-	calc_sens_val,
-	calc_avg_horizontal_rad_per_px_2d_pixel_uniform
+	calc_sens_val
 } from "./sens/calc_sens.js"
 const off = new OffscreenCanvas(1, 1)
 const off_context = /** @type {OffscreenCanvasRenderingContext2D} */(off.getContext("2d"))/**/
@@ -135,12 +135,12 @@ function update_game_sens(height, width) {
 	const fn_ads = 100
 	const fn_ar = round_to(
 		// eslint-disable-next-line max-len
-		calc_avg_horizontal_rad_per_px_2d_pixel_uniform(40, width, height) / calc_avg_horizontal_rad_per_px_2d_pixel_uniform(80, width, height) * 8_000 / 40,
+		calc_avg_spherical_rad_per_px_horizontal_weighted(40, width, height) / calc_avg_spherical_rad_per_px_horizontal_weighted(80, width, height) * 8_000 / 40,
 		1
 	)
 	const fn_sr = round_to(
 		// eslint-disable-next-line max-len
-		calc_avg_horizontal_rad_per_px_2d_pixel_uniform(15, width, height) / calc_avg_horizontal_rad_per_px_2d_pixel_uniform(80, width, height) * 8_000 / 15,
+		calc_avg_spherical_rad_per_px_horizontal_weighted(15, width, height) / calc_avg_spherical_rad_per_px_horizontal_weighted(80, width, height) * 8_000 / 15,
 		1
 	)
 	const cs2_hipfire = round_to(

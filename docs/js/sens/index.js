@@ -13,12 +13,12 @@ export {
 	calc_pubg_fpp_fov
 } from "./calc_pubg.js"
 export {
+	calc_avg_spherical_rad_per_px_horizontal_weighted,
 	calc_sens_cs2,
 	calc_sens_fn,
 	calc_sens_mc,
 	calc_sens_ow,
 	calc_sens_pubg,
 	calc_sens_sa,
-	calc_sens_val,
-	calc_avg_horizontal_rad_per_px_2d_pixel_uniform as compute_sens_rad
+	calc_sens_val
 } from "./calc_sens.js"

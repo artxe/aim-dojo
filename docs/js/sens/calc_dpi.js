@@ -4,11 +4,11 @@ import {
 } from "../math.js"
 import state from "../state.js"
 import {
+	calc_avg_spherical_rad_per_px_horizontal_weighted,
 	calc_sens_cs2,
 	calc_sens_fn,
 	calc_sens_ow,
-	calc_sens_val,
-	calc_avg_horizontal_rad_per_px_2d_pixel_uniform
+	calc_sens_val
 } from "./calc_sens.js"
 /** @returns {number} */
 export function calc_dpi_cs2() {
@@ -88,7 +88,7 @@ export function calc_dpi_mc() {
 	const { width, height } = state.game
 	const hfov_deg = convert_deg_across_aspect(110, height, width)
 	const dpi_sens_rad = dpi * to_rad(1.2) * (.2 + .006 * sens) ** 3
-	return dpi_sens_rad / calc_avg_horizontal_rad_per_px_2d_pixel_uniform(hfov_deg, width, height)
+	return dpi_sens_rad / calc_avg_spherical_rad_per_px_horizontal_weighted(hfov_deg, width, height)
 }
 /** @returns {number} */
 export function calc_dpi_ow() {
@@ -144,7 +144,7 @@ export function calc_dpi_pubg() {
 	}
 	const dpi_sens_rad = dpi * to_rad(hfov_deg / base_fov * base_yaw)
 			* 2 ** ((sens - base_sens) / step)
-	return dpi_sens_rad / calc_avg_horizontal_rad_per_px_2d_pixel_uniform(hfov_deg, width, height)
+	return dpi_sens_rad / calc_avg_spherical_rad_per_px_horizontal_weighted(hfov_deg, width, height)
 }
 /** @returns {number} */
 export function calc_dpi_sa() {
@@ -154,7 +154,7 @@ export function calc_dpi_sa() {
 	const { dpi, fov, sens } = state.dpi_norm
 	const { height, width } = state.game
 	const dpi_sens_rad = dpi * to_rad(.000_15 + .000_03 * sens)
-	return dpi_sens_rad / calc_avg_horizontal_rad_per_px_2d_pixel_uniform(
+	return dpi_sens_rad / calc_avg_spherical_rad_per_px_horizontal_weighted(
 		85,
 		fov == "normal" ? height * 4 / 3 : width,
 		height

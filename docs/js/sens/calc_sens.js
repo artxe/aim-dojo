@@ -24,7 +24,7 @@ import {
 export function calc_sens_cs2(hfov_deg, height, width) {
 	const vfov_deg = convert_deg_across_aspect(hfov_deg, height * 4 / 3, height)
 	const real_hfov_deg = convert_deg_across_aspect(vfov_deg, height, width)
-	return calc_avg_horizontal_rad_per_px_2d_pixel_uniform(real_hfov_deg, width, height)
+	return calc_avg_spherical_rad_per_px_horizontal_weighted(real_hfov_deg, width, height)
 		/ to_rad(.022 * hfov_deg / 90)
 }
 /**
@@ -34,7 +34,7 @@ export function calc_sens_cs2(hfov_deg, height, width) {
  * @returns {number}
  */
 export function calc_sens_fn(hfov_deg, height, width) {
-	return calc_avg_horizontal_rad_per_px_2d_pixel_uniform(hfov_deg, width, height)
+	return calc_avg_spherical_rad_per_px_horizontal_weighted(hfov_deg, width, height)
 		/ to_rad(
 			.005_555 * tan(to_rad(hfov_deg) / 2) / tan(to_rad(80) / 2)
 		)
@@ -47,7 +47,7 @@ export function calc_sens_fn(hfov_deg, height, width) {
  */
 export function calc_sens_mc(vfov_deg, height, width) {
 	const hfov_deg = convert_deg_across_aspect(vfov_deg, height, width)
-	const rad_per_count = calc_avg_horizontal_rad_per_px_2d_pixel_uniform(hfov_deg, width, height)
+	const rad_per_count = calc_avg_spherical_rad_per_px_horizontal_weighted(hfov_deg, width, height)
 	return (
 		cbrt(rad_per_count / to_rad(1.2)) - .2
 	) / .006
@@ -59,7 +59,7 @@ export function calc_sens_mc(vfov_deg, height, width) {
  * @returns {number}
  */
 export function calc_sens_ow(hfov_deg, height, width) {
-	return calc_avg_horizontal_rad_per_px_2d_pixel_uniform(hfov_deg, width, height)
+	return calc_avg_spherical_rad_per_px_horizontal_weighted(hfov_deg, width, height)
 		/ to_rad(.006_6)
 }
 /**
@@ -74,7 +74,7 @@ export function calc_sens_pubg(hfov_deg, height, width) {
 	const base_yaw = .044_440_000_444_4
 	const step = 15.051_5
 	const sens50_yaw = to_rad(hfov_deg / base_fov * base_yaw)
-	const rad_per_count = calc_avg_horizontal_rad_per_px_2d_pixel_uniform(hfov_deg, width, height)
+	const rad_per_count = calc_avg_spherical_rad_per_px_horizontal_weighted(hfov_deg, width, height)
 	return base_sens + step * (log2(rad_per_count / sens50_yaw))
 }
 /**
@@ -82,7 +82,7 @@ export function calc_sens_pubg(hfov_deg, height, width) {
  * @returns {number}
  */
 export function calc_sens_sa(height) {
-	return (calc_avg_horizontal_rad_per_px_2d_pixel_uniform(85, height * 4 / 3, height) - .000_15)
+	return (calc_avg_spherical_rad_per_px_horizontal_weighted(85, height * 4 / 3, height) - .000_15)
 		/ .000_03
 }
 /**
@@ -92,7 +92,7 @@ export function calc_sens_sa(height) {
  * @returns {number}
  */
 export function calc_sens_val(hfov_deg, height, width) {
-	return calc_avg_horizontal_rad_per_px_2d_pixel_uniform(hfov_deg, width, height)
+	return calc_avg_spherical_rad_per_px_horizontal_weighted(hfov_deg, width, height)
 		/ to_rad(.07 * hfov_deg / 103)
 }
 /**
@@ -101,7 +101,7 @@ export function calc_sens_val(hfov_deg, height, width) {
  * @param {number} height
  * @returns {number}
  */
-export function calc_avg_horizontal_rad_per_px_2d_pixel_uniform(fov_deg, width, height) {
+export function calc_avg_spherical_rad_per_px_horizontal_weighted(fov_deg, width, height) {
 	const fov = to_rad(fov_deg)
 	const hw = width / 2
 	const hh = height / 2
@@ -115,9 +115,11 @@ export function calc_avg_horizontal_rad_per_px_2d_pixel_uniform(fov_deg, width, 
 		for (let j = 0; j < 64; j++) {
 			const x = hw / 2 * (GL64_X[j] + 1)
 			const wj = hw / 2 * GL64_W[j]
-			const theta = atan(x / f_eff)
-			num += wi * wj * theta / x
-			den += wi * wj
+			const r = sqrt(x * x + y * y)
+			const omega = atan(r / f)
+			const htheta = atan(x / f_eff)
+			num += wi * wj * htheta * omega / r
+			den += wi * wj * htheta
 		}
 	}
 	return num / den
