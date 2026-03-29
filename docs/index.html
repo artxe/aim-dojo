@@ -256,7 +256,6 @@
 		</div>
 		<canvas class="fixed h=100% pe=auto w=100%" id="canvas"></canvas>
 		<main class="c=#ccc fixed l=8 t=8 ws=nowrap">
-			<span class="op=.5" menu>(Tab: Next game sens)<br></span>
 			<div class="flex p=4">
 				<div class="c=#9cd2ff pe=auto relative">
 					<button id="monitor-res"
@@ -278,33 +277,28 @@
 			:active>li:not([active])>div/none">
 				<li class="lh=24
 				:hover>b/c=#9cd2ff
-				:not([active])/none" id="lol">
-					<b class="c=#fff fs=24">League of Legends</b>
+				:not([active])/none" id="al">
+					<b class="c=#fff fs=24">APEX LEGENDS</b>
 					<div>
-						<span class="c=#fff">Window(6): </span><span class="c=#fff fw=700">50</span>
+						<span class="c=#fff">Hipfire(110): </span><span class="c=#fff fw=700" id="al-hipfire">—</span><br>
+						<span class="c=#fff">x1: </span><span class="c=#fff fw=700" id="al-x1">—</span><br>
+						<span class="c=#fff">x2: </span><span class="c=#fff fw=700" id="al-x2">—</span><br>
+						<span class="c=#fff">x3: </span><span class="c=#fff fw=700" id="al-x3">—</span><br>
+						<span class="c=#fff">x4: </span><span class="c=#fff fw=700" id="al-x4">—</span><br>
+						<span class="c=#fff">x6: </span><span class="c=#fff fw=700" id="al-x6">—</span><br>
+						<span class="c=#fff">x8: </span><span class="c=#fff fw=700" id="al-x8">—</span><br>
+						<span class="c=#fff">x10: </span><span class="c=#fff fw=700" id="al-x10">—</span>
 					</div>
 				</li>
 				<li class="lh=24
 				:hover>b/c=#9cd2ff
-				:not([active])/none" id="val">
-					<b class="c=#fff fs=24">VALORANT</b>
+				:not([active])/none" id="cs2">
+					<b class="c=#fff fs=24">Counter-Strike 2</b>
 					<div>
-						<span class="c=#fff">Hipfire: </span><span class="c=#fff fw=700" id="val-hipfire">—</span><br>
-						<span class="c=#fff">Scoped: </span><span class="c=#fff fw=700" id="val-scoped">—</span><br>
-						<span class="c=#fff">ADS: </span><span class="c=#fff fw=700" id="val-ads">—</span><br>
-						Ares/Odin/Spectre/Stinger: <span id="val-spectre">—</span><br>
-						Bulldog/Phantom/Vandal: <span id="val-vandal">—</span><br>
-						Guardian: <span id="val-guardian">—</span><br>
-						Marshal/Outlaw: <span id="val-marshal">—</span><br>
-						Operator: <span id="val-operator25">—</span> / <span id="val-operator5">—</span>
-					</div>
-				</li>
-				<li class="lh=24
-				:hover>b/c=#9cd2ff
-				:not([active])/none" id="mc">
-					<b class="c=#fff fs=24">Minecraft</b>
-					<div>
-						<span class="c=#fff">Hipfire(110): <span class="c=#fff fw=700" id="mc-hipfire">—</span>%</span>
+						<span class="c=#fff">Hipfire(16:9): </span><span class="c=#fff fw=700" id="cs2-hipfire">—</span><br>
+						AUG/SG556: <span id="cs2-aug">—</span><br>
+						Automatic/SSG08: <span id="cs2-auto1">—</span> / <span id="cs2-auto2">—</span><br>
+						<span class="c=#fff">AWP: </span><span class="c=#fff fw=700" id="cs2-awp1">—</span> / <span id="cs2-awp2">—</span>
 					</div>
 				</li>
 				<li class="lh=24
@@ -321,36 +315,18 @@
 				</li>
 				<li class="lh=24
 				:hover>b/c=#9cd2ff
-				:not([active])/none" id="cs2">
-					<b class="c=#fff fs=24">Counter-Strike 2</b>
+				:not([active])/none" id="lol">
+					<b class="c=#fff fs=24">League of Legends</b>
 					<div>
-						<span class="c=#fff">Hipfire(16:9): </span><span class="c=#fff fw=700" id="cs2-hipfire">—</span><br>
-						AUG/SG556: <span id="cs2-aug">—</span><br>
-						Automatic/SSG08: <span id="cs2-auto1">—</span> / <span id="cs2-auto2">—</span><br>
-						<span class="c=#fff">AWP: </span><span class="c=#fff fw=700" id="cs2-awp1">—</span> / <span id="cs2-awp2">—</span>
+						<span class="c=#fff">Window(6): </span><span class="c=#fff fw=700">50</span>
 					</div>
 				</li>
 				<li class="lh=24
 				:hover>b/c=#9cd2ff
-				:not([active])/none" id="pubg">
-					<b class="c=#fff fs=24">PUBG: BATTLEGROUNDS</b>
+				:not([active])/none" id="mc">
+					<b class="c=#fff fs=24">Minecraft</b>
 					<div>
-						<span class="c=#fff">FPP FoV: </span><span class="c=#fff fw=700">103</span><br>
-						<span class="c=#fff">Hipfire: </span><span class="c=#fff fw=700" id="pubg-hipfire">—</span><br>
-						<span class="c=#fff">ADS/Scope: </span><span class="c=#fff fw=700" id="pubg-ads">—</span><br>
-						<span class="c=#fff">Vertical: </span><span class="c=#fff fw=700">1</span><br>
-						<span class="c=#fff">x2: </span><span class="c=#fff fw=700" id="pubg-x2">—</span><br>
-						<span class="c=#fff">x3: </span><span class="c=#fff fw=700" id="pubg-x3">—</span><br>
-						<span class="c=#fff">x4: </span><span class="c=#fff fw=700" id="pubg-x4">—</span><br>
-						<span class="c=#fff">x6: </span><span class="c=#fff fw=700" id="pubg-x6">—</span><br>
-						<span class="c=#fff">x8: </span><span class="c=#fff fw=700" id="pubg-x8">—</span><br>
-						<span class="c=#fff">x15: </span><span class="c=#fff fw=700" id="pubg-x15">—</span>
-						<fieldset class="ai=center br=12 flex h=96 jc=center relative w=fit-content
-						:hover:after/absolute;bf=blur(1.5px);bg=rgba(170,170,170,.25);br=12;ct='C:\\Users\\$\\AppData\\Local\\TslGame\\Saved\\Config\\WindowsNoEditor\\';l=12;p=12;t=-12
-						[dragover=true]/c=#9cd2ff" dragover="false" id="pubg-file">
-							<legend class="m=0_auto_-14 p=6 pe=none">Drop file for update</legend>
-							<span class="p=12 pe=none">GameUserSettings.ini</span>
-						</fieldset>
+						<span class="c=#fff">Hipfire(110): <span class="c=#fff fw=700" id="mc-hipfire">—</span>%</span>
 					</div>
 				</li>
 				<li class="lh=24
@@ -370,10 +346,48 @@
 				</li>
 				<li class="lh=24
 				:hover>b/c=#9cd2ff
+				:not([active])/none" id="pubg">
+					<b class="c=#fff fs=24">PUBG: BATTLEGROUNDS</b>
+					<div>
+						<span class="c=#fff">FPP FoV: </span><span class="c=#fff fw=700">80</span><br>
+						<span class="c=#fff">Hipfire: </span><span class="c=#fff fw=700" id="pubg-hipfire">—</span><br>
+						<span class="c=#fff">ADS/Scope: </span><span class="c=#fff fw=700" id="pubg-ads">—</span><br>
+						<span class="c=#fff">Vertical: </span><span class="c=#fff fw=700">1</span><br>
+						<span class="c=#fff">x2: </span><span class="c=#fff fw=700" id="pubg-x2">—</span><br>
+						<span class="c=#fff">x3: </span><span class="c=#fff fw=700" id="pubg-x3">—</span><br>
+						<span class="c=#fff">x4: </span><span class="c=#fff fw=700" id="pubg-x4">—</span><br>
+						<span class="c=#fff">x6: </span><span class="c=#fff fw=700" id="pubg-x6">—</span><br>
+						<span class="c=#fff">x8: </span><span class="c=#fff fw=700" id="pubg-x8">—</span><br>
+						<span class="c=#fff">x15: </span><span class="c=#fff fw=700" id="pubg-x15">—</span>
+						<fieldset class="ai=center br=12 flex h=96 jc=center relative w=fit-content
+						:hover:after/absolute;bf=blur(1.5px);bg=rgba(170,170,170,.25);br=12;ct='C:\\Users\\$\\AppData\\Local\\TslGame\\Saved\\Config\\WindowsNoEditor\\';l=12;p=12;t=-12
+						[dragover=true]/c=#9cd2ff" dragover="false" id="pubg-file">
+							<legend class="m=0_auto_-14 p=6 pe=none">Drop file for update</legend>
+							<span class="p=12 pe=none">GameUserSettings.ini</span>
+						</fieldset>
+					</div>
+				</li>
+				<li class="lh=24
+				:hover>b/c=#9cd2ff
 				:not([active])/none" id="sa">
 					<b class="c=#fff fs=24">Sudden Attack</b>
 					<div>
 						<span class="c=#fff">Hipfire(1152x864): </span><span class="c=#fff fw=700" id="sa-hipfire">—</span>
+					</div>
+				</li>
+				<li class="lh=24
+				:hover>b/c=#9cd2ff
+				:not([active])/none" id="val">
+					<b class="c=#fff fs=24">VALORANT</b>
+					<div>
+						<span class="c=#fff">Hipfire: </span><span class="c=#fff fw=700" id="val-hipfire">—</span><br>
+						<span class="c=#fff">Scoped: </span><span class="c=#fff fw=700" id="val-scoped">—</span><br>
+						<span class="c=#fff">ADS: </span><span class="c=#fff fw=700" id="val-ads">—</span><br>
+						Ares/Odin/Spectre/Stinger: <span id="val-spectre">—</span><br>
+						Bulldog/Phantom/Vandal: <span id="val-vandal">—</span><br>
+						Guardian: <span id="val-guardian">—</span><br>
+						Marshal/Outlaw: <span id="val-marshal">—</span><br>
+						Operator: <span id="val-operator25">—</span> / <span id="val-operator5">—</span>
 					</div>
 				</li>
 			</ul>
@@ -439,7 +453,7 @@
 				<fieldset class="ai=center bd=1px_solid_#fff br=8 column flex p=16
 				:has(#bg-type[value='default'])_#bg-link/none">
 					<legend class="m=0_auto_-24 p=8">Background Video</legend>
-					<div>
+					<div class="fs=24">
 						<input id="bg-type" type="hidden" />
 						<label class="cs=pointer">
 							<input class="cs=pointer" name="bg-type" type="radio" value="default"
@@ -454,7 +468,7 @@
 							<input class="cs=pointer" name="bg-type" type="radio" value="webview"
 							onchange="radio_item_onchange.call(this)" />Web View</label>
 					</div>
-					<div class="h=48">
+					<div class="fs=24 h=32">
 						<input class="bd=none bg=none c=#9cd2ff p=0_8 pe=auto w=25ch" id="bg-link" placeholder="https://..." />
 					</div>
 					<div class="flex g=32 jc=center">
@@ -471,15 +485,7 @@
 					<legend class="m=0_auto_-24 p=8">DPI Normalizer</legend>
 					<fieldset class="bd=1px_solid_#fff column flex g=16 p=16">
 						<legend class="m=-24_0 p=8">From</legend>
-						<div class="ai=center flex fs=20 g=20
-						:not(:has(#dpi-norm-game[value='cs2']))>#dpi-norm-cs2-detail/none
-						:not(:has(#dpi-norm-game[value='fn']))>#dpi-norm-fn-detail/none
-						:not(:has(#dpi-norm-game[value='lol']))>#dpi-norm-lol-detail/none
-						:not(:has(#dpi-norm-game[value='mc']))>#dpi-norm-mc-detail/none
-						:not(:has(#dpi-norm-game[value='ow']))>#dpi-norm-ow-detail/none
-						:not(:has(#dpi-norm-game[value='pubg']))>#dpi-norm-pubg-detail/none
-						:not(:has(#dpi-norm-game[value='sa']))>#dpi-norm-sa-detail/none
-						:not(:has(#dpi-norm-game[value='val']))>#dpi-norm-val-detail/none">
+						<div class="ai=center flex fs=20 g=20">
 							<label>
 								DPI:
 								<input class="bd=none bg=none c=#9cd2ff w=5.5ch" id="dpi-norm-dpi" max="99999" min="1" />
@@ -490,189 +496,31 @@
 								<ul class="absolute bf=blur(2px) bg=rgba(0,0,0,.5) block br=16 l=0 w=max-content
 								:not([open])/none" tabindex="-1"
 								onblur="this.removeAttribute('open')">
-									<li class="p=5" value="lol"
-									onclick="selector_option_onclick.call(this)">League of Legends</li>
-									<li class="p=5" value="val"
-									onclick="selector_option_onclick.call(this)">VALORANT</li>
-									<li class="p=5" value="mc"
-									onclick="selector_option_onclick.call(this)">Minecraft</li>
-									<li class="p=5" value="fn"
-									onclick="selector_option_onclick.call(this)">Fortnite</li>
+									<li class="p=5" value="al"
+									onclick="selector_option_onclick.call(this)">APEX LEGENDS</li>
 									<li class="p=5" value="cs2"
 									onclick="selector_option_onclick.call(this)">Counter-Strike 2</li>
-									<li class="p=5" value="pubg"
-									onclick="selector_option_onclick.call(this)">PUBG: BATTLEGROUNDS</li>
+									<li class="p=5" value="fn"
+									onclick="selector_option_onclick.call(this)">Fortnite</li>
+									<li class="p=5" value="lol"
+									onclick="selector_option_onclick.call(this)">League of Legends</li>
+									<li class="p=5" value="mc"
+									onclick="selector_option_onclick.call(this)">Minecraft</li>
 									<li class="p=5" value="ow"
 									onclick="selector_option_onclick.call(this)">Overwatch</li>
+									<li class="p=5" value="pubg"
+									onclick="selector_option_onclick.call(this)">PUBG: BATTLEGROUNDS</li>
 									<li class="p=5" value="sa"
 									onclick="selector_option_onclick.call(this)">Sudden Attack</li>
+									<li class="p=5" value="val"
+									onclick="selector_option_onclick.call(this)">VALORANT</li>
 								</ul>
 							</div>
-							<div class="ai=center flex g=20" id="dpi-norm-lol-detail">
+							<div class="ai=center flex g=20">
 								<label>
 									Sens:
-									<input class="bd=none bg=none c=#9cd2ff w=3.5ch" id="dpi-norm-lol-sens" max="100" min="0" />
+									<input class="bd=none bg=none c=#9cd2ff w=6.5ch" decimals="3" id="dpi-norm-sens" max="100" min="0" />
 								</label>
-							</div>
-							<div class="ai=center flex g=20
-							:has(#dpi-norm-val-fov[value=hipfire])_label:has(#dpi-norm-val-zoom)/none" id="dpi-norm-val-detail">
-								<label>
-									Sens:
-									<input class="bd=none bg=none c=#9cd2ff w=5.5ch" decimals="3" id="dpi-norm-val-sens" max="10" min=".01" />
-								</label>
-								<div class="c=#9cd2ff pe=auto relative">
-									<button class="p=5" id="dpi-norm-val-fov"
-									onclick="selector_button_onclick.call(this)">-</button>
-									<ul class="absolute bf=blur(2px) bg=rgba(0,0,0,.5) block br=16 l=0 w=max-content
-									:not([open])/none" tabindex="-1"
-									onblur="this.removeAttribute('open')">
-										<li class="p=5" value="hipfire"
-										onclick="selector_option_onclick.call(this)">Hipfire</li>
-										<li class="p=5" value="spectre"
-										onclick="selector_option_onclick.call(this)">Spectre/Stinger/Ares/Odin</li>
-										<li class="p=5" value="vandal"
-										onclick="selector_option_onclick.call(this)">Vandal/Phantom/Bulldog</li>
-										<li class="p=5" value="guardian"
-										onclick="selector_option_onclick.call(this)">Guardian</li>
-										<li class="p=5" value="marshal"
-										onclick="selector_option_onclick.call(this)">Marshal/Outlaw</li>
-										<li class="p=5" value="operator"
-										onclick="selector_option_onclick.call(this)">Operator</li>
-									</ul>
-								</div>
-								<label>
-									Zoom:
-									<input class="bd=none bg=none c=#9cd2ff w=5.5ch" decimals="3" id="dpi-norm-val-zoom" max="10" min=".01" />
-								</label>
-							</div>
-							<div class="ai=center flex g=20" id="dpi-norm-mc-detail">
-								<label>
-									Sens:
-									<input class="bd=none bg=none c=#9cd2ff w=3.5ch" id="dpi-norm-mc-sens" max="100" min="0" />
-								</label>
-							</div>
-							<div class="ai=center flex g=20
-							:has(#dpi-norm-fn-fov[value=hipfire])_label:has(#dpi-norm-fn-zoom)/none" id="dpi-norm-fn-detail">
-								<label>
-									Sens:
-									<input class="bd=none bg=none c=#9cd2ff w=5.5ch" decimals="1" id="dpi-norm-fn-sens" max="100" min="1" />
-								</label>
-								<div class="c=#9cd2ff pe=auto relative">
-									<button class="p=5" id="dpi-norm-fn-fov"
-									onclick="selector_button_onclick.call(this)">-</button>
-									<ul class="absolute bf=blur(2px) bg=rgba(0,0,0,.5) block br=16 l=0 w=max-content
-									:not([open])/none" tabindex="-1"
-									onblur="this.removeAttribute('open')">
-										<li class="p=5" value="hipfire"
-										onclick="selector_option_onclick.call(this)">Hipfire</li>
-										<li class="p=5" value="ads"
-										onclick="selector_option_onclick.call(this)">ADS/Scope</li>
-									</ul>
-								</div>
-								<label>
-									Zoom:
-									<input class="bd=none bg=none c=#9cd2ff w=5.5ch" decimals="1" id="dpi-norm-fn-zoom" max="100" min="1" />
-								</label>
-							</div>
-							<div class="ai=center flex g=20
-							:has(#dpi-norm-cs2-fov[value=hipfire])_label:has(#dpi-norm-cs2-zoom)/none" id="dpi-norm-cs2-detail">
-								<label>
-									Sens:
-									<input class="bd=none bg=none c=#9cd2ff w=4.5ch" decimals="2" id="dpi-norm-cs2-sens" max="8" min=".1" />
-								</label>
-								<div class="c=#9cd2ff pe=auto relative">
-									<button class="p=5" id="dpi-norm-cs2-fov"
-									onclick="selector_button_onclick.call(this)">-</button>
-									<ul class="absolute bf=blur(2px) bg=rgba(0,0,0,.5) block br=.5 l=0 w=max-content
-									:not([open])/none" tabindex="-1"
-									onblur="this.removeAttribute('open')">
-										<li class="p=5" value="hipfire"
-										onclick="selector_option_onclick.call(this)">Hipfire</li>
-										<li class="p=5" value="aug"
-										onclick="selector_option_onclick.call(this)">AUG/SG556</li>
-										<li class="p=5" value="awp"
-										onclick="selector_option_onclick.call(this)">AWP/Automatic/SSG08</li>
-									</ul>
-								</div>
-								<label>
-									Zoom:
-									<input class="bd=none bg=none c=#9cd2ff w=4.5ch" decimals="2" id="dpi-norm-cs2-zoom" max="3" min=".01" />
-								</label>
-							</div>
-							<div class="ai=center flex g=20" id="dpi-norm-pubg-detail">
-								<div class="c=#9cd2ff pe=auto relative">
-									<button class="p=5" id="dpi-norm-pubg-fov"
-									onclick="selector_button_onclick.call(this)">-</button>
-									<ul class="absolute bf=blur(2px) bg=rgba(0,0,0,.5) block br=.5 l=0 w=max-content
-									:not([open])/none" tabindex="-1"
-									onblur="this.removeAttribute('open')">
-										<li class="p=5" value="tpp"
-										onclick="selector_option_onclick.call(this)">TPP</li>
-										<li class="p=5" value="x1"
-										onclick="selector_option_onclick.call(this)">x1</li>
-										<li class="p=5" value="x2"
-										onclick="selector_option_onclick.call(this)">x2</li>
-										<li class="p=5" value="x3"
-										onclick="selector_option_onclick.call(this)">x3</li>
-										<li class="p=5" value="x4"
-										onclick="selector_option_onclick.call(this)">x4</li>
-										<li class="p=5" value="x6"
-										onclick="selector_option_onclick.call(this)">x6</li>
-										<li class="p=5" value="x8"
-										onclick="selector_option_onclick.call(this)">x8</li>
-										<li class="p=5" value="x15"
-										onclick="selector_option_onclick.call(this)">x15</li>
-									</ul>
-								</div>
-								<label>
-									Sens:
-									<input class="bd=none bg=none c=#9cd2ff w=3.5ch" id="dpi-norm-pubg-sens" max="100" min="0" />
-								</label>
-							</div>
-							<div class="ai=center flex g=20
-							:has(#dpi-norm-ow-fov[value=hipfire])_label:has(#dpi-norm-ow-zoom)/none" id="dpi-norm-ow-detail">
-								<label>
-									Sens:
-									<input class="bd=none bg=none c=#9cd2ff w=6.5ch" decimals="2" id="dpi-norm-ow-sens" max="100" min=".01" />
-								</label>
-								<div class="c=#9cd2ff pe=auto relative">
-									<button class="p=5" id="dpi-norm-ow-fov"
-									onclick="selector_button_onclick.call(this)">-</button>
-									<ul class="absolute bf=blur(2px) bg=rgba(0,0,0,.5) block br=16 l=0 w=max-content
-									:not([open])/none" tabindex="-1"
-									onblur="this.removeAttribute('open')">
-										<li class="p=5" value="hipfire"
-										onclick="selector_option_onclick.call(this)">Hipfire</li>
-										<li class="p=5" value="widow"
-										onclick="selector_option_onclick.call(this)">Widow/Ana</li>
-										<li class="p=5" value="ashe"
-										onclick="selector_option_onclick.call(this)">Ashe/Cassidy</li>
-										<li class="p=5" value="freja"
-										onclick="selector_option_onclick.call(this)">Freja</li>
-									</ul>
-								</div>
-								<label>
-									Zoom:
-									<input class="bd=none bg=none c=#9cd2ff w=6.5ch" decimals="2" id="dpi-norm-ow-zoom" max="100" min=".01" />
-								</label>
-							</div>
-							<div class="ai=center flex g=20" id="dpi-norm-sa-detail">
-								<label>
-									Sens:
-									<input class="bd=none bg=none c=#9cd2ff w=3.5ch" id="dpi-norm-sa-sens" max="100" min="0" />
-								</label>
-								<div class="c=#9cd2ff pe=auto relative">
-									<button class="p=5" id="dpi-norm-sa-fov"
-									onclick="selector_button_onclick.call(this)">-</button>
-									<ul class="absolute bf=blur(2px) bg=rgba(0,0,0,.5) block br=.5 l=0 w=max-content
-									:not([open])/none" tabindex="-1"
-									onblur="this.removeAttribute('open')">
-										<li class="p=5" value="normal"
-										onclick="selector_option_onclick.call(this)">Normal</li>
-										<li class="p=5" value="wide"
-										onclick="selector_option_onclick.call(this)">Wide</li>
-									</ul>
-								</div>
 							</div>
 						</div>
 					</fieldset>
@@ -686,8 +534,8 @@
 				<br>
 				<fieldset class="ai=center bd=1px_solid_#fff br=8 column flex p=16">
 					<legend class="m=0_auto_-24 p=8">Raw Accel</legend>
-					<span class="fs=16 fw=700">DPI X: 450</span>
-					<span class="fs=16 fw=700">DPI Y: 950</span>
+					<span class="fs=16 fw=700">DPI - X: 500</span>
+					<span class="fs=16 fw=700">DPI - Y: 1000</span>
 					<a class="fs=24
 					:hover/c=#9cd2ff" href="https://rawaccel.net/" target="_blank">https://rawaccel.net/</a>
 				</fieldset>
@@ -698,6 +546,11 @@
 					:hover/c=#9cd2ff" href="https://equalizerapo.com/" target="_blank">https://equalizerapo.com/</a>
 					<button class="pe=auto
 					:hover/fw=700;c=#9cd2ff" id="copy-apo-filter">Copy Filter</button>
+				</fieldset>
+				<br>
+				<fieldset class="ai=center bd=1px_solid_#fff br=8 column flex p=16">
+					<legend class="m=0_auto_-24 p=8">Overwatch Custom Game</legend>
+					<span class="fs=16 fw=700">CODE: TXCXX</span>
 				</fieldset>
 				<br>
 				<fieldset class="ai=center bd=1px_solid_#fff br=8 column grid gtc=repeat(3,1fr) p=16">

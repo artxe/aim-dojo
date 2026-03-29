@@ -18,7 +18,7 @@ worker.onmessage = function({ data }) {
 		}
 	} else if (fn == "update_game_sens") {
 		update_game_sens(
-			.../** @type {Tuple<number, 31>} */(result)/**/
+			.../** @type {Tuple<number, 39>} */(result)/**/
 		)
 	} else {
 		throw Error(fn)

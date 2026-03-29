@@ -21,9 +21,21 @@ import {
  * @param {number} height
  * @returns {number}
  */
+export function calc_sens_al(hfov_deg, width, height) {
+	const real_hfov_deg = convert_deg_across_aspect(hfov_deg, 4 / 3, width / height)
+	return calc_rad_per_px(real_hfov_deg, width, height)
+		/ to_rad(
+			.022 * tan(to_rad(hfov_deg) / 2) / tan(to_rad(70 * 1.55) / 2)
+		)
+}
+/**
+ * @param {number} hfov_deg
+ * @param {number} width
+ * @param {number} height
+ * @returns {number}
+ */
 export function calc_sens_cs2(hfov_deg, width, height) {
-	const vfov_deg = convert_deg_across_aspect(hfov_deg, height * 4 / 3, height)
-	const real_hfov_deg = convert_deg_across_aspect(vfov_deg, height, width)
+	const real_hfov_deg = convert_deg_across_aspect(hfov_deg, 4 / 3, width / height)
 	return calc_rad_per_px(real_hfov_deg, width, height)
 		/ to_rad(.022 * hfov_deg / 90)
 }

@@ -16,29 +16,19 @@ if (game_resolution == "fhd") {
 	throw Error(game_resolution)
 }
 const dpi_norm_game = /** @type {GameSensName} */(localStorage.getItem("dpi_norm.game") || "lol")/**/
-let dpi_norm_fov
 let dpi_norm_sens
-let dpi_norm_zoom
-if (dpi_norm_game == "cs2") {
-	dpi_norm_fov = localStorage.getItem("dpi_norm.fov") || "hipfire"
+if (dpi_norm_game == "al") {
+	dpi_norm_sens = Number(
+		localStorage.getItem("dpi_norm.sens") || 5
+	)
+} else if (dpi_norm_game == "cs2") {
 	dpi_norm_sens = Number(
 		localStorage.getItem("dpi_norm.sens") || 2.5
 	)
-	if (dpi_norm_fov != "hipfire") {
-		dpi_norm_zoom = Number(
-			localStorage.getItem("dpi_norm.zoom") || 1
-		)
-	}
 } else if (dpi_norm_game == "fn") {
-	dpi_norm_fov = localStorage.getItem("dpi_norm.fov") || "hipfire"
 	dpi_norm_sens = Number(
 		localStorage.getItem("dpi_norm.sens") || 50
 	)
-	if (dpi_norm_fov != "hipfire") {
-		dpi_norm_zoom = Number(
-			localStorage.getItem("dpi_norm.zoom") || 100
-		)
-	}
 } else if (dpi_norm_game == "lol") {
 	dpi_norm_sens = Number(
 		localStorage.getItem("dpi_norm.sens") || 50
@@ -48,35 +38,21 @@ if (dpi_norm_game == "cs2") {
 		localStorage.getItem("dpi_norm.sens") || 50
 	)
 } else if (dpi_norm_game == "ow") {
-	dpi_norm_fov = localStorage.getItem("dpi_norm.fov") || "hipfire"
 	dpi_norm_sens = Number(
 		localStorage.getItem("dpi_norm.sens") || 15
 	)
-	if (dpi_norm_fov != "hipfire") {
-		dpi_norm_zoom = Number(
-			localStorage.getItem("dpi_norm.zoom") || 100
-		)
-	}
 } else if (dpi_norm_game == "pubg") {
-	dpi_norm_fov = localStorage.getItem("dpi_norm.fov") || "hipfire"
 	dpi_norm_sens = Number(
 		localStorage.getItem("dpi_norm.sens") || 50
 	)
 } else if (dpi_norm_game == "sa") {
-	dpi_norm_fov = localStorage.getItem("dpi_norm.fov") || "hipfire"
 	dpi_norm_sens = Number(
 		localStorage.getItem("dpi_norm.sens") || 50
 	)
 } else if (dpi_norm_game == "val") {
-	dpi_norm_fov = localStorage.getItem("dpi_norm.fov") || "hipfire"
 	dpi_norm_sens = Number(
 		localStorage.getItem("dpi_norm.sens") || 1
 	)
-	if (dpi_norm_fov != "hipfire") {
-		dpi_norm_zoom = Number(
-			localStorage.getItem("dpi_norm.zoom") || 1
-		)
-	}
 } else {
 	throw Error(dpi_norm_game)
 }
@@ -145,10 +121,8 @@ export default {
 		dpi: Number(
 			localStorage.getItem("dpi_norm.dpi") || 800
 		),
-		fov: dpi_norm_fov,
 		game: dpi_norm_game,
-		sens: dpi_norm_sens,
-		zoom: dpi_norm_zoom
+		sens: dpi_norm_sens
 	})/**/,
 	game: {
 		height: game_height,

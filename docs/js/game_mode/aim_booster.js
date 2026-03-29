@@ -191,14 +191,13 @@ function update_hud() {
 	const { update_interval_ms } = constants.hud
 	const {
 		inc_target_per_sec,
-		score_mul,
 		start_target_per_sec
 	} = constants.mode.aim_booster
 	const { start_ms } = state.mode.aim_booster
 	const { count_hit, count_shoot } = state.stats
 	const { now_ms } = state.timer
 	state.hud.next_update_ms = now_ms + update_interval_ms
-	const score = (score_mul * count_hit ** .9) | 0
+	const score = count_hit * 100
 	const dt = (now_ms - start_ms) / 1_000
 	const m = (dt / 60)
 	const tps = round_to(

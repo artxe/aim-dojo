@@ -61,13 +61,13 @@ export function update_fov() {
 	const { height, width } = state.camera
 	const { mode, sens } = state.game
 	const { mb_right } = state.input
-	if (sens == "cs2") {
+	if (sens == "al") {
+		state.camera.fov = 80
+	} else if (sens == "cs2") {
 		if (mb_right) {
-			const vfov_deg = convert_deg_across_aspect(40, height * 4 / 3, height)
-			state.camera.fov = convert_deg_across_aspect(vfov_deg, height, width)
+			state.camera.fov = convert_deg_across_aspect(40, 4 / 3, width / height)
 		} else {
-			const vfov_deg = convert_deg_across_aspect(90, height * 4 / 3, height)
-			state.camera.fov = convert_deg_across_aspect(vfov_deg, height, width)
+			state.camera.fov = convert_deg_across_aspect(90, 4 / 3, width / height)
 		}
 	} else if (sens == "fn") {
 		state.camera.fov = 80

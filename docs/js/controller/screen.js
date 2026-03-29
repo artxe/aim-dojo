@@ -2,9 +2,8 @@ import { bg_el, setting_view_el, timer_el } from "../document.js"
 import game_mode from "../game_mode/index.js"
 import { stop_game, update_fov } from "../logic.js"
 import { clamp, EPS, PI, round } from "../math.js"
-import { calc_rad_per_px } from "../sens/index.js"
+import { calc_rad_per_px } from "../calc/index.js"
 import state from "../state.js"
-import { cycle_active_game_sens } from "./game_sens.js"
 import { on_resize, set_text_if_changed } from "./index.js"
 import { on_click_modal_backdrop } from "./setting.js"
 addEventListener(
@@ -57,9 +56,6 @@ function on_keydown(ev) {
 	if (ev.code === "Escape") {
 		ev.preventDefault()
 		on_click_modal_backdrop()
-	} else if (ev.code == "Tab") {
-		ev.preventDefault()
-		cycle_active_game_sens()
 	}
 	if (!mode) {
 		if (rest_raf_id) {

@@ -379,7 +379,6 @@ function update_fov() {
 /** @returns {void} */
 function update_hud() {
 	const { update_interval_ms } = constants.hud
-	const { score_mul } = constants.mode.twitch
 	const {
 		count_crit,
 		count_hit,
@@ -389,7 +388,7 @@ function update_hud() {
 	} = state.stats
 	const { now_ms } = state.timer
 	state.hud.next_update_ms = now_ms + update_interval_ms
-	const score = (score_mul * (sum_crit_ms + sum_hit_ms) * (count_hit / count_shoot)) | 0
+	const score = (sum_crit_ms + sum_hit_ms) * (count_hit / count_shoot) | 0
 	if (score > state.mode.twitch.peak_score) {
 		state.mode.twitch.peak_score = score
 		if (score > state.mode.twitch.best_score) {

@@ -395,11 +395,10 @@ function update_fov() {
 /** @returns {void} */
 function update_hud() {
 	const { update_interval_ms } = constants.hud
-	const { score_mul } = constants.mode.flick
 	const { count_crit, count_hit, count_shoot } = state.stats
 	const { now_ms } = state.timer
 	state.hud.next_update_ms = now_ms + update_interval_ms
-	const score = (score_mul * (count_crit + count_hit) * (count_hit / count_shoot)) | 0
+	const score = (100 * (count_crit + count_hit) * (count_hit / count_shoot)) | 0
 	if (score > state.mode.flick.peak_score) {
 		state.mode.flick.peak_score = score
 		if (score > state.mode.flick.best_score) {

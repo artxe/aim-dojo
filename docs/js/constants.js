@@ -3,10 +3,10 @@ export default /** @type {const} */({
 	audio: { volume: .5 },
 	crosshair: {
 		color: "#ff0",
-		gap: 2,
-		height: 46,
+		gap: 4,
+		height: 44,
 		thickness: 2,
-		width: 46
+		width: 44
 	},
 	grid: {
 		major_every: 9,
@@ -23,7 +23,6 @@ export default /** @type {const} */({
 	mode: {
 		aim_booster: {
 			inc_target_per_sec: 2,
-			score_mul: 200,
 			start_target_per_sec: 2,
 			target_height: 1080 / 4,
 			target_radius: 20,
@@ -32,8 +31,7 @@ export default /** @type {const} */({
 		flick: {
 			first_dist_mul: 5,
 			num_targets: 8,
-			pitch_limit: 30,
-			score_mul: 375
+			pitch_limit: 30
 		},
 		tracking: {
 			base_speed: .01,
@@ -47,7 +45,6 @@ export default /** @type {const} */({
 		},
 		twitch: {
 			height_div: 6,
-			score_mul: 2.5,
 			target_hide_duration_ms: 500,
 			target_show_duration_ms: 1_000,
 			width_div: 3
@@ -62,7 +59,7 @@ export default /** @type {const} */({
 			size_steps: [ 1, 2, 3, 5 ],
 			speed_lerp_ms: 150,
 			speed_steps: [ 0.5, 0.75, 1 ],
-			v_speed_steps: [ 0, 0.75, 1, 1.25 ]
+			v_speed_steps: [ 0, 0.25, 0.5, 0.75 ]
 		},
 		writing: {
 			line_width: 2,

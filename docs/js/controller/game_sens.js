@@ -1,4 +1,13 @@
 import {
+	al_el,
+	al_hipfire_el,
+	al_x10_el,
+	al_x1_el,
+	al_x2_el,
+	al_x3_el,
+	al_x4_el,
+	al_x6_el,
+	al_x8_el,
 	cs2_aug_el,
 	cs2_auto1_el,
 	cs2_auto2_el,
@@ -49,7 +58,7 @@ import { round_to } from "../math.js"
 import {
 	calc_pubg_converted,
 	calc_sens_pubg
-} from "../sens/index.js"
+} from "../calc/index.js"
 import state from "../state.js"
 import { post_worker_message } from "../worker_manager.js"
 import { update_dpi_norm_result } from "./dpi_norm.js"
@@ -87,6 +96,10 @@ monitor_res_btn.addEventListener(
 		)
 	}
 )
+al_el.addEventListener(
+	"mouseup",
+	() => change_active_game_sens("al")
+)
 cs2_el.addEventListener(
 	"mouseup",
 	() => change_active_game_sens("cs2")
@@ -123,7 +136,9 @@ pubg_file_el.addEventListener("drop", on_drop_pubg_file)
 /** @returns {void} */
 export function active_game_sens() {
 	const { sens } = state.game
-	if (sens == "cs2") {
+	if (sens == "al") {
+		al_el.setAttribute("active", "")
+	} else if (sens == "cs2") {
 		cs2_el.setAttribute("active", "")
 	} else if (sens == "fn") {
 		fn_el.setAttribute("active", "")
@@ -157,7 +172,9 @@ export function change_active_game_sens(name) {
 		"game.sens",
 		state.game.sens = name
 	)
-	if (sens == "cs2") {
+	if (sens == "al") {
+		al_el.removeAttribute("active")
+	} else if (sens == "cs2") {
 		cs2_el.removeAttribute("active")
 	} else if (sens == "fn") {
 		fn_el.removeAttribute("active")
@@ -177,29 +194,6 @@ export function change_active_game_sens(name) {
 		throw Error(sens)
 	}
 	active_game_sens()
-}
-/** @returns {void} */
-export function cycle_active_game_sens() {
-	const { sens } = state.game
-	if (sens == "cs2") {
-		change_active_game_sens("pubg")
-	} else if (sens == "fn") {
-		change_active_game_sens("cs2")
-	} else if (sens == "lol") {
-		change_active_game_sens("val")
-	} else if (sens == "mc") {
-		change_active_game_sens("fn")
-	} else if (sens == "ow") {
-		change_active_game_sens("sa")
-	} else if (sens == "pubg") {
-		change_active_game_sens("ow")
-	} else if (sens == "sa") {
-		change_active_game_sens("lol")
-	} else if (sens == "val") {
-		change_active_game_sens("mc")
-	} else {
-		throw Error(sens)
-	}
 }
 /**
  * @param {DragEvent} ev
@@ -272,23 +266,29 @@ async function on_drop_pubg_file(ev) {
 	}
 }
 /**
- * @param {number} val_hipfire
- * @param {number} spectre
- * @param {number} vandal
- * @param {number} guardian
- * @param {number} marshal
- * @param {number} operator25
- * @param {number} operator5
- * @param {number} mc_hipfire
- * @param {number} fn_hipfire
- * @param {number} fn_ads
- * @param {number} fn_ar
- * @param {number} fn_sr
+ * @param {number} al_hipfire
+ * @param {number} al_x1
+ * @param {number} al_x2
+ * @param {number} al_x3
+ * @param {number} al_x4
+ * @param {number} al_x6
+ * @param {number} al_x8
+ * @param {number} al_x10
  * @param {number} cs2_hipfire
  * @param {number} cs2_45
  * @param {number} cs2_40
  * @param {number} cs2_15
  * @param {number} cs2_10
+ * @param {number} fn_hipfire
+ * @param {number} fn_ads
+ * @param {number} fn_ar
+ * @param {number} fn_sr
+ * @param {number} mc_hipfire
+ * @param {number} ow_hipfire
+ * @param {number} widow
+ * @param {number} ashe
+ * @param {number} freja
+ * @param {number} emre
  * @param {number} pubg_hipfire
  * @param {number} pubg_ads
  * @param {number} pubg_x2
@@ -297,32 +297,40 @@ async function on_drop_pubg_file(ev) {
  * @param {number} pubg_x6
  * @param {number} pubg_x8
  * @param {number} pubg_x15
- * @param {number} ow_hipfire
- * @param {number} widow
- * @param {number} ashe
- * @param {number} freja
- * @param {number} emre
  * @param {number} sa_hipfire
+ * @param {number} val_hipfire
+ * @param {number} spectre
+ * @param {number} vandal
+ * @param {number} guardian
+ * @param {number} marshal
+ * @param {number} operator25
+ * @param {number} operator5
  * @returns {void}
  */
 export function update_game_sens(
-	val_hipfire,
-	spectre,
-	vandal,
-	guardian,
-	marshal,
-	operator25,
-	operator5,
-	mc_hipfire,
-	fn_hipfire,
-	fn_ads,
-	fn_ar,
-	fn_sr,
+	al_hipfire,
+	al_x1,
+	al_x2,
+	al_x3,
+	al_x4,
+	al_x6,
+	al_x8,
+	al_x10,
 	cs2_hipfire,
 	cs2_45,
 	cs2_40,
 	cs2_15,
 	cs2_10,
+	fn_hipfire,
+	fn_ads,
+	fn_ar,
+	fn_sr,
+	mc_hipfire,
+	ow_hipfire,
+	widow,
+	ashe,
+	freja,
+	emre,
 	pubg_hipfire,
 	pubg_ads,
 	pubg_x2,
@@ -331,33 +339,39 @@ export function update_game_sens(
 	pubg_x6,
 	pubg_x8,
 	pubg_x15,
-	ow_hipfire,
-	widow,
-	ashe,
-	freja,
-	emre,
-	sa_hipfire
+	sa_hipfire,
+	val_hipfire,
+	spectre,
+	vandal,
+	guardian,
+	marshal,
+	operator25,
+	operator5
 ) {
-	set_text_if_changed(val_hipfire_el, val_hipfire)
-	set_text_if_changed(val_scoped_el, operator25)
-	set_text_if_changed(val_ads_el, vandal)
-	set_text_if_changed(val_spectre_el, spectre)
-	set_text_if_changed(val_vandal_el, vandal)
-	set_text_if_changed(val_guardian_el, guardian)
-	set_text_if_changed(val_marshal_el, marshal)
-	set_text_if_changed(val_operator25_el, operator25)
-	set_text_if_changed(val_operator5_el, operator5)
-	set_text_if_changed(mc_hipfire_el, mc_hipfire)
-	set_text_if_changed(fn_hipfire_el, fn_hipfire)
-	set_text_if_changed(fn_ads_el, fn_ads)
-	set_text_if_changed(fn_ar_el, fn_ar)
-	set_text_if_changed(fn_sr_el, fn_sr)
+	set_text_if_changed(al_hipfire_el, al_hipfire)
+	set_text_if_changed(al_x1_el, al_x1)
+	set_text_if_changed(al_x2_el, al_x2)
+	set_text_if_changed(al_x3_el, al_x3)
+	set_text_if_changed(al_x4_el, al_x4)
+	set_text_if_changed(al_x6_el, al_x6)
+	set_text_if_changed(al_x8_el, al_x8)
+	set_text_if_changed(al_x10_el, al_x10)
 	set_text_if_changed(cs2_hipfire_el, cs2_hipfire)
 	set_text_if_changed(cs2_aug_el, cs2_45)
 	set_text_if_changed(cs2_auto1_el, cs2_40)
 	set_text_if_changed(cs2_auto2_el, cs2_15)
 	set_text_if_changed(cs2_awp1_el, cs2_40)
 	set_text_if_changed(cs2_awp2_el, cs2_10)
+	set_text_if_changed(fn_hipfire_el, fn_hipfire)
+	set_text_if_changed(fn_ads_el, fn_ads)
+	set_text_if_changed(fn_ar_el, fn_ar)
+	set_text_if_changed(fn_sr_el, fn_sr)
+	set_text_if_changed(mc_hipfire_el, mc_hipfire)
+	set_text_if_changed(ow_hipfire_el, ow_hipfire)
+	set_text_if_changed(ow_widow_el, widow)
+	set_text_if_changed(ow_ashe_el, ashe)
+	set_text_if_changed(ow_freja_el, freja)
+	set_text_if_changed(ow_emre_el, emre)
 	set_text_if_changed(
 		pubg_hipfire_el,
 		`${round_to(pubg_hipfire, 6)}, ${round_to(calc_pubg_converted(pubg_hipfire), 6)}`
@@ -390,10 +404,14 @@ export function update_game_sens(
 		pubg_x15_el,
 		`${round_to(pubg_x15, 6)}, ${round_to(calc_pubg_converted(pubg_x15), 6)}`
 	)
-	set_text_if_changed(ow_hipfire_el, ow_hipfire)
-	set_text_if_changed(ow_widow_el, widow)
-	set_text_if_changed(ow_ashe_el, ashe)
-	set_text_if_changed(ow_freja_el, freja)
-	set_text_if_changed(ow_emre_el, emre)
 	set_text_if_changed(sa_hipfire_el, sa_hipfire)
+	set_text_if_changed(val_hipfire_el, val_hipfire)
+	set_text_if_changed(val_scoped_el, operator25)
+	set_text_if_changed(val_ads_el, vandal)
+	set_text_if_changed(val_spectre_el, spectre)
+	set_text_if_changed(val_vandal_el, vandal)
+	set_text_if_changed(val_guardian_el, guardian)
+	set_text_if_changed(val_marshal_el, marshal)
+	set_text_if_changed(val_operator25_el, operator25)
+	set_text_if_changed(val_operator5_el, operator5)
 }

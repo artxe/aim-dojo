@@ -5,6 +5,7 @@ import {
 } from "./math.js"
 import {
 	calc_rad_per_px,
+	calc_sens_al,
 	calc_sens_cs2,
 	calc_sens_fn,
 	calc_sens_mc,
@@ -12,7 +13,7 @@ import {
 	calc_sens_pubg,
 	calc_sens_sa,
 	calc_sens_val
-} from "./sens/calc_sens.js"
+} from "./calc/calc_sens.js"
 const off = new OffscreenCanvas(1, 1)
 const off_context = /** @type {OffscreenCanvasRenderingContext2D} */(off.getContext("2d"))/**/
 onmessage = function({ data }) {
@@ -89,56 +90,61 @@ export function check_writing_stats(
  * @returns {void}
  */
 function update_game_sens(height, width) {
-	const base_hfov = 103
-	const val_hipfire = round_to(
-		calc_sens_val(base_hfov, width, height),
-		3
+	const al_hipfire = round_to(
+		calc_sens_al(70 * 1.55, width, height),
+		2
 	)
-	let zoom_fov = convert_deg_across_aspect(base_hfov, 1.15, 1)
-	const spectre = round_to(
-		calc_sens_val(zoom_fov, width, height) / val_hipfire,
-		3
+	const al_x1 = round_to(
+		calc_sens_al(60 * 1.55, width, height) / al_hipfire,
+		2
 	)
-	zoom_fov = convert_deg_across_aspect(base_hfov, 1.25, 1)
-	const vandal = round_to(
-		calc_sens_val(zoom_fov, width, height) / val_hipfire,
-		3
+	const al_x2 = round_to(
+		calc_sens_al(
+			convert_deg_across_aspect(60 * 1.55, 2, 1),
+			width,
+			height
+		) / al_hipfire,
+		2
 	)
-	zoom_fov = convert_deg_across_aspect(base_hfov, 1.5, 1)
-	const guardian = round_to(
-		calc_sens_val(zoom_fov, width, height) / val_hipfire,
-		3
+	const al_x3 = round_to(
+		calc_sens_al(
+			convert_deg_across_aspect(60 * 1.55, 3, 1),
+			width,
+			height
+		) / al_hipfire,
+		2
 	)
-	zoom_fov = convert_deg_across_aspect(base_hfov, 3.5, 1)
-	const marshal = round_to(
-		calc_sens_val(zoom_fov, width, height) / val_hipfire,
-		3
+	const al_x4 = round_to(
+		calc_sens_al(
+			convert_deg_across_aspect(60 * 1.55, 4, 1),
+			width,
+			height
+		) / al_hipfire,
+		2
 	)
-	zoom_fov = convert_deg_across_aspect(base_hfov, 2.5, 1)
-	const operator25 = round_to(
-		calc_sens_val(zoom_fov, width, height) / val_hipfire,
-		3
+	const al_x6 = round_to(
+		calc_sens_al(
+			convert_deg_across_aspect(60 * 1.55, 6, 1),
+			width,
+			height
+		) / al_hipfire,
+		2
 	)
-	zoom_fov = convert_deg_across_aspect(base_hfov, 5, 1)
-	const operator5 = round_to(
-		calc_sens_val(zoom_fov, width, height) / val_hipfire,
-		3
+	const al_x8 = round_to(
+		calc_sens_al(
+			convert_deg_across_aspect(60 * 1.55, 8, 1),
+			width,
+			height
+		) / al_hipfire,
+		2
 	)
-	const mc_hipfire = round(
-		calc_sens_mc(110, width, height)
-	)
-	const fn_hipfire = round_to(
-		calc_sens_fn(80, width, height),
-		1
-	)
-	const fn_ads = 100
-	const fn_ar = round_to(
-		calc_rad_per_px(40, width, height) / calc_rad_per_px(80, width, height) * 8_000 / 40,
-		1
-	)
-	const fn_sr = round_to(
-		calc_rad_per_px(15, width, height) / calc_rad_per_px(80, width, height) * 8_000 / 15,
-		1
+	const al_x10 = round_to(
+		calc_sens_al(
+			convert_deg_across_aspect(60 * 1.55, 10, 1),
+			width,
+			height
+		) / al_hipfire,
+		2
 	)
 	const cs2_hipfire = round_to(
 		calc_sens_cs2(90, width, height),
@@ -160,17 +166,25 @@ function update_game_sens(height, width) {
 		calc_sens_cs2(10, width, height) / cs2_hipfire,
 		2
 	)
-	const pubg_fov = 80
-	const pubg_hipfire = calc_sens_pubg(pubg_fov, width, height)
-	const pubg_ads = calc_sens_pubg(pubg_fov / 1.5, width, height)
-	const pubg_x2 = calc_sens_pubg(pubg_fov / 2, width, height)
-	const pubg_x3 = calc_sens_pubg(pubg_fov / 3, width, height)
-	const pubg_x4 = calc_sens_pubg(pubg_fov / 4 - 1, width, height)
-	const pubg_x6 = calc_sens_pubg(pubg_fov / 6, width, height)
-	const pubg_x8 = calc_sens_pubg(pubg_fov / 8, width, height)
-	const pubg_x15 = calc_sens_pubg(pubg_fov / 15, width, height)
+	const fn_hipfire = round_to(
+		calc_sens_fn(80, width, height),
+		1
+	)
+	const fn_ads = 100
+	const fn_ar = round_to(
+		calc_rad_per_px(40, width, height) / calc_rad_per_px(80, width, height) * 8_000 / 40,
+		1
+	)
+	const fn_sr = round_to(
+		calc_rad_per_px(15, width, height) / calc_rad_per_px(80, width, height) * 8_000 / 15,
+		1
+	)
+	const mc_hipfire = round_to(
+		calc_sens_mc(110, width, height),
+		2
+	)
 	const ow_hipfire = round_to(
-		calc_sens_ow(base_hfov, width, height),
+		calc_sens_ow(103, width, height),
 		2
 	)
 	const widow = round_to(
@@ -205,27 +219,94 @@ function update_game_sens(height, width) {
 		) / ow_hipfire * 100,
 		2
 	)
+	const pubg_fov = 80
+	const pubg_hipfire = calc_sens_pubg(pubg_fov, width, height)
+	const pubg_ads = calc_sens_pubg(pubg_fov / 1.5, width, height)
+	const pubg_x2 = calc_sens_pubg(pubg_fov / 2, width, height)
+	const pubg_x3 = calc_sens_pubg(pubg_fov / 3, width, height)
+	const pubg_x4 = calc_sens_pubg(pubg_fov / 4 - 1, width, height)
+	const pubg_x6 = calc_sens_pubg(pubg_fov / 6, width, height)
+	const pubg_x8 = calc_sens_pubg(pubg_fov / 8, width, height)
+	const pubg_x15 = calc_sens_pubg(pubg_fov / 15, width, height)
 	const sa_hipfire = round(calc_sens_sa(height))
+	const val_hipfire = round_to(
+		calc_sens_val(103, width, height),
+		3
+	)
+	const spectre = round_to(
+		calc_sens_val(
+			convert_deg_across_aspect(103, 1.15, 1),
+			width,
+			height
+		) / val_hipfire,
+		3
+	)
+	const vandal = round_to(
+		calc_sens_val(
+			convert_deg_across_aspect(103, 1.25, 1),
+			width,
+			height
+		) / val_hipfire,
+		3
+	)
+	const guardian = round_to(
+		calc_sens_val(
+			convert_deg_across_aspect(103, 1.5, 1),
+			width,
+			height
+		) / val_hipfire,
+		3
+	)
+	const marshal = round_to(
+		calc_sens_val(
+			convert_deg_across_aspect(103, 3.5, 1),
+			width,
+			height
+		) / val_hipfire,
+		3
+	)
+	const operator25 = round_to(
+		calc_sens_val(
+			convert_deg_across_aspect(103, 2.5, 1),
+			width,
+			height
+		) / val_hipfire,
+		3
+	)
+	const operator5 = round_to(
+		calc_sens_val(
+			convert_deg_across_aspect(103, 5, 1),
+			width,
+			height
+		) / val_hipfire,
+		3
+	)
 	postMessage(
 		[
 			"update_game_sens",
-			val_hipfire,
-			spectre,
-			vandal,
-			guardian,
-			marshal,
-			operator25,
-			operator5,
-			mc_hipfire,
-			fn_hipfire,
-			fn_ads,
-			fn_ar,
-			fn_sr,
+			al_hipfire,
+			al_x1,
+			al_x2,
+			al_x3,
+			al_x4,
+			al_x6,
+			al_x8,
+			al_x10,
 			cs2_hipfire,
 			cs2_45,
 			cs2_40,
 			cs2_15,
 			cs2_10,
+			fn_hipfire,
+			fn_ads,
+			fn_ar,
+			fn_sr,
+			mc_hipfire,
+			ow_hipfire,
+			widow,
+			ashe,
+			freja,
+			emre,
 			pubg_hipfire,
 			pubg_ads,
 			pubg_x2,
@@ -234,12 +315,14 @@ function update_game_sens(height, width) {
 			pubg_x6,
 			pubg_x8,
 			pubg_x15,
-			ow_hipfire,
-			widow,
-			ashe,
-			freja,
-			emre,
-			sa_hipfire
+			sa_hipfire,
+			val_hipfire,
+			spectre,
+			vandal,
+			guardian,
+			marshal,
+			operator25,
+			operator5
 		]
 	)
 }
