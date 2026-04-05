@@ -6,7 +6,7 @@ import {
 	crit_rate_el,
 	peak_score_el
 } from "../document.js"
-import { max, random, round, round_to, sqrt } from "../math.js"
+import { max, random, round, round_to } from "../math.js"
 import {
 	context_2d,
 	draw_crosshair,
@@ -63,15 +63,12 @@ function on_frame() {
 	const tps = start_target_per_sec + inc_target_per_sec * m
 	const total = ((start_target_per_sec + tps) / 2 * dt + 1) | 0
 	if (total - count + targets.length > tps * 2) {
-		const remain = targets.length
-		const effective_count = max(0, count - remain)
-		const t_effective = (-start_target_per_sec + sqrt(
-			start_target_per_sec * start_target_per_sec + (inc_target_per_sec / 30) * effective_count
-		)) / (inc_target_per_sec / 60)
-		const t2 = t_effective * (2 / 3)
+		const REWIND_SEC = 10
+		const t2 = max(0, dt - REWIND_SEC)
 		const m2 = t2 / 60
 		const tps2 = start_target_per_sec + inc_target_per_sec * m2
 		const new_count = ((start_target_per_sec + tps2) / 2 * t2 + 1) | 0
+
 		let count_hit = state.stats.count_hit
 		let count_shoot = state.stats.count_shoot
 		let cut_to = 0
