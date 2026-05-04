@@ -1,0 +1,20 @@
+{
+	"author": "artxe",
+	"description": "AIM DOJO — Train your aim. Unify your sensitivity. One trainer for all your FPS games.",
+	"devDependencies": {
+		"@eslint/json": "^1.2.0",
+		"eslint": "^10.2.1",
+		"eslint-plugin-lube": "^0.5.1",
+		"serve": "^14.2.6",
+		"typescript": "^6.0.3",
+		"typescript-eslint": "^8.58.2"
+	},
+	"keywords": [],
+	"name": "aim-dojo",
+	"scripts": {
+		"dev": "serve docs",
+		"lint": "eslint --cache --fix **/* && tsc"
+	},
+	"type": "module",
+	"version": "v1.0.0"
+}
