@@ -1,0 +1,11 @@
+{
+	"permissions": {
+		"additionalDirectories": [ "\\tmp" ],
+		"allow": [
+			"Bash(node -)",
+			"Bash(python -)",
+			"Bash(sed -)",
+			"WebFetch(domain:raw.githubusercontent.com)"
+		]
+	}
+}
