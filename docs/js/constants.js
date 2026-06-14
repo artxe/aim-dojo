@@ -10,7 +10,7 @@ export default /** @type {const} */({
 		thickness: 2,
 		width: 2
 	},
-	dpi: { x: 280, y_ratio: sqrt(2) },
+	dpi: { x: 276, y_ratio: sqrt(2) },
 	frame_limit: {
 		space_hold_interval_ms: 1_000 / 30
 	},
