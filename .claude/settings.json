@@ -1,0 +1,14 @@
+{
+	"permissions": {
+		"allow": [
+			"Bash(node:*)",
+			"Bash(python:*)",
+			"Bash(sed:*)",
+			"WebFetch(domain:raw.githubusercontent.com)",
+			"PowerShell(npx eslint:*)",
+			"PowerShell(npx tsc:*)",
+			"Bash(git mv *)"
+		],
+		"additionalDirectories": [ "\\tmp" ]
+	}
+}
