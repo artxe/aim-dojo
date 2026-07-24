@@ -1,0 +1,14 @@
+{
+	"permissions": {
+		"allow": [
+			"Bash(git *)",
+			"Bash(node:*)",
+			"Bash(pnpm lint)",
+			"Bash(pnpm run *)",
+			"Bash(python:*)",
+			"Bash(python3:*)",
+			"Bash(sed:*)",
+			"WebFetch(domain:raw.githubusercontent.com)"
+		]
+	}
+}
