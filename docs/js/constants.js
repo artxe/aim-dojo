@@ -6,7 +6,7 @@ export default /** @type {const} */({
 		for (let i = 0; i < 5; i++) {
 			psi -= (psi ** 3 - psi ** 2 - 1) / (3 * psi ** 2 - 2 * psi)
 		}
-		return { psi, x: 361 }
+		return { psi, x: 363 }
 	})(),
 	crosshair: {
 		color: "rgba(0,255,0,1)",
