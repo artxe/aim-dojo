@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"lib": [ "DOM", "DOM.Iterable", "ESNext" ],
+		"types": []
+	},
+	"exclude": [ "lib/" ],
+	"extends": "../tsconfig.json",
+	"include": [ "js/**/*", "../private.d.ts" ]
+}
