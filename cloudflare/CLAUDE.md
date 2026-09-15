@@ -1,0 +1,9 @@
+# cloudflare/
+
+The default BG video's host. Not shipped with `docs/`, not in `tsc -b` (no Workers types installed; lint only). Deploy with `pnpm run wrangler deploy` (the script pins `--config`, so any subcommand — `tail`, `login` — goes through it).
+
+- `worker.js` streams the ONE object `bg.mp4` from the private R2 bucket `aim-dojo` (binding `BUCKET`) at `https://aim-dojo.artxe.workers.dev/bg.mp4` (Worker `aim-dojo` on account subdomain `artxe`, mirroring `artxe.github.io/aim-dojo`); every other path is a 404. `docs/js/worker/bg_worker.js:BG_VIDEO_URL` points here
+- **Why a Worker, not the bucket's own URL**: no domain is owned, so R2 custom domains are out (the zone must be in the Cloudflare account — `github.io` can't be), and `r2.dev` is rate-limited and documented as non-production. `workers.dev` is free and unthrottled up to **100 000 requests/day (UTC)**; past that it FAILS CLOSED with error 1027. The page's IndexedDB cache (keyed by `constants.version`) makes that one request per visitor per version
+- **CORS lives here, not in the bucket's CORS policy** — a binding read bypasses it. The fetch is cross-origin from a module worker on `artxe.github.io`, so `ALLOWED_ORIGINS` must list every origin that serves `docs/` (`pnpm run dev` = `http://localhost:3000`). A Cloudflare error page (1027, an uncaught exception) carries no `access-control-allow-origin`, so the page's `fetch` rejects instead of caching an HTML body as the video
+- **`cache-control: no-store` on purpose**: IndexedDB is the cache. An HTTP cache entry would duplicate ~100 MB per visitor and could serve the OLD bytes under a NEW version key, because the URL never changes when the video does
+- Replacing the video: `node scripts/fragment_bg.js` on the root `bg.mp4` master (gitignored) → `node scripts/update_html_bg.js` + `node scripts/update_images.js` (the first-frame placeholders) → upload to the bucket as `bg.mp4` → bump `constants.version` so cached visitors re-fetch

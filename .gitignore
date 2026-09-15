@@ -1,0 +1,5 @@
+*.tsbuildinfo
+.eslintcache
+/bg.*
+/cloudflare/.wrangler
+node_modules
