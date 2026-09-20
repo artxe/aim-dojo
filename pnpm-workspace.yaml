@@ -1,0 +1,4 @@
+allowBuilds:
+  ffmpeg-static: true
+minimumReleaseAgeExclude:
+  - eslint-plugin-lube@0.6.0
