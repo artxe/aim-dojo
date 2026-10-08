@@ -1,0 +1,11 @@
+{
+	"editor.codeActionsOnSave": {
+		"source.fixAll": "explicit",
+		"source.fixAll.eslint": "explicit"
+	},
+	"editor.formatOnSave": false,
+	"eslint.enable": true,
+	"eslint.useFlatConfig": true,
+	"eslint.validate": [ "javascript", "json", "typescript" ],
+	"html.validate.scripts": false
+}

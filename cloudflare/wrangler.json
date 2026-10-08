@@ -1,0 +1,13 @@
+{
+	"compatibility_date": "2026-09-15",
+	"main": "worker.js",
+	"name": "aim-dojo",
+	"preview_urls": false,
+	"r2_buckets": [
+		{
+			"binding": "BUCKET",
+			"bucket_name": "aim-dojo"
+		}
+	],
+	"workers_dev": true
+}

@@ -1,0 +1,7 @@
+*.tsbuildinfo
+.eslintcache
+/bg.*
+/cloudflare/.wrangler
+node_modules
+.scratch/
+.claude/settings.local.json

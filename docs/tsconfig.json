@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"lib": [ "dom", "esnext" ],
+		"noUncheckedIndexedAccess": false
+	},
+	"exclude": [ "lib/" ],
+	"extends": "../tsconfig.json",
+	"include": [ "js/**/*", "../private.d.ts" ]
+}
