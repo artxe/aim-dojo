@@ -1,0 +1,9 @@
+allowBuilds:
+  ffmpeg-static: true
+minimumReleaseAgeExclude:
+  - async-lube
+  - data-lube
+  - datetime-lube
+  - dom-eater
+  - eslint-plugin-lube
+  - hangul-lube

@@ -1,0 +1,9 @@
+*.tsbuildinfo
+.eslintcache
+/bg.*
+/cloudflare/.wrangler
+node_modules
+.tmp/
+.claude/settings.local.json
+.vitest/
+coverage/
